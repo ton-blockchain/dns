@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TON DNS</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="dns.css">
+    <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
+    <script type="text/javascript" src="libs/tonweb-0.0.45.js"></script>
+    <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>
+</head>
+<body>
+
+<div class="testnet-badge" data-locale="testnet" style="display: none">
+    ATTENTION: this is test network, don't send real coins! Test domains can be reset.
+</div>
+
+<div class="badge">
+    <div class="badge-icon"></div>
+    TON DNS
+</div>
+
+<div id="navInput" class="nav-input">
+    <input type="text" placeholder="Enter domain">
+</div>
+
+<div id="soonScreen" class="soon">
+    <lottie-player loop mode="normal" src="assets/soon.tgs" style="width: 300px"></lottie-player>
+</div>
+
+<div id="startScreen" class="start">
+    <div class="start-img"></div>
+
+    <div class="start-input-container">
+        <input class="start-input" type="text" placeholder="Enter domain to start">
+    </div>
+
+    <div class="start-error">
+    </div>
+
+    <div class="version">
+        v0.9
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="h">
+        <span id="domainName"></span>
+        <div id="domainStatus" class="status"></div>
+    </div>
+
+    <div id="domainLoading" class="loading"></div>
+
+    <div id="auctionDomainScreen" class="info">
+        <p data-locale="auction1">
+            There is an auction for this domain.
+        </p>
+        <p>
+            <span data-locale="auction2_1">Auction ends</span>
+            <span id="auctionEndTime" class="strong"></span>
+            <span data-locale="auction2_2">in</span>
+            <span id="auctionLeftTime" class="strong"></span>.
+        </p>
+        <p data-locale="auction3">Current best bet:</p>
+        <p>
+            <span id="auctionAmount" class="strong"></span>
+            <span data-locale="auctionFrom">by</span>
+            <span id="auctionOwnerAddress" class="addr"></span>.
+        </p>
+
+        <p class="padding-top" data-locale="auction4">
+            To bet higher, send Toncoins to the domain address:
+        </p>
+        <p id="auctionAddressContainer" class="copy-container">
+            <span id="auctionAddress" class="addr"></span>
+            <span class="copy-btn"><span class="copy-btn-icon"></span></span>
+        </p>
+        <div id="auctionQr"></div>
+        <a id="auctionBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
+
+        <p class="padding-top" data-locale="auctionInfo1">
+            If your bet is outbid, your coins will automatically be returned to your wallet. You will be able to place a
+            new bet.
+        </p>
+        <p data-locale="auctionInfo2">
+            After the end of the auction, the user who made the best bid takes the domain.
+        </p>
+    </div>
+
+    <div id="busyDomainScreen" class="info">
+        <div class="info">
+            <p id="busyOwnerRow">
+                <span data-locale="owner">Owner</span>: <span id="busyOwnerAddress" class="addr"></span>.
+            </p>
+            <p id="busyEndTimeRow">
+                <span data-locale="expires">Expires</span>: <span id="busyEndDate" class="strong"></span>
+            </p>
+            <p>
+                <a id="connectBtn" class="btn" data-locale="connect">Edit</a>
+            </p>
+            <div id="editLoading" class="loading"></div>
+            <div id="domainEditContainer" class="padding-top">
+                <span data-locale="dnsRecords" class="strong">DNS Records:</span>
+
+                <div class="edit-form padding-top">
+                    <div id="editWalletRow" class="edit-row">
+                        <div class="edit-label" data-locale="walletAddress">
+                            Wallet address:
+                        </div>
+                        <div class="edit-input">
+                            <input type="text">
+                        </div>
+                        <div class="edit-btn">
+                            <a>Set</a>
+                        </div>
+                    </div>
+                    <div id="editAdnlRow" class="edit-row">
+                        <div class="edit-label" data-locale="adnlAddress">
+                            TON Site [Soon]:
+                        </div>
+                        <div class="edit-input">
+                            <input type="text" disabled>
+                        </div>
+                        <div class="edit-btn">
+                            <a data-locale="set" class="edit-btn">Set</a>
+                        </div>
+                    </div>
+                    <div id="editResolverRow" class="edit-row">
+                        <div class="edit-label" data-locale="resolver">
+                            Resolver:
+                        </div>
+                        <div class="edit-input">
+                            <input type="text">
+                        </div>
+                        <div class="edit-btn">
+                            <a>Set</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="freeDomainScreen" class="info">
+        <p data-locale="free1">This domain is available.</p>
+        <p data-locale="free2">The domain can be purchased on open auction.</p>
+        <p class="padding-top" data-locale="free3">
+            To start the auction, make the first bid by sending Toncoins to the address:
+        </p>
+        <p id="freeAddressContainer" class="copy-container">
+            <span id="freeBuyAddress" class="addr"></span>
+            <span class="copy-btn"><span class="copy-btn-icon"></span></span>
+        </p>
+        <p data-locale="free4">In the transfer comment specify:</p>
+
+        <p id="freeCommentContainer" class="copy-container">
+            <span id="freeComment" class="strong"></span>
+            <span class="copy-btn"><span class="copy-btn-icon"></span></span>
+        </p>
+
+        <div id="freeQr"></div>
+
+        <a id="freeBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
+
+        <p class="padding-top" data-locale="auctionDuration">The auction runs a week.</p>
+        <p data-locale="auctionInfo1">
+            If your bet is outbid, your coins will automatically be returned to your wallet.
+            You will be able to place a new bet.
+        </p>
+        <p data-locale="auctionInfo2">
+            After the end of the auction, the user who made the best bid takes the domain.
+        </p>
+    </div>
+</div>
+
+<script>
+    const $ = (selector) => document.querySelector(selector);
+
+    const toggle = (name, isVisible, display) => {
+        $(name).style.display = isVisible ? (display || 'flex') : 'none';
+    }
+
+    const setScreen = (name) => {
+        toggle('#soonScreen', name === 'soonScreen');
+
+        toggle('#startScreen', name === 'startScreen');
+        if (name === 'startScreen') {
+            setTimeout(() => {
+                $('.start-input').focus();
+            }, 10);
+        }
+        toggle('#navInput', name !== 'startScreen' && name !== 'soonScreen');
+        toggle('.main', name !== 'startScreen' && name !== 'soonScreen');
+        toggle('#auctionDomainScreen', name === 'auctionDomainScreen', 'block');
+        toggle('#busyDomainScreen', name === 'busyDomainScreen', 'block');
+        toggle('#freeDomainScreen', name === 'freeDomainScreen', 'block');
+        toggle('#domainStatus', name !== 'main');
+        toggle('#domainLoading', name === 'main');
+        if (name === 'auctionDomainScreen') {
+            $('#domainStatus').classList.remove('busy');
+            $('#domainStatus').classList.add('free');
+            $('#domainStatus').innerText = locale.auction;
+        } else if (name === 'freeDomainScreen') {
+            $('#domainStatus').classList.remove('busy');
+            $('#domainStatus').classList.add('free');
+            $('#domainStatus').innerText = locale.free;
+        } else if (name === 'busyDomainScreen') {
+            $('#domainStatus').classList.add('busy');
+            $('#domainStatus').classList.remove('free');
+            $('#domainStatus').innerText = locale.busy;
+        }
+    }
+    // LANG
+
+    const localeDict = {
+        'ru': {
+            'testnet': 'ВНИМАНИЕ: это тестовая сеть, не посылайте настоящие монеты! Тестовые домены могут быть сброшены.',
+            'navInputPlaceholder': 'Введите домен',
+            'startInputPlaceholder': 'Введите домен, чтобы начать',
+            'auction1': 'Проходит аукцион на этот домен.',
+            'auction2_1': 'Аукцион закончится',
+            'auction2_2': 'через',
+            'auction3': 'Лучшая ставка на данный момент:',
+            'auctionFrom': 'от',
+            'auction4': 'Чтобы сделать ставку выше отправьте монеты TON на адрес домена:',
+            'openWallet': 'Открыть кошелек',
+            'auctionInfo1': 'Если ваша ставка будет перебита, ваши монеты автоматически вернутся на ваш кошелек. Вы сможете сделать новую ставку.',
+            'auctionInfo2': 'После окончания аукциона пользователь, сделавший лучшую ставку, забирает домен.',
+            'owner': 'Владелец',
+            'free1': 'Этот домен свободен.',
+            'free2': 'Домен можно приобрести через открытый аукцион.',
+            'free3': 'Чтобы начать аукцион сделайте первую ставку, отправив монеты TON на адрес:',
+            'free4': 'В комментарии к переводу укажите:',
+            'auctionDuration': 'Аукцион длится неделю.',
+            'free': 'Свободен',
+            'busy': 'Занят',
+            'auction': 'Аукцион',
+            'errorLength': 'Минимум 4 символа, максимум 127 символов',
+            'subdomainsNotAllowed': 'Субдомены не разрешены',
+            'invalidChars': 'Неподдерживаемые символы',
+            'days': 'дней',
+            'hours': 'часов',
+            'min': 'мин.',
+            'sec': 'сек',
+            'cantCopy': 'Буфер омена не доступен',
+            'connect': 'Редактировать',
+            'dnsRecords': 'DNS-записи:',
+            'notOwner': 'Вы не владелец домена',
+            'walletAddress': 'Адрес кошелька:',
+            'adnlAddress': 'TON сайт [Скоро]:',
+            'invalidAddress': 'Неверный адрес',
+            'resolver': 'Resolver:',
+            'set': 'Сохр.',
+            'installExtension': 'Пожалуйста, установите TON Chrome расширение, чтобы редактировать домен',
+            'updateExtension': 'Пожалуйста, обновите TON Chrome расширение',
+            'expires': 'Истекает',
+        },
+        'en': {
+            'free': 'Available',
+            'busy': 'Busy',
+            'auction': 'Auction',
+            'errorLength': 'Minimum 4 characters, maximum 127 characters',
+            'subdomainsNotAllowed': 'Subdomains are not allowed',
+            'invalidChars': 'Invalid characters',
+            'days': 'days',
+            'hours': 'hours',
+            'min': 'min.',
+            'sec': 'sec',
+            'cantCopy': 'Can\'t copy to clipboard',
+            'notOwner': 'You are not owner of this domain',
+            'invalidAddress': 'Invalid address',
+            'set': 'Set',
+            'installExtension': 'Please update your TON Chrome Extension',
+            'updateExtension': 'Please install TON Chrome Extension to edit domain',
+        }
+    }
+
+    const browserLang = navigator.language || navigator.userLanguage;
+    const lang = (browserLang === 'ru-RU') || (browserLang === 'ru') || (browserLang === 'be-BY') || (browserLang === 'be') || (browserLang === 'kk-KZ') || (browserLang === 'kk') ? 'ru' : 'en';
+    const locale = localeDict[lang];
+
+    if (lang !== 'en') {
+        $('.start-input').placeholder = locale.startInputPlaceholder;
+        $('#navInput input').placeholder = locale.navInputPlaceholder;
+        document.querySelectorAll('[data-locale]').forEach(div => {
+            const key = div.attributes['data-locale'].value;
+            div.innerText = locale[key];
+        });
+    }
+
+    // MAINNET / TESTNET
+
+    const isTestnet = window.location.href.indexOf('testnet=true') > -1;
+
+    if (isTestnet) {
+        toggle('.testnet-badge', true, 'block');
+        document.body.classList.add('testnet-padding');
+    } else {
+        setScreen('soonScreen');
+        $("lottie-player").play();
+        throw new Error('soon');
+    }
+
+    const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
+    const tonRootAddress = isTestnet ? 'EQAdZcyp4H1kCb8bAOuiAdCfngiwINivQ15w_vNQ784DcCl4' : ''; // .ton root smart contract in bounceable form
+
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(toncenterUrl, {apiKey: 'cf29c6480217595ee17158db12a72e3f70b36377f2f79b72487621576a0df10b'}));
+
+    const dnsCollection = new TonWeb.dns.DnsCollection(tonweb.provider, {
+        address: tonRootAddress
+    });
+
+    // UI
+
+    let updateIntervalId = 0;
+    let auctionTimerIntervalId = 0;
+    let freeQrUrl = null;
+    let auctionQrUrl = null;
+    let currentDomain = null;
+    let currentOwner = null;
+    let currentDnsItem = null;
+
+    $('.badge').addEventListener('click', () => {
+        clearInterval(updateIntervalId);
+        clearInterval(auctionTimerIntervalId);
+        freeQrUrl = null;
+        auctionQrUrl = null;
+        currentDomain = null;
+        currentOwner = null;
+        currentDnsItem = null;
+        $('#busyDomainScreen').classList.remove('edit-expand');
+        $('#busyDomainScreen').classList.remove('edit-loading');
+        window.history.pushState('', 'TON DNS ', '#');
+        setScreen('startScreen');
+    });
+
+    // SET DOMAIN
+
+    const validateDomain = (domain) => {
+        if (domain.length < 4 || domain.length > 127) {
+            return locale.errorLength;
+        }
+        for (let i = 0; i < domain.length; i++) {
+            if (domain.charAt(i) === '.') {
+                return locale.subdomainsNotAllowed;
+            }
+            if (domain.charCodeAt(i) <= 32) {
+                return locale.invalidChars;
+            }
+        }
+    }
+
+    const setDomain = (domain) => {
+        currentDomain = domain;
+
+        const loadDomain = async () => {
+            const result = await dnsCollection.resolve(domain, TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER, true);
+            const domainAddress = result[TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER];
+            const domainAddressString = domainAddress.toString(true, true, true);
+            const accountInfo = await tonweb.provider.getAddressInfo(domainAddressString);
+            let dnsItem;
+            let domainExists = accountInfo.state === 'active';
+            let ownerAddress = null;
+            if (domainExists) {
+                dnsItem = new TonWeb.dns.DnsItem(tonweb.provider, {address: domainAddress});
+                const data = await dnsItem.methods.getData();
+                if (!data.isInitialized) {
+                    domainExists = false;
+                } else {
+                    ownerAddress = data.ownerAddress;
+                }
+            }
+            let auctionInfo = null;
+            if (domainExists && !ownerAddress) {
+                auctionInfo = await dnsItem.methods.getAuctionInfo();
+                if (auctionInfo.auctionEndTime < Date.now() / 1000) {
+                    ownerAddress = auctionInfo.maxBidAddress;
+                }
+            }
+            let lastFillUpTime = 0;
+            if (domainExists && ownerAddress) {
+                lastFillUpTime = await dnsItem.methods.getLastFillUpTime();
+            }
+
+            if (currentDomain === domain) {
+                if (!domainExists) {
+                    setScreen('freeDomainScreen');
+                    renderFreeDomain(domain);
+                } else if (ownerAddress) {
+                    currentOwner = ownerAddress.toString(true, true, true);
+                    currentDnsItem = dnsItem;
+                    setScreen('busyDomainScreen');
+                    renderBusyDomain(domain, domainAddressString, ownerAddress.toString(true, true, true), lastFillUpTime);
+                } else {
+                    setScreen('auctionDomainScreen');
+                    renderAuctionDomain(domain, domainAddressString, auctionInfo);
+                }
+            }
+        }
+
+        clearInterval(auctionTimerIntervalId);
+        freeQrUrl = null;
+        auctionQrUrl = null;
+        currentOwner = null;
+        currentDnsItem = null;
+        $('#busyDomainScreen').classList.remove('edit-expand');
+        $('#busyDomainScreen').classList.remove('edit-loading');
+        $('#navInput input').value = '';
+        $('.start-input').value = '';
+
+        setScreen('main');
+        $('#domainName').innerText = domain + '.ton';
+
+        clearInterval(updateIntervalId);
+        updateIntervalId = setInterval(() => loadDomain(), 10 * 1000);
+        loadDomain();
+    }
+
+    const onInput = (e) => {
+        if (e.key === 'Enter') {
+            let domain = e.target.value.toLowerCase();
+            if (domain.endsWith('.ton')) {
+                domain = domain.substring(0, domain.length - 4);
+            }
+            const error = validateDomain(domain);
+            if (error) {
+                $('.start-error').innerText = error;
+                toggle('.start-error', true);
+            } else {
+                window.history.pushState(domain, 'TON DNS - ' + domain, '#' + encodeURIComponent(domain));
+                setDomain(domain);
+            }
+        } else {
+            toggle('.start-error', false);
+        }
+    };
+
+    $('.start-input').addEventListener('keydown', onInput);
+    $('#navInput input').addEventListener('keydown', onInput);
+
+    const processUrl = () => {
+        const domainFromUrl = decodeURIComponent(window.location.hash.substring(1)).toLowerCase();
+        if (domainFromUrl) {
+            const error = validateDomain(domainFromUrl);
+            if (error) {
+                setScreen('startScreen')
+            } else {
+                setDomain(domainFromUrl);
+            }
+        } else {
+            setScreen('startScreen')
+        }
+    }
+    processUrl();
+
+    window.onpopstate = () => processUrl();
+
+    // RENDER UI
+
+    const renderQr = (name, url) => {
+        const qrCode = new QRCodeStyling({
+            "width": 220,
+            "height": 220,
+            "data": url,
+            "margin": 0,
+            "qrOptions": {"typeNumber": "0", "mode": "Byte", "errorCorrectionLevel": "Q"},
+            "imageOptions": {"hideBackgroundDots": true, "imageSize": 0.2, "margin": 0},
+            "dotsOptions": {"type": "rounded", "color": "#000000", "gradient": null},
+            "backgroundOptions": {"color": "#ffffff"},
+            "image": "assets/qr-logo.png",
+            "cornersSquareOptions": {"type": "extra-rounded", "color": "#000000"},
+            "cornersDotOptions": {"type": "dot", "color": "#000000"},
+        });
+
+        const canvasContainer = $(name);
+        canvasContainer.innerHTML = '';
+        qrCode.append(canvasContainer);
+    }
+
+    const shortAddress = (address) => {
+        return address.substring(0, 8) + '...' + address.substring(address.length - 8);
+    }
+
+    const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
+        const auctionEndTime = auctionInfo.auctionEndTime; // unixtime
+        const bestBidAmount = auctionInfo.maxBidAmount;
+        const bestBidAddress = auctionInfo.maxBidAddress.toString(true, true, true);
+
+        const endDate = new Date(auctionEndTime * 1000);
+
+        const setLeftTime = () => {
+            const now = Date.now();
+            let delta = (auctionEndTime * 1000) - now;
+            if (delta < 0) delta = 0;
+            let seconds = Math.floor((delta / 1000) % 60);
+            let minutes = Math.floor((delta / (1000 * 60)) % 60);
+            let hours = Math.floor((delta / (1000 * 60 * 60)) % 24);
+            let days = Math.floor((delta / (1000 * 60 * 60 * 24)));
+
+            hours = (hours < 10) ? '0' + hours : hours;
+            minutes = (minutes < 10) ? '0' + minutes : minutes;
+            seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+            $('#auctionLeftTime').innerText = days + ' ' + locale.days + ' ' + hours + ' ' + locale.hours + ' ' + minutes + ' ' + locale.min + ' ' + seconds + ' ' + locale.sec;
+        }
+
+        clearInterval(auctionTimerIntervalId);
+        auctionTimerIntervalId = setInterval(() => setLeftTime(), 1000);
+        setLeftTime();
+
+        $('#auctionEndTime').innerText = endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString();
+        $('#auctionAmount').innerText = TonWeb.utils.fromNano(bestBidAmount) + ' TON';
+        $('#auctionOwnerAddress').innerText = shortAddress(bestBidAddress);
+        $('#auctionAddress').innerText = domainItemAddress;
+
+        const auctionUrl = 'ton://transfer/' + domainItemAddress;
+        $('#auctionBtn').href = auctionUrl;
+        if (auctionQrUrl !== auctionUrl) {
+            auctionQrUrl = auctionUrl;
+            renderQr('#auctionQr', auctionUrl);
+        }
+    }
+
+    const renderFreeDomain = (domain) => {
+        $('#freeBuyAddress').innerText = tonRootAddress;
+        $('#freeComment').innerText = domain;
+
+        const buyUrl = 'ton://transfer/' + tonRootAddress + '?text=' + encodeURIComponent(domain);
+        $('#freeBtn').href = buyUrl;
+        if (freeQrUrl !== buyUrl) {
+            freeQrUrl = buyUrl;
+            renderQr('#freeQr', buyUrl);
+        }
+    }
+
+    const renderBusyDomain = (domain, domainItemAddress, ownerAddress, lastFillUpTime) => {
+        $('#busyOwnerAddress').innerText = shortAddress(ownerAddress);
+        const ONE_YEAR = 3.156e+10;
+        const endDate = new Date(lastFillUpTime * 1000 + ONE_YEAR);
+        $('#busyEndDate').innerText = endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString();
+    }
+
+    // COPY TO CLIPBOARD
+
+    const copyToClipboard = async (name, btnName) => {
+        try {
+            const div = $(name);
+            const btn = $(btnName);
+            await navigator.clipboard.writeText(div.innerText);
+            btn.style.backgroundImage = 'url("assets/ok.svg")';
+            setTimeout(() => {
+                btn.style.backgroundImage = 'url("assets/copy.svg")';
+            }, 300);
+        } catch (e) {
+            alert(locale.cantCopy);
+        }
+    }
+
+    $('#auctionAddressContainer').addEventListener('click', () => {
+        copyToClipboard('#auctionAddress', '#auctionAddressContainer .copy-btn-icon');
+    });
+
+    $('#freeAddressContainer').addEventListener('click', () => {
+        copyToClipboard('#freeBuyAddress', '#freeAddressContainer .copy-btn-icon');
+    });
+
+    $('#freeCommentContainer').addEventListener('click', () => {
+        copyToClipboard('#freeComment', '#freeCommentContainer .copy-btn-icon');
+    });
+
+    // EDIT
+
+    const createEditBtn = (containerName) => {
+        const container = $(containerName);
+        container.innerHTML = '';
+        const btn = document.createElement('a');
+        btn.innerText = locale.set;
+        btn.classList.add('edit-btn');
+        container.appendChild(btn);
+        return btn;
+    }
+
+    const connectExtension = async (domain, dnsItem) => {
+        const provider = window.ton;
+
+        if (!provider) {
+            alert(locale.installExtension);
+            return;
+        }
+
+        if (!window.tonProtocolVersion || window.tonProtocolVersion < 1) {
+            alert(locale.updateExtension);
+            return;
+        }
+
+        const accounts = await provider.send('ton_requestAccounts');
+        const account = accounts[0];
+        if (account !== currentOwner) {
+            alert(locale.notOwner);
+            return;
+        }
+
+        $('#busyDomainScreen').classList.add('edit-loading');
+
+        try {
+            let dnsRecordWallet = await dnsItem.resolve(".", TonWeb.dns.DNS_CATEGORY_WALLET);
+            if (dnsRecordWallet) {
+                dnsRecordWallet = dnsRecordWallet[TonWeb.dns.DNS_CATEGORY_WALLET];
+            }
+            let dnsRecordResolver = await dnsItem.resolve(".", TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
+            if (dnsRecordResolver) {
+                dnsRecordResolver = dnsRecordResolver[TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER];
+            }
+            if (domain === currentDomain) {
+                $('#editWalletRow input').value = dnsRecordWallet ? dnsRecordWallet.toString(true, true, true) : '';
+                // $('#editAdnlRow input').value = dnsRecordAdnl ? dnsRecordAdnl.toString() : '';
+                $('#editResolverRow input').value = dnsRecordResolver ? dnsRecordResolver.toString(true, true, true) : '';
+
+                const setTx = async (key, value) => {
+                    const dataCell = await TonWeb.dns.DnsItem.createChangeContentEntryBody({
+                        category: key,
+                        value: value
+                    });
+                    const data = TonWeb.utils.bytesToBase64(await dataCell.toBoc(false));
+
+                    provider.send(
+                        'ton_sendTransaction',
+                        [{
+                            to: (await dnsItem.getAddress()).toString(true, true, true),
+                            value: TonWeb.utils.toNano('0.05').toString(),
+                            data: data,
+                            dataType: 'boc'
+                        }]
+                    );
+                }
+
+                createEditBtn('#editWalletRow .edit-btn').addEventListener('click', () => {
+                    const value = $('#editWalletRow input').value;
+                    if (!value || TonWeb.Address.isValid(value)) {
+                        setTx(TonWeb.dns.DNS_CATEGORY_WALLET, value ? TonWeb.dns.createSmartContractAddressRecord(new TonWeb.Address(value)) : null);
+                    } else {
+                        alert(locale.invalidAddress);
+                    }
+                });
+                // createEditBtn('#editAdnlRow .edit-btn').addEventListener('click', () => {
+                //     const value = $('#editAdnlRow input').value;
+                //     setTx(TonWeb.dns.DNS_CATEGORY_TON_SITE, value ? TonWeb.dns.DnsItem.createAdnlAddressValue(new TonWeb.utils.BN(value)) : null);
+                // });
+                createEditBtn('#editResolverRow .edit-btn').addEventListener('click', () => {
+                    const value = $('#editResolverRow input').value;
+                    if (!value || TonWeb.Address.isValid(value)) {
+                        setTx(TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER, value ? TonWeb.dns.createNextResolverRecord(new TonWeb.Address(value)) : null);
+                    } else {
+                        alert(locale.invalidAddress);
+                    }
+                });
+            }
+        } catch (e) {
+            console.error(e);
+            $('#busyDomainScreen').classList.remove('edit-loading');
+            return;
+        }
+
+        $('#busyDomainScreen').classList.remove('edit-loading');
+        $('#busyDomainScreen').classList.add('edit-expand');
+    }
+
+    $('#connectBtn').addEventListener('click', () => connectExtension(currentDomain, currentDnsItem));
+</script>
+
+</body>
+</html>
