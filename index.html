@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="dns.css">
     <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
-    <script type="text/javascript" src="libs/tonweb-0.0.45.js"></script>
+    <script type="text/javascript" src="libs/tonweb-0.0.46.js"></script>
     <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>
 </head>
 <body>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="version">
-        v0.9
+        v0.91
     </div>
 </div>
 
@@ -307,7 +307,7 @@
     }
 
     const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
-    const tonRootAddress = isTestnet ? 'EQAdZcyp4H1kCb8bAOuiAdCfngiwINivQ15w_vNQ784DcCl4' : ''; // .ton root smart contract in bounceable form
+    const tonRootAddress = isTestnet ? 'EQBqeczRqjicXNS6JGY0T6wf6CVFjyuSZWaO2gHguqskRUrZ' : ''; // .ton root smart contract in bounceable form
 
     const tonweb = new TonWeb(new TonWeb.HttpProvider(toncenterUrl, {apiKey: 'cf29c6480217595ee17158db12a72e3f70b36377f2f79b72487621576a0df10b'}));
 
@@ -359,8 +359,7 @@
         currentDomain = domain;
 
         const loadDomain = async () => {
-            const result = await dnsCollection.resolve(domain, TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER, true);
-            const domainAddress = result[TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER];
+            const domainAddress = await dnsCollection.resolve(domain, TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER, true);
             const domainAddressString = domainAddress.toString(true, true, true);
             const accountInfo = await tonweb.provider.getAddressInfo(domainAddressString);
             let dnsItem;
@@ -608,14 +607,8 @@
         $('#busyDomainScreen').classList.add('edit-loading');
 
         try {
-            let dnsRecordWallet = await dnsItem.resolve(".", TonWeb.dns.DNS_CATEGORY_WALLET);
-            if (dnsRecordWallet) {
-                dnsRecordWallet = dnsRecordWallet[TonWeb.dns.DNS_CATEGORY_WALLET];
-            }
-            let dnsRecordResolver = await dnsItem.resolve(".", TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
-            if (dnsRecordResolver) {
-                dnsRecordResolver = dnsRecordResolver[TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER];
-            }
+            let dnsRecordWallet = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_WALLET);
+            let dnsRecordResolver = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
             if (domain === currentDomain) {
                 $('#editWalletRow input').value = dnsRecordWallet ? dnsRecordWallet.toString(true, true, true) : '';
                 // $('#editAdnlRow input').value = dnsRecordAdnl ? dnsRecordAdnl.toString() : '';

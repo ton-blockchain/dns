@@ -48,7 +48,7 @@ input {
 }
 
 .testnet-padding {
-    padding-top: 40px;
+    padding-top: 60px;
 }
 
 /* START PAGE */
@@ -116,7 +116,7 @@ input {
 }
 
 .testnet-padding .badge {
-    top: 60px;
+    top: 80px;
 }
 
 .badge-icon {
@@ -137,7 +137,7 @@ input {
 }
 
 .testnet-padding .nav-input {
-    top: 58px;
+    top: 78px;
 }
 
 .nav-input input {
