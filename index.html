@@ -42,7 +42,7 @@
     </div>
 
     <div class="version">
-        v0.92
+        v0.93
     </div>
 </div>
 
@@ -72,8 +72,8 @@
             <span id="auctionOwnerAddress" class="addr"></span>.
         </p>
 
-        <p class="padding-top" data-locale="auction4">
-            To bet higher, send Toncoins to the domain address:
+        <p class="padding-top">
+            <span data-locale="auction4_1">To bet higher, send at least</span> <span id="auctionMinBet" class="strong"></span> <span data-locale="auction4_2">to the domain address:</span>
         </p>
         <p id="auctionAddressContainer" class="copy-container">
             <span id="auctionAddress" class="addr"></span>
@@ -227,7 +227,8 @@
             'auction2_2': 'через',
             'auction3': 'Лучшая ставка на данный момент:',
             'auctionFrom': 'от',
-            'auction4': 'Чтобы сделать ставку выше отправьте монеты TON на адрес домена:',
+            'auction4_1': 'Чтобы поднять ставку отправьте не менее',
+            'auction4_2': 'на адрес домена:',
             'openWallet': 'Открыть кошелек',
             'auctionInfo1': 'Если ваша ставка будет перебита, ваши монеты автоматически вернутся на ваш кошелек. Вы сможете сделать новую ставку.',
             'auctionInfo2': 'После окончания аукциона пользователь, сделавший лучшую ставку, забирает домен.',
@@ -240,9 +241,9 @@
             'free': 'Свободен',
             'busy': 'Занят',
             'auction': 'Аукцион',
-            'errorLength': 'Минимум 4 символа, максимум 127 символов',
+            'errorLength': 'Минимум 4 символа, максимум 126 символов',
             'subdomainsNotAllowed': 'Субдомены не разрешены',
-            'invalidChars': 'Неподдерживаемые символы',
+            'invalidChars': ' Допустимы латинские буквы (a-z), цифры (0-9) и дефис (-). Дефис не может находиться в начале и конце.',
             'days': 'дней',
             'hours': 'часов',
             'min': 'мин.',
@@ -264,9 +265,9 @@
             'free': 'Available',
             'busy': 'Busy',
             'auction': 'Auction',
-            'errorLength': 'Minimum 4 characters, maximum 127 characters',
+            'errorLength': 'Minimum 4 characters, maximum 126 characters',
             'subdomainsNotAllowed': 'Subdomains are not allowed',
-            'invalidChars': 'Invalid characters',
+            'invalidChars': 'Latin letters (a-z), numbers (0-9) and hyphens (-) are allowed. A hyphen cannot be at the beginning or end.',
             'days': 'days',
             'hours': 'hours',
             'min': 'min.',
@@ -325,7 +326,7 @@
     let currentOwner = null;
     let currentDnsItem = null;
 
-    $('.badge').addEventListener('click', () => {
+    const clear = () => {
         clearInterval(updateIntervalId);
         clearInterval(auctionTimerIntervalId);
         freeQrUrl = null;
@@ -335,6 +336,10 @@
         currentDnsItem = null;
         $('#busyDomainScreen').classList.remove('edit-expand');
         $('#busyDomainScreen').classList.remove('edit-loading');
+    }
+
+    $('.badge').addEventListener('click', () => {
+        clear();
         window.history.pushState('', 'TON DNS ', '#');
         setScreen('startScreen');
     });
@@ -342,14 +347,18 @@
     // SET DOMAIN
 
     const validateDomain = (domain) => {
-        if (domain.length < 4 || domain.length > 127) {
+        if (domain.length < 4 || domain.length > 126) {
             return locale.errorLength;
         }
         for (let i = 0; i < domain.length; i++) {
             if (domain.charAt(i) === '.') {
                 return locale.subdomainsNotAllowed;
             }
-            if (domain.charCodeAt(i) <= 32) {
+            const char = domain.charCodeAt(i);
+            const isHyphen = (char === 45);
+            const isValidChar = (isHyphen & (i > 0) & (i < domain.length - 1)) | ((char >= 48) & (char <= 57)) | ((char >= 97) & (char <= 122)); // '-' or 0-9 or a-z ;  abcdefghijklmnopqrstuvwxyz-0123456789
+
+            if (!isValidChar) {
                 return locale.invalidChars;
             }
         }
@@ -422,7 +431,7 @@
 
     const onInput = (e) => {
         if (e.key === 'Enter') {
-            let domain = e.target.value.toLowerCase();
+            let domain = e.target.value.toLowerCase().trim();
             if (domain.endsWith('.ton')) {
                 domain = domain.substring(0, domain.length - 4);
             }
@@ -443,6 +452,7 @@
     $('#navInput input').addEventListener('keydown', onInput);
 
     const processUrl = () => {
+        clear();
         const domainFromUrl = decodeURIComponent(window.location.hash.substring(1)).toLowerCase();
         if (domainFromUrl) {
             const error = validateDomain(domainFromUrl);
@@ -516,6 +526,7 @@
         $('#auctionAmount').innerText = TonWeb.utils.fromNano(bestBidAmount) + ' TON';
         $('#auctionOwnerAddress').innerText = shortAddress(bestBidAddress);
         $('#auctionAddress').innerText = domainItemAddress;
+        $('#auctionMinBet').innerText = TonWeb.utils.fromNano(bestBidAmount.mul(new TonWeb.utils.BN(105)).div(new TonWeb.utils.BN(100))) + ' TON';
 
         const auctionUrl = 'ton://transfer/' + domainItemAddress;
         $('#auctionBtn').href = auctionUrl;
