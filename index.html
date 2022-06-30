@@ -42,7 +42,7 @@
     </div>
 
     <div class="version">
-        v0.94
+        v0.95
     </div>
 </div>
 
@@ -308,7 +308,7 @@
     }
 
     const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
-    const tonRootAddress = isTestnet ? 'EQBqeczRqjicXNS6JGY0T6wf6CVFjyuSZWaO2gHguqskRUrZ' : ''; // .ton root smart contract in bounceable form
+    const tonRootAddress = isTestnet ? new TonWeb.Address('EQBqeczRqjicXNS6JGY0T6wf6CVFjyuSZWaO2gHguqskRUrZ').toString(true, true, true, true) : ''; // .ton root smart contract in bounceable form
 
     const tonweb = new TonWeb(new TonWeb.HttpProvider(toncenterUrl, {apiKey: 'cf29c6480217595ee17158db12a72e3f70b36377f2f79b72487621576a0df10b'}));
 
@@ -369,7 +369,7 @@
 
         const loadDomain = async () => {
             const domainAddress = await dnsCollection.resolve(domain, TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER, true);
-            const domainAddressString = domainAddress.toString(true, true, true);
+            const domainAddressString = domainAddress.toString(true, true, true, isTestnet);
             const accountInfo = await tonweb.provider.getAddressInfo(domainAddressString);
             let dnsItem;
             let domainExists = accountInfo.state === 'active';
@@ -400,10 +400,10 @@
                     setScreen('freeDomainScreen');
                     renderFreeDomain(domain);
                 } else if (ownerAddress) {
-                    currentOwner = ownerAddress.toString(true, true, true);
+                    currentOwner = ownerAddress.toString(true, true, true, isTestnet);
                     currentDnsItem = dnsItem;
                     setScreen('busyDomainScreen');
-                    renderBusyDomain(domain, domainAddressString, ownerAddress.toString(true, true, true), lastFillUpTime);
+                    renderBusyDomain(domain, domainAddressString, ownerAddress.toString(true, true, true, isTestnet), lastFillUpTime);
                 } else {
                     setScreen('auctionDomainScreen');
                     renderAuctionDomain(domain, domainAddressString, auctionInfo);
@@ -498,7 +498,7 @@
     const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         const auctionEndTime = auctionInfo.auctionEndTime; // unixtime
         const bestBidAmount = auctionInfo.maxBidAmount;
-        const bestBidAddress = auctionInfo.maxBidAddress.toString(true, true, true);
+        const bestBidAddress = auctionInfo.maxBidAddress.toString(true, true, true, isTestnet);
 
         const endDate = new Date(auctionEndTime * 1000);
 
@@ -609,7 +609,7 @@
         }
 
         const accounts = await provider.send('ton_requestAccounts');
-        const account = accounts[0];
+        const account = new TonWeb.Address(accounts[0]).toString(true, true, true, isTestnet);
         if (account !== currentOwner) {
             alert(locale.notOwner);
             return;
@@ -621,9 +621,9 @@
             let dnsRecordWallet = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_WALLET);
             let dnsRecordResolver = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
             if (domain === currentDomain) {
-                $('#editWalletRow input').value = dnsRecordWallet ? dnsRecordWallet.toString(true, true, true) : '';
+                $('#editWalletRow input').value = dnsRecordWallet ? dnsRecordWallet.toString(true, true, true, isTestnet) : '';
                 // $('#editAdnlRow input').value = dnsRecordAdnl ? dnsRecordAdnl.toString() : '';
-                $('#editResolverRow input').value = dnsRecordResolver ? dnsRecordResolver.toString(true, true, true) : '';
+                $('#editResolverRow input').value = dnsRecordResolver ? dnsRecordResolver.toString(true, true, true, isTestnet) : '';
 
                 const setTx = async (key, value) => {
                     const dataCell = await TonWeb.dns.DnsItem.createChangeContentEntryBody({
@@ -635,7 +635,7 @@
                     provider.send(
                         'ton_sendTransaction',
                         [{
-                            to: (await dnsItem.getAddress()).toString(true, true, true),
+                            to: (await dnsItem.getAddress()).toString(true, true, true, isTestnet),
                             value: TonWeb.utils.toNano('0.05').toString(),
                             data: data,
                             dataType: 'boc'
