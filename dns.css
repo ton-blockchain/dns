@@ -163,6 +163,8 @@ input {
     display: flex;
     justify-content: center;
     margin-top: 200px;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* MAIN */
