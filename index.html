@@ -9,13 +9,13 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="dns.css?2">
     <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
-    <script type="text/javascript" src="libs/tonweb-0.0.48.js"></script>
+    <script type="text/javascript" src="libs/tonweb-0.0.51.js"></script>
     <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>
 </head>
 <body>
 
 <div class="testnet-badge" data-locale="testnet" style="display: none">
-    ATTENTION: this is test network, don't send real coins! Test domains can be reset.
+    ATTENTION! This is the test network — don’t send real Toncoin! Test domains can be reset.
 </div>
 
 <div class="badge">
@@ -24,7 +24,7 @@
 </div>
 
 <div id="navInput" class="nav-input">
-    <input type="text" placeholder="Enter domain">
+    <input type="text" placeholder="Enter a domain">
 </div>
 
 <div id="soonScreen" class="soon">
@@ -41,14 +41,14 @@
     <div class="start-img"></div>
 
     <div class="start-input-container">
-        <input class="start-input" type="text" placeholder="Enter domain to start">
+        <input class="start-input" type="text" placeholder="Enter a domain to start">
     </div>
 
     <div class="start-error">
     </div>
 
     <div class="version">
-        v0.95
+        v0.96
     </div>
 </div>
 
@@ -63,15 +63,15 @@
 
     <div id="auctionDomainScreen" class="info">
         <p data-locale="auction1">
-            There is an auction for this domain.
+            This domain is up for auction.
         </p>
         <p>
-            <span data-locale="auction2_1">Auction ends</span>
+            <span data-locale="auction2_1">The auction ends on</span>
             <span id="auctionEndTime" class="strong"></span>
             <span data-locale="auction2_2">in</span>
             <span id="auctionLeftTime" class="strong"></span>.
         </p>
-        <p data-locale="auction3">Current best bet:</p>
+        <p data-locale="auction3">The current highest bid:</p>
         <p>
             <span id="auctionAmount" class="strong"></span>
             <span data-locale="auctionFrom">by</span>
@@ -79,7 +79,7 @@
         </p>
 
         <p class="padding-top">
-            <span data-locale="auction4_1">To bet higher, send at least</span> <span id="auctionMinBet" class="strong"></span> <span data-locale="auction4_2">to the domain address:</span>
+            <span data-locale="auction4_1">To place a higher bid, send at leas</span> <span id="auctionMinBet" class="strong"></span> <span data-locale="auction4_2">to the domain address:</span>
         </p>
         <p id="auctionAddressContainer" class="copy-container">
             <span id="auctionAddress" class="addr"></span>
@@ -88,12 +88,13 @@
         <div id="auctionQr"></div>
         <a id="auctionBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
 
-        <p class="padding-top" data-locale="auctionInfo1">
-            If your bet is outbid, your coins will automatically be returned to your wallet. You will be able to place a
-            new bet.
+        <p data-locale="send-warning" class="padding-top strong">Send TON from a wallet you control. Do not send directly from exchanges or bots — you will lose coins.</p>
+
+        <p  data-locale="auctionInfo1">
+            If someone outbids you, your coins will automatically be returned to your wallet. However, you will be able to place a new bid.
         </p>
         <p data-locale="auctionInfo2">
-            After the end of the auction, the user who made the best bid takes the domain.
+            When the auction ends, the user who made the highest bid will claim the domain.
         </p>
     </div>
 
@@ -154,15 +155,15 @@
 
     <div id="freeDomainScreen" class="info">
         <p data-locale="free1">This domain is available.</p>
-        <p data-locale="free2">The domain can be purchased on open auction.</p>
-        <p class="padding-top" data-locale="free3">
-            To start the auction, make the first bid by sending Toncoins to the address:
+        <p data-locale="free2">The domain can be purchased at an open auction.</p>
+        <p class="padding-top">
+            <span data-locale="free3_1">To start the auction, make the first bid by sending at least</span> <span id="freeMinBet" class="strong"></span> <span data-locale="free3_2">to the address:</span>
         </p>
         <p id="freeAddressContainer" class="copy-container">
             <span id="freeBuyAddress" class="addr"></span>
             <span class="copy-btn"><span class="copy-btn-icon"></span></span>
         </p>
-        <p data-locale="free4">In the transfer comment specify:</p>
+        <p data-locale="free4">In the transfer comment, specify:</p>
 
         <p id="freeCommentContainer" class="copy-container">
             <span id="freeComment" class="strong"></span>
@@ -173,13 +174,14 @@
 
         <a id="freeBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
 
-        <p class="padding-top" data-locale="auctionDuration">The auction runs a week.</p>
+        <p data-locale="send-warning" class="padding-top strong">Send TON from a wallet you control. Do not send directly from exchanges or bots — you will lose coins.</p>
+
+        <p ><span data-locale="auctionDuration">The auction’s duration:</span> <span id="auctionDuration"></span></p>
         <p data-locale="auctionInfo1">
-            If your bet is outbid, your coins will automatically be returned to your wallet.
-            You will be able to place a new bet.
+            If someone outbids you, your coins will automatically be returned to your wallet. However, you will be able to place a new bid.
         </p>
         <p data-locale="auctionInfo2">
-            After the end of the auction, the user who made the best bid takes the domain.
+            When the auction ends, the user who made the highest bid will claim the domain.
         </p>
     </div>
 </div>
@@ -225,7 +227,7 @@
 
     const localeDict = {
         'ru': {
-            'testnet': 'ВНИМАНИЕ: это тестовая сеть, не посылайте настоящие монеты! Тестовые домены могут быть сброшены.',
+            'testnet': 'ВНИМАНИЕ! Это тестовая сеть, не посылайте настоящие монеты! Тестовые домены могут быть сброшены.',
             'navInputPlaceholder': 'Введите домен',
             'startInputPlaceholder': 'Введите домен, чтобы начать',
             'auction1': 'Проходит аукцион на этот домен.',
@@ -233,7 +235,7 @@
             'auction2_2': 'через',
             'auction3': 'Лучшая ставка на данный момент:',
             'auctionFrom': 'от',
-            'auction4_1': 'Чтобы поднять ставку отправьте не менее',
+            'auction4_1': 'Чтобы поднять ставку, отправьте не менее',
             'auction4_2': 'на адрес домена:',
             'openWallet': 'Открыть кошелек',
             'auctionInfo1': 'Если ваша ставка будет перебита, ваши монеты автоматически вернутся на ваш кошелек. Вы сможете сделать новую ставку.',
@@ -241,15 +243,17 @@
             'owner': 'Владелец',
             'free1': 'Этот домен свободен.',
             'free2': 'Домен можно приобрести через открытый аукцион.',
-            'free3': 'Чтобы начать аукцион сделайте первую ставку, отправив монеты TON на адрес:',
+            'free3_1': 'Чтобы начать аукцион, сделайте первую ставку, отправив не менее',
+            'free3_2': 'на адрес:',
             'free4': 'В комментарии к переводу укажите:',
-            'auctionDuration': 'Аукцион длится неделю.',
+            'auctionDuration': 'Длительность аукциона:',
             'free': 'Свободен',
             'busy': 'Занят',
             'auction': 'Аукцион',
             'errorLength': 'Минимум 4 символа, максимум 126 символов',
             'subdomainsNotAllowed': 'Субдомены не разрешены',
             'invalidChars': ' Допустимы латинские буквы (a-z), цифры (0-9) и дефис (-). Дефис не может находиться в начале и конце.',
+            'week': 'неделя',
             'days': 'дней',
             'hours': 'часов',
             'min': 'мин.',
@@ -263,9 +267,10 @@
             'invalidAddress': 'Неверный адрес',
             'resolver': 'Resolver:',
             'set': 'Сохр.',
-            'installExtension': 'Пожалуйста, установите TON Chrome расширение, чтобы редактировать домен',
-            'updateExtension': 'Пожалуйста, обновите TON Chrome расширение',
+            'installExtension': 'Пожалуйста, установите TON Chrome расширение, чтобы редактировать домен.',
+            'updateExtension': 'Пожалуйста, обновите расширение TON Chrome.',
             'expires': 'Истекает',
+            'send-warning': 'Отправляйте монеты с кошелька, который вы контролируете. Не отправляйте напрямую с бирж или ботов - вы потеряете монеты.'
         },
         'en': {
             'free': 'Available',
@@ -274,16 +279,17 @@
             'errorLength': 'Minimum 4 characters, maximum 126 characters',
             'subdomainsNotAllowed': 'Subdomains are not allowed',
             'invalidChars': 'Latin letters (a-z), numbers (0-9) and hyphens (-) are allowed. A hyphen cannot be at the beginning or end.',
+            'week': 'week',
             'days': 'days',
             'hours': 'hours',
             'min': 'min.',
             'sec': 'sec',
-            'cantCopy': 'Can\'t copy to clipboard',
-            'notOwner': 'You are not owner of this domain',
+            'cantCopy': 'Can’t copy to clipboard',
+            'notOwner': 'You are not the owner of this domain',
             'invalidAddress': 'Invalid address',
             'set': 'Set',
-            'installExtension': 'Please update your TON Chrome Extension',
-            'updateExtension': 'Please install TON Chrome Extension to edit domain',
+            'installExtension': 'Please update your TON Chrome extension',
+            'updateExtension': 'Please install the TON Chrome extension to edit the domain',
         }
     }
 
@@ -314,13 +320,16 @@
     }
 
     const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
-    const tonRootAddress = isTestnet ? new TonWeb.Address('EQBqeczRqjicXNS6JGY0T6wf6CVFjyuSZWaO2gHguqskRUrZ').toString(true, true, true, true) : ''; // .ton root smart contract in bounceable form
+    const tonRootAddress = isTestnet ? new TonWeb.Address('EQDzgi9SYoLRR255ABSpsceO09TNkL-kitDM3F6hmBgkfLlI').toString(true, true, true, true) : ''; // .ton root smart contract in bounceable form
 
     const tonweb = new TonWeb(new TonWeb.HttpProvider(toncenterUrl, {apiKey: 'cf29c6480217595ee17158db12a72e3f70b36377f2f79b72487621576a0df10b'}));
 
     const dnsCollection = new TonWeb.dns.DnsCollection(tonweb.provider, {
         address: tonRootAddress
     });
+
+    const one_month = 2592000; // 1 month in seconds = 60 * 60 * 24 * 30
+    const auction_start_time = 1659119372;
 
     // UI
 
@@ -501,6 +510,67 @@
         return address.substring(0, 8) + '...' + address.substring(address.length - 8);
     }
 
+    const getMinPriceConfig = (domainCharCount) => {
+        switch (domainCharCount) {
+            case 4: return ['1000', '100'];
+            case 5: return ['500', '50'];
+            case 6: return ['400', '40'];
+            case 7: return ['300', '30'];
+            case 8: return ['200', '20'];
+            case 9: return ['100', '10'];
+            case 10: return ['50', '5'];
+            default:
+                return ['10', '1'];
+        }
+    }
+
+    const getMinPrice = (domain) => {
+        const arr = getMinPriceConfig(domain.length);
+        let startMinPrice = TonWeb.utils.toNano(arr[0]);
+        const endMinPrice = TonWeb.utils.toNano(arr[1]);
+        const nowTime = Math.floor(Date.now() / 1000);
+        const seconds = nowTime - auction_start_time;
+        const months = Math.floor(seconds / one_month);
+        if (months > 21) {
+            return endMinPrice;
+        }
+        for (let i = 0; i < months; i++) {
+            startMinPrice = startMinPrice.mul(new TonWeb.utils.BN(90)).div(new TonWeb.utils.BN(100));
+        }
+        return startMinPrice;
+    }
+
+    const getAuctionDuration = () => {
+        const auction_start_duration = 60 * 60 * 24 * 7; // 5 min (in mainnet 1 week)
+        const auction_end_duration = 60 * 60; // 1 min (in mainnet 1 hour)
+
+        const nowTime = Math.floor(Date.now() / 1000);
+        const seconds = nowTime - auction_start_time;
+        let months = Math.floor(seconds / one_month);
+        if (months > 12) {
+            months = 12;
+        }
+        return auction_start_duration - (auction_start_duration - auction_end_duration) * months / 12;
+    }
+
+    const formatDuration = millis => {
+        if (millis < 0) millis = 0;
+        let seconds = Math.floor((millis / 1000) % 60);
+        let minutes = Math.floor((millis / (1000 * 60)) % 60);
+        let hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
+        let days = Math.floor((millis / (1000 * 60 * 60 * 24)));
+
+        if (days === 7) {
+            return '1 ' + locale.week;
+        }
+
+        hours = (hours < 10) ? '0' + hours : hours;
+        minutes = (minutes < 10) ? '0' + minutes : minutes;
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+        return days + ' ' + locale.days + ' ' + hours + ' ' + locale.hours + ' ' + minutes + ' ' + locale.min + ' ' + seconds + ' ' + locale.sec;
+    }
+
     const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         const auctionEndTime = auctionInfo.auctionEndTime; // unixtime
         const bestBidAmount = auctionInfo.maxBidAmount;
@@ -511,17 +581,7 @@
         const setLeftTime = () => {
             const now = Date.now();
             let delta = (auctionEndTime * 1000) - now;
-            if (delta < 0) delta = 0;
-            let seconds = Math.floor((delta / 1000) % 60);
-            let minutes = Math.floor((delta / (1000 * 60)) % 60);
-            let hours = Math.floor((delta / (1000 * 60 * 60)) % 24);
-            let days = Math.floor((delta / (1000 * 60 * 60 * 24)));
-
-            hours = (hours < 10) ? '0' + hours : hours;
-            minutes = (minutes < 10) ? '0' + minutes : minutes;
-            seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-            $('#auctionLeftTime').innerText = days + ' ' + locale.days + ' ' + hours + ' ' + locale.hours + ' ' + minutes + ' ' + locale.min + ' ' + seconds + ' ' + locale.sec;
+            $('#auctionLeftTime').innerText = formatDuration(delta);
         }
 
         clearInterval(auctionTimerIntervalId);
@@ -545,6 +605,9 @@
     const renderFreeDomain = (domain) => {
         $('#freeBuyAddress').innerText = tonRootAddress;
         $('#freeComment').innerText = domain;
+
+        $('#freeMinBet').innerText = TonWeb.utils.fromNano(getMinPrice(domain)) + ' TON';
+        $('#auctionDuration').innerText = formatDuration(getAuctionDuration() * 1000) + '.';
 
         const buyUrl = 'ton://transfer/' + tonRootAddress + '?text=' + encodeURIComponent(domain);
         $('#freeBtn').href = buyUrl;
