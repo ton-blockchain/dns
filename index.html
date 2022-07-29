@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="dns.css?2">
     <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
-    <script type="text/javascript" src="libs/tonweb-0.0.52.js"></script>
+    <script type="text/javascript" src="libs/tonweb-0.0.52.js?1"></script>
     <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>
 </head>
 <body>
@@ -29,11 +29,14 @@
 
 <div id="soonScreen" class="soon">
     <lottie-player loop mode="normal" src="assets/soon.tgs" style="width: 300px"></lottie-player>
-    <div style="margin-top: 20px; text-align: center; line-height: 150%">
-        The open auction of TON domain names will begin on <span class="strong">July 30th</span>.
+    <div data-locale="begin" style="margin-top: 20px; text-align: center; line-height: 150%">
+        The open auction of TON domain names will begin today.
+    </div>
+    <div id="soonTimer" class="strong padding-top" style="height: 40px">
+
     </div>
     <div style="margin-top: 20px">
-        <a href="https://telegra.ph/TON-DNS-06-30">More about TON DNS</a>
+        <a id="aboutDnsLink" href="https://telegra.ph/TON-DNS-06-30" data-locale="about_dns">More about TON DNS</a>
     </div>
 </div>
 
@@ -48,7 +51,7 @@
     </div>
 
     <div class="version">
-        v0.97
+        v1.0, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
     </div>
 </div>
 
@@ -254,6 +257,8 @@
             'subdomainsNotAllowed': 'Субдомены не разрешены',
             'invalidChars': ' Допустимы латинские буквы (a-z), цифры (0-9) и дефис (-). Дефис не может находиться в начале и конце.',
             'week': 'неделя',
+            'day': 'день',
+            'hour': 'час',
             'days': 'дней',
             'hours': 'часов',
             'min': 'мин.',
@@ -270,7 +275,10 @@
             'installExtension': 'Пожалуйста, установите TON Chrome расширение, чтобы редактировать домен.',
             'updateExtension': 'Пожалуйста, обновите расширение TON Chrome.',
             'expires': 'Истекает',
-            'send-warning': 'Отправляйте монеты с кошелька, который вы контролируете. Не отправляйте напрямую с бирж или ботов - вы потеряете монеты.'
+            'send-warning': 'Отправляйте монеты с кошелька, который вы контролируете. Не отправляйте напрямую с бирж или ботов - вы потеряете монеты.',
+            'begin': 'Открытый аукцион доменных имен TON DNS начинается сегодня.',
+            'about_dns': 'Узнать больше о TON DNS',
+            'help': 'Помощь'
         },
         'en': {
             'free': 'Available',
@@ -280,6 +288,8 @@
             'subdomainsNotAllowed': 'Subdomains are not allowed',
             'invalidChars': 'Latin letters (a-z), numbers (0-9) and hyphens (-) are allowed. A hyphen cannot be at the beginning or end.',
             'week': 'week',
+            'day': 'day',
+            'hour': 'hour',
             'days': 'days',
             'hours': 'hours',
             'min': 'min.',
@@ -304,32 +314,73 @@
             const key = div.attributes['data-locale'].value;
             div.innerText = locale[key];
         });
+        $('#aboutDnsLink').href = 'https://telegra.ph/TON-DNS-06-27';
+    }
+
+    const formatDuration = millis => {
+        if (millis < 0) millis = 0;
+        let seconds = Math.floor((millis / 1000) % 60);
+        let minutes = Math.floor((millis / (1000 * 60)) % 60);
+        let hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
+        let days = Math.floor((millis / (1000 * 60 * 60 * 24)));
+
+        if (days === 7) {
+            return '1 ' + locale.week;
+        }
+
+        minutes = (minutes < 10) ? '0' + minutes : minutes;
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+        let result = '';
+        if (days > 0) {
+            result += days + ' ' + (days === 1 ? locale.day : locale.days) + ' ';
+        }
+        if (days > 0 || hours > 0) {
+            result += hours + ' ' + (hours === 1 ? locale.hour : locale.hours) + ' ';
+        }
+        result += minutes + ' ' + locale.min + ' ' + seconds + ' ' + locale.sec;
+
+        return result;
     }
 
     // MAINNET / TESTNET
 
     const isTestnet = window.location.href.indexOf('testnet=true') > -1;
 
+    const one_month = 2592000; // 1 month in seconds = 60 * 60 * 24 * 30
+    const auction_start_time = isTestnet ? 1659125865 : 1659171600;
+
     if (isTestnet) {
         toggle('.testnet-badge', true, 'block');
         document.body.classList.add('testnet-padding');
     } else {
-        setScreen('soonScreen');
-        $("lottie-player").play();
-        throw new Error('soon');
+        if (Date.now() / 1000 < auction_start_time) {
+            setScreen('soonScreen');
+            $("lottie-player").play();
+
+            const setSoonTime = () => {
+                let delta = (auction_start_time * 1000) - Date.now();
+                if (delta <= 0) {
+                    location.reload();
+                }
+                $('#soonTimer').innerText = formatDuration(delta);
+            }
+
+            setInterval(() => setSoonTime(), 1000);
+            setSoonTime();
+
+            throw new Error('soon');
+        }
     }
 
     const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
-    const tonRootAddress = isTestnet ? new TonWeb.Address('EQDjPtM6QusgMgWfl9kMcG-EALslbTITnKcH8VZK1pnH3UZA').toString(true, true, true, true) : ''; // .ton root smart contract in bounceable form
+    const tonRootAddress = isTestnet ? new TonWeb.Address('EQDjPtM6QusgMgWfl9kMcG-EALslbTITnKcH8VZK1pnH3UZA').toString(true, true, true, true) : 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz'; // .ton root smart contract in bounceable form
 
     const tonweb = new TonWeb(new TonWeb.HttpProvider(toncenterUrl, {apiKey: 'cf29c6480217595ee17158db12a72e3f70b36377f2f79b72487621576a0df10b'}));
 
     const dnsCollection = new TonWeb.dns.DnsCollection(tonweb.provider, {
         address: tonRootAddress
     });
-
-    const one_month = 2592000; // 1 month in seconds = 60 * 60 * 24 * 30
-    const auction_start_time = 1659119372;
 
     // UI
 
@@ -553,24 +604,6 @@
         return auction_start_duration - (auction_start_duration - auction_end_duration) * months / 12;
     }
 
-    const formatDuration = millis => {
-        if (millis < 0) millis = 0;
-        let seconds = Math.floor((millis / 1000) % 60);
-        let minutes = Math.floor((millis / (1000 * 60)) % 60);
-        let hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
-        let days = Math.floor((millis / (1000 * 60 * 60 * 24)));
-
-        if (days === 7) {
-            return '1 ' + locale.week;
-        }
-
-        hours = (hours < 10) ? '0' + hours : hours;
-        minutes = (minutes < 10) ? '0' + minutes : minutes;
-        seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-        return days + ' ' + locale.days + ' ' + hours + ' ' + locale.hours + ' ' + minutes + ' ' + locale.min + ' ' + seconds + ' ' + locale.sec;
-    }
-
     const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         const auctionEndTime = auctionInfo.auctionEndTime; // unixtime
         const bestBidAmount = auctionInfo.maxBidAmount;
@@ -619,7 +652,7 @@
 
     const renderBusyDomain = (domain, domainItemAddress, ownerAddress, lastFillUpTime) => {
         $('#busyOwnerAddress').innerText = shortAddress(ownerAddress);
-        const ONE_YEAR = 3.156e+10;
+        const ONE_YEAR = 31622400 * 1000;
         const endDate = new Date(lastFillUpTime * 1000 + ONE_YEAR);
         $('#busyEndDate').innerText = endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString();
     }
