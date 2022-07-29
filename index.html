@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="dns.css?2">
     <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
-    <script type="text/javascript" src="libs/tonweb-0.0.51.js"></script>
+    <script type="text/javascript" src="libs/tonweb-0.0.52.js"></script>
     <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>
 </head>
 <body>
@@ -48,7 +48,7 @@
     </div>
 
     <div class="version">
-        v0.96
+        v0.97
     </div>
 </div>
 
@@ -320,7 +320,7 @@
     }
 
     const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
-    const tonRootAddress = isTestnet ? new TonWeb.Address('EQDzgi9SYoLRR255ABSpsceO09TNkL-kitDM3F6hmBgkfLlI').toString(true, true, true, true) : ''; // .ton root smart contract in bounceable form
+    const tonRootAddress = isTestnet ? new TonWeb.Address('EQDjPtM6QusgMgWfl9kMcG-EALslbTITnKcH8VZK1pnH3UZA').toString(true, true, true, true) : ''; // .ton root smart contract in bounceable form
 
     const tonweb = new TonWeb(new TonWeb.HttpProvider(toncenterUrl, {apiKey: 'cf29c6480217595ee17158db12a72e3f70b36377f2f79b72487621576a0df10b'}));
 
