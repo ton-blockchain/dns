@@ -7,10 +7,10 @@
           content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="dns.css?2">
+    <link rel="stylesheet" href="dns.css?3">
     <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
     <script type="text/javascript" src="libs/tonweb-0.0.52.js?1"></script>
-    <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>
+<!--    <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>-->
 </head>
 <body>
 
@@ -27,31 +27,22 @@
     <input type="text" placeholder="Enter a domain">
 </div>
 
-<div id="soonScreen" class="soon">
-    <lottie-player loop mode="normal" src="assets/soon.tgs?1" style="width: 300px"></lottie-player>
-    <div data-locale="begin" style="margin-top: 20px; text-align: center; line-height: 150%">
-        The open auction of TON domain names will begin today.
-    </div>
-    <div id="soonTimer" class="strong padding-top" style="height: 40px">
-
-    </div>
-    <div style="margin-top: 20px">
-        <a id="aboutDnsLink" href="https://telegra.ph/TON-DNS-06-30" data-locale="about_dns" target="_blank">More about TON DNS</a>
-    </div>
-</div>
-
 <div id="startScreen" class="start">
     <div class="start-img"></div>
+
+    <div class="strong" style="line-height: 40px">
+        <span data-locale="openAuction">Open auction of domain names</span> <a id="aboutDnsLink" href="https://telegra.ph/TON-DNS-06-30" target="_blank" style="word-break: break-word">TON&nbsp;DNS</a>
+    </div>
 
     <div class="start-input-container">
         <input class="start-input" type="text" placeholder="Enter a domain to start">
     </div>
 
-    <div class="start-error">
+    <div class="start-error" style="display: none">
     </div>
 
     <div class="version">
-        v1.01, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
+        v1.02, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
     </div>
 </div>
 
@@ -82,7 +73,7 @@
         </p>
 
         <p class="padding-top">
-            <span data-locale="auction4_1">To place a higher bid, send at leas</span> <span id="auctionMinBet" class="strong"></span> <span data-locale="auction4_2">to the domain address:</span>
+            <span data-locale="auction4_1">To place a higher bid, send at least</span> <span id="auctionMinBet" class="strong"></span> <span data-locale="auction4_2">to the domain address:</span>
         </p>
         <p id="auctionAddressContainer" class="copy-container">
             <span id="auctionAddress" class="addr"></span>
@@ -90,6 +81,9 @@
         </p>
         <div id="auctionQr"></div>
         <a id="auctionBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
+        <div class="padding-top" style="margin-left: 16px">
+            <a href="https://ton.org/wallets" target="_blank" data-locale="noWallet">No wallet?</a>
+        </div>
 
         <p data-locale="send-warning" class="padding-top strong">Send TON from a wallet you control. Do not send directly from exchanges or bots — you will lose coins.</p>
 
@@ -176,6 +170,9 @@
         <div id="freeQr"></div>
 
         <a id="freeBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
+        <div class="padding-top" style="margin-left: 16px">
+            <a href="https://ton.org/wallets" target="_blank" data-locale="noWallet">No wallet?</a>
+        </div>
 
         <p data-locale="send-warning" class="padding-top strong">Send TON from a wallet you control. Do not send directly from exchanges or bots — you will lose coins.</p>
 
@@ -197,16 +194,14 @@
     }
 
     const setScreen = (name) => {
-        toggle('#soonScreen', name === 'soonScreen');
-
         toggle('#startScreen', name === 'startScreen');
         if (name === 'startScreen') {
             setTimeout(() => {
                 $('.start-input').focus();
             }, 10);
         }
-        toggle('#navInput', name !== 'startScreen' && name !== 'soonScreen');
-        toggle('.main', name !== 'startScreen' && name !== 'soonScreen');
+        toggle('#navInput', name !== 'startScreen');
+        toggle('.main', name !== 'startScreen');
         toggle('#auctionDomainScreen', name === 'auctionDomainScreen', 'block');
         toggle('#busyDomainScreen', name === 'busyDomainScreen', 'block');
         toggle('#freeDomainScreen', name === 'freeDomainScreen', 'block');
@@ -278,7 +273,9 @@
             'send-warning': 'Отправляйте монеты с кошелька, который вы контролируете. Не отправляйте напрямую с бирж или ботов - вы потеряете монеты.',
             'begin': 'Открытый аукцион доменных имен TON DNS начинается сегодня.',
             'about_dns': 'Узнать больше о TON DNS',
-            'help': 'Помощь'
+            'help': 'Помощь',
+            'noWallet': 'Нет кошелька?',
+            'openAuction': 'Открытый аукцион доменных имен'
         },
         'en': {
             'free': 'Available',
@@ -353,24 +350,6 @@
     if (isTestnet) {
         toggle('.testnet-badge', true, 'block');
         document.body.classList.add('testnet-padding');
-    } else {
-        if (Date.now() / 1000 < auction_start_time) {
-            setScreen('soonScreen');
-            $("lottie-player").play();
-
-            const setSoonTime = () => {
-                let delta = (auction_start_time * 1000) - Date.now();
-                if (delta <= 0) {
-                    location.reload();
-                }
-                $('#soonTimer').innerText = formatDuration(delta);
-            }
-
-            setInterval(() => setSoonTime(), 1000);
-            setSoonTime();
-
-            throw new Error('soon');
-        }
     }
 
     const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
