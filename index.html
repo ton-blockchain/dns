@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="dns.css?3">
     <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
-    <script type="text/javascript" src="libs/tonweb-0.0.52.js?1"></script>
+    <script type="text/javascript" src="libs/tonweb-0.0.55.js"></script>
 <!--    <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>-->
 </head>
 <body>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="version">
-        v1.02, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
+        v1.03, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
     </div>
 </div>
 
@@ -124,10 +124,10 @@
                     </div>
                     <div id="editAdnlRow" class="edit-row">
                         <div class="edit-label" data-locale="adnlAddress">
-                            TON Site [Soon]:
+                            TON site:
                         </div>
                         <div class="edit-input">
-                            <input type="text" disabled>
+                            <input type="text" placeholder="HEX">
                         </div>
                         <div class="edit-btn">
                             <a data-locale="set" class="edit-btn">Set</a>
@@ -135,7 +135,7 @@
                     </div>
                     <div id="editResolverRow" class="edit-row">
                         <div class="edit-label" data-locale="resolver">
-                            Resolver:
+                            Subdomains:
                         </div>
                         <div class="edit-input">
                             <input type="text">
@@ -263,9 +263,9 @@
             'dnsRecords': 'DNS-записи:',
             'notOwner': 'Вы не владелец домена',
             'walletAddress': 'Адрес кошелька:',
-            'adnlAddress': 'TON сайт [Скоро]:',
+            'adnlAddress': 'TON-сайт:',
             'invalidAddress': 'Неверный адрес',
-            'resolver': 'Resolver:',
+            'resolver': 'Субдомены:',
             'set': 'Сохр.',
             'installExtension': 'Пожалуйста, установите TON Chrome расширение, чтобы редактировать домен.',
             'updateExtension': 'Пожалуйста, обновите расширение TON Chrome.',
@@ -699,11 +699,12 @@
         $('#busyDomainScreen').classList.add('edit-loading');
 
         try {
-            let dnsRecordWallet = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_WALLET);
-            let dnsRecordResolver = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
+            const dnsRecordWallet = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_WALLET);
+            const dnsRecordAdnl = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_SITE);
+            const dnsRecordResolver = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
             if (domain === currentDomain) {
                 $('#editWalletRow input').value = dnsRecordWallet ? dnsRecordWallet.toString(true, true, true, isTestnet) : '';
-                // $('#editAdnlRow input').value = dnsRecordAdnl ? dnsRecordAdnl.toString() : '';
+                $('#editAdnlRow input').value = dnsRecordAdnl ? dnsRecordAdnl.toHex() : '';
                 $('#editResolverRow input').value = dnsRecordResolver ? dnsRecordResolver.toString(true, true, true, isTestnet) : '';
 
                 const setTx = async (key, value) => {
@@ -732,10 +733,22 @@
                         alert(locale.invalidAddress);
                     }
                 });
-                // createEditBtn('#editAdnlRow .edit-btn').addEventListener('click', () => {
-                //     const value = $('#editAdnlRow input').value;
-                //     setTx(TonWeb.dns.DNS_CATEGORY_TON_SITE, value ? TonWeb.dns.DnsItem.createAdnlAddressValue(new TonWeb.utils.BN(value)) : null);
-                // });
+                createEditBtn('#editAdnlRow .edit-btn').addEventListener('click', () => {
+                    const value = $('#editAdnlRow input').value; // hex
+                    let record = null;
+                    if (value) {
+                        try {
+                            const adnlAddress = new TonWeb.utils.AdnlAddress(value);
+                            record = TonWeb.dns.createAdnlAddressRecord(adnlAddress);
+                        } catch (e) {
+                            console.error(e);
+                            alert(locale.invalidAddress);
+                            return;
+                        }
+                    }
+                    
+                    setTx(TonWeb.dns.DNS_CATEGORY_SITE, value ? record : null);
+                });
                 createEditBtn('#editResolverRow .edit-btn').addEventListener('click', () => {
                     const value = $('#editResolverRow input').value;
                     if (!value || TonWeb.Address.isValid(value)) {
