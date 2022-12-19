@@ -1,0 +1,307 @@
+.about {
+    display: flex;
+    flex-direction: column;
+    gap: 120px;
+
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 736px;
+    padding: 0 16px;
+    margin: 0 auto;
+    margin-top: 136px;
+    margin-bottom: 120px;
+}
+
+.block:first-child {
+    margin: 0;
+}
+
+.about h1, .about h2 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 48px;
+
+    margin-top: 0;
+    margin-bottom: 16px;
+
+    padding-top: 80px;
+    margin-top: -80px;
+
+    color: var(--text-primary);
+}
+
+.about h4 {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    margin-bottom: 16px;
+
+    color: var(--text-primary);
+}
+
+.about p {
+    color: var(--text-secondary);
+    margin: 16px 0;
+}
+
+.about p:last-child {
+    margin-bottom: 0;
+}
+
+a.unbreak {
+    word-break: inherit;
+    display: inline-block;
+}
+
+a {
+    text-decoration: none;
+    color: var(--accent-default);
+}
+
+a:hover:not(.badge__dns) {
+    color: var(--accent-hover);
+}
+
+
+.note {
+    padding-left: 27px;
+    position: relative;
+    color: var(--text-primary);
+}
+
+.note::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 3px;
+    height: 100%;
+    content: "";
+    border-radius: 10px;
+    background-color: var(--accent-default);
+}
+
+.about ul {
+    list-style: none;
+    padding-left: 1em;
+    color: var(--text-secondary)
+}
+
+.about li {
+    margin-top: 16px;
+}
+
+.about li:first-child {
+    margin-top: 0;
+}
+
+.about ul li::before {
+    content: "•";
+    color: var(--accent-default);
+    font-weight: 700;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    font-size: 20px;
+}
+
+.image {
+    width: 100%;
+    height: 0;
+    position: relative;
+    padding-top: 44%;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+html[data-theme='dark'] .image.light {
+    display: none;
+}
+
+html[data-theme='light'] .image.dark {
+    display: none;
+}
+
+.image img {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+}
+
+.image.mobile {
+    display: none;
+}
+
+.image .mobile {
+    display: none;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+}
+
+.image-container.guide {
+    margin-bottom: 40px;
+}
+
+.description {
+    color: var(--text-tetriary);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+
+    padding-left: 23px;
+    padding-top: 12px;
+}
+
+.video-section {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    padding: 16px 0;
+
+}
+
+.card-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.video-container {
+    position: relative;
+    background-color: #F7F9FB;
+    height: 0px;
+    padding-top: 95%;
+    border-radius: 24px;
+
+    overflow: hidden;
+}
+
+.video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    border-radius: 24px;
+
+    object-fit: cover;
+}
+
+.button {
+    font-weight: 700;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.button span .arrow {
+    margin-left: 6px;
+    margin-top: 4px;
+}
+
+.arrow {
+    margin-top: 3px;
+    display: inline-block;
+}
+
+@media screen and (max-width: 568px) {
+    .about {
+        margin-top: 108px;
+    }
+}
+
+@media screen and (max-width: 568px) {
+    .about {
+        gap: 72px;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .about h1, .about h2 {
+        font-size: 26px;
+        line-height: 32px;
+
+        margin-bottom: 12px;
+
+    }
+
+    .about h3 {
+        font-size: 20px;
+        line-height: 28px;
+        margin-top: 24px;
+        margin-bottom: 12px;
+    }
+
+    .about p {
+        margin: 12px 0;
+    }
+
+    .note {
+        padding-left: 16px;
+    }
+
+    .video-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        padding: 12px 0;
+
+    }
+
+    .card-container {
+        width: 100%;
+    }
+
+    .description {
+        font-size: 12px;
+
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-top: 8px;
+    }
+
+    .about li {
+        margin-top: 12px;
+    }
+
+    .image-container {
+        margin-top: 24px;
+    }
+
+    .image-container.guide {
+        margin-bottom: 24px;
+    }
+
+    .image {
+        padding-top: 54%;
+    }
+
+    .image.mobile {
+        display: block;
+    }
+
+    .image.desktop {
+        display: none;
+    }
+
+    .image .mobile {
+        display: block;
+    }
+
+    .image .desktop {
+        display: none;
+    }
+}
