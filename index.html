@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="dns.css?3">
     <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
-    <script type="text/javascript" src="libs/tonweb-0.0.55.js"></script>
+    <script type="text/javascript" src="libs/tonweb-0.0.59.js"></script>
 <!--    <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>-->
 </head>
 <body>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="version">
-        v1.03, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
+        v1.04, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
     </div>
 </div>
 
@@ -125,6 +125,22 @@
                     <div id="editAdnlRow" class="edit-row">
                         <div class="edit-label" data-locale="adnlAddress">
                             TON site:
+                        </div>
+                        <div class="edit-input">
+                            <input type="text" placeholder="HEX">
+                        </div>
+                        <div class="edit-btn">
+                            <a data-locale="set" class="edit-btn">Set</a>
+                        </div>
+                    </div>
+                    <div class="edit-row" style="margin-top: -30px">
+                        <div class="edit-label">
+                        </div>
+                        <div style="font-size: 14px"><input type="checkbox" id="siteStorage"><label for="siteStorage">Hosting in TON Storage</label></div>
+                    </div>
+                    <div id="editStorageRow" class="edit-row">
+                        <div class="edit-label">
+                            Storage:
                         </div>
                         <div class="edit-input">
                             <input type="text" placeholder="HEX">
@@ -700,11 +716,15 @@
 
         try {
             const dnsRecordWallet = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_WALLET);
-            const dnsRecordAdnl = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_SITE);
+            const dnsRecordSite = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_SITE);
+            const isSiteInStorage = dnsRecordSite instanceof TonWeb.utils.StorageBagId;
+            const dnsRecordStorage = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_STORAGE);
             const dnsRecordResolver = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
             if (domain === currentDomain) {
                 $('#editWalletRow input').value = dnsRecordWallet ? dnsRecordWallet.toString(true, true, true, isTestnet) : '';
-                $('#editAdnlRow input').value = dnsRecordAdnl ? dnsRecordAdnl.toHex() : '';
+                $('#editAdnlRow input').value = dnsRecordSite ? dnsRecordSite.toHex() : '';
+                $('#siteStorage').checked = isSiteInStorage;
+                $('#editStorageRow input').value = dnsRecordStorage ? dnsRecordStorage.toHex() : '';
                 $('#editResolverRow input').value = dnsRecordResolver ? dnsRecordResolver.toString(true, true, true, isTestnet) : '';
 
                 const setTx = async (key, value) => {
@@ -738,8 +758,13 @@
                     let record = null;
                     if (value) {
                         try {
-                            const adnlAddress = new TonWeb.utils.AdnlAddress(value);
-                            record = TonWeb.dns.createAdnlAddressRecord(adnlAddress);
+                            if ($('#siteStorage').checked) {
+                                const bagId = new TonWeb.utils.StorageBagId(value);
+                                record = TonWeb.dns.createStorageBagIdRecord(bagId);
+                            } else {
+                                const adnlAddress = new TonWeb.utils.AdnlAddress(value);
+                                record = TonWeb.dns.createAdnlAddressRecord(adnlAddress);
+                            }
                         } catch (e) {
                             console.error(e);
                             alert(locale.invalidAddress);
@@ -748,6 +773,23 @@
                     }
                     
                     setTx(TonWeb.dns.DNS_CATEGORY_SITE, value ? record : null);
+                });
+                createEditBtn('#editStorageRow .edit-btn').addEventListener('click', () => {
+                    const value = $('#editStorageRow input').value; // hex
+
+                    let record = null;
+                    if (value) {
+                        try {
+                            const bagId = new TonWeb.utils.StorageBagId(value);
+                            record = TonWeb.dns.createStorageBagIdRecord(bagId);
+                        } catch (e) {
+                            console.error(e);
+                            alert(locale.invalidAddress);
+                            return;
+                        }
+                    }
+
+                    setTx(TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
                 });
                 createEditBtn('#editResolverRow .edit-btn').addEventListener('click', () => {
                     const value = $('#editResolverRow input').value;
