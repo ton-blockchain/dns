@@ -74,6 +74,7 @@ const localeDict = {
         use_other_payments: 'Другие способы оплаты <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
             '                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
             '                </svg>',
+        storage_checkbox: "Хостинг на TON Storage",
     },
     en: {
         address: 'Address',
@@ -610,6 +611,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 
     let localPrice = price;
+    const bidAddress = address || tonRootAddress;
     const bidModalInput = $("#bid__modal--bid__input")
     const submitStepButton = $("#bid__modal--submit__step")
     const submitPriceLabel = $("#bid__modal--submit__price")
@@ -721,35 +723,38 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const renderSecondStep = () => {
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
-        setAddress($('#freeBuyAddress'), address || tonRootAddress)
-        $('#domainName--bid__modal--payment').innerText = domain + '.ton'
-        $('#freeComment').innerText = domain
-        $('#freeComment').dataset.name = domain
 
-        $('#bidPrice').innerText = formatNumber(localPrice, false)
-        const isExtensionInstalled = !isMobile() && window.ton
-        const buyUrl = 'ton://transfer/' + tonRootAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
-
-        if (isExtensionInstalled) {
-            $('#freeBtn').href = buyUrl
-        } else {
-            $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + tonRootAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
-        }
-
-        if (isMobile()) {
-            $('#freeBtn').href = buyUrl
-        }
-
-        $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + tonRootAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
-        $('#copyLinkbutton').setAttribute('address', buyUrl)
-
-        if (freeQrUrl !== buyUrl) {
-            freeQrUrl = buyUrl
-            renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + tonRootAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000))
-        }
+        setAddress($('#freeBuyAddress'), bidAddress)
 
         showOtherPaymentMethods.removeEventListener('click', renderOtherPaymentsMethods)
         showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
+    }
+
+    // update bid modal payemnt data
+    $('#domainName--bid__modal--payment').innerText = domain + '.ton'
+    $('#freeComment').innerText = domain
+    $('#freeComment').dataset.name = domain
+
+    $('#bidPrice').innerText = formatNumber(localPrice, false)
+    const isExtensionInstalled = !isMobile() && window.ton
+    const buyUrl = 'ton://transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
+
+    if (isExtensionInstalled) {
+        $('#freeBtn').href = buyUrl
+    } else {
+        $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
+    }
+
+    if (isMobile()) {
+        $('#freeBtn').href = buyUrl
+    }
+
+    $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
+    $('#copyLinkbutton').setAttribute('address', buyUrl)
+
+    if (freeQrUrl !== buyUrl) {
+        freeQrUrl = buyUrl
+        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000))
     }
 
     $(modalButton).addEventListener('click', toggleBidModal, false)
@@ -853,9 +858,14 @@ const connectExtension = async (domain, dnsItem) => {
             '.',
             TonWeb.dns.DNS_CATEGORY_WALLET
         )
-        const dnsRecordAdnl = await dnsItem.resolve(
+        const dnsRecordSite = await dnsItem.resolve(
             '.',
             TonWeb.dns.DNS_CATEGORY_SITE
+        )
+        const isSiteInStorage = dnsRecordSite instanceof TonWeb.utils.StorageBagId;
+        const dnsRecordStorage = await dnsItem.resolve(
+            '.',
+            TonWeb.dns.DNS_CATEGORY_STORAGE
         )
         const dnsRecordResolver = await dnsItem.resolve(
             '.',
@@ -866,7 +876,9 @@ const connectExtension = async (domain, dnsItem) => {
             $('#editWalletRow input').value = dnsRecordWallet
                 ? dnsRecordWallet.toString(true, true, true, IS_TESTNET)
                 : ''
-            $('#editAdnlRow input').value = dnsRecordAdnl ? dnsRecordAdnl.toHex() : ''
+            $('#editAdnlRow input').value = dnsRecordSite ? dnsRecordSite.toHex() : ''
+            $('#siteStorage').checked = isSiteInStorage
+            $('#editStorageRow input').value = dnsRecordStorage ? dnsRecordStorage.toHex() : ''
             $('#editResolverRow input').value = dnsRecordResolver
                 ? dnsRecordResolver.toString(true, true, true, IS_TESTNET)
                 : ''
@@ -924,8 +936,13 @@ const connectExtension = async (domain, dnsItem) => {
                 let record = null
                 if (value) {
                     try {
-                        const adnlAddress = new TonWeb.utils.AdnlAddress(value)
-                        record = TonWeb.dns.createAdnlAddressRecord(adnlAddress)
+                        if ($('#siteStorage').checked) {
+                            const bagId = new TonWeb.utils.StorageBagId(value)
+                            record = TonWeb.dns.createStorageBagIdRecord(bagId)
+                        } else {
+                            const adnlAddress = new TonWeb.utils.AdnlAddress(value)
+                            record = TonWeb.dns.createAdnlAddressRecord(adnlAddress)
+                        }
                     } catch (e) {
                         console.error(e)
                         alert(locale.invalid_address)
@@ -935,6 +952,24 @@ const connectExtension = async (domain, dnsItem) => {
 
                 setTx(TonWeb.dns.DNS_CATEGORY_SITE, value ? record : null)
             })
+
+            createEditBtn('#editStorageRow .edit-btn').addEventListener('click', () => {
+                const value = $('#editStorageRow input').value; // hex
+
+                let record = null;
+                if (value) {
+                    try {
+                        const bagId = new TonWeb.utils.StorageBagId(value);
+                        record = TonWeb.dns.createStorageBagIdRecord(bagId);
+                    } catch (e) {
+                        console.error(e);
+                        alert(locale.invalid_address);
+                        return;
+                    }
+                }
+
+                setTx(TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
+            });
 
             $('#editResolverRow input').placeholder = locale.address
 
@@ -1060,7 +1095,7 @@ document.querySelectorAll('.addr').forEach((node) => {
 
 let prevTimeoutId = null;
 
-document.querySelectorAll('input').forEach((node) => {
+document.querySelectorAll("input:not([type=checkbox])").forEach((node) => {
     node.addEventListener(('mousedown'), (e) => {
         e.target.classList.add('input__clicked')
 

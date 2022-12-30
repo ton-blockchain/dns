@@ -31,6 +31,7 @@ html[data-theme='light'] {
     --background-fixed-header: rgba(255, 255, 255, 0.56);
 
     --card-border-default: #DDE3E6;
+    --card-border-checkbox: #DDE3E6;
     --card-shadow: rgba(114, 138, 150, 0.12);
 
     --button-secondary-stroke: #E9EEF1;
@@ -103,6 +104,7 @@ html[data-theme='dark'] {
     --background-fixed-header: rgba(0, 0, 0, 0.24);
 
     --card-border-default: #2D2D32;
+    --card-border-checkbox: #44444A;
     --card-shadow: rgba(0, 0, 0, 0.16);
 
     --button-secondary-stroke: #303035;

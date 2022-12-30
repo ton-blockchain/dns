@@ -224,6 +224,20 @@
                             <a data-locale="save" class="edit__button">Save</a>
                         </div>
                     </div>
+                    <div class="edit-row edit-row-checkbox" >
+                        <div class="edit-label">
+                        </div>
+                        <div style="font-size: 14px"><input type="checkbox" id="siteStorage"><label for="siteStorage" data-locale="storage_checkbox">Hosting in TON Storage</label></div>
+                    </div>
+                    <div id="editStorageRow" class="edit-row edit__row">
+                        <div class="edit-label edit__label">
+                            TON Storage
+                        </div>
+                        <input type="text" placeholder="HEX" class="default__input">
+                        <div class="edit-btn edit__button">
+                            <a data-locale="set" class="edit-btn">Save</a>
+                        </div>
+                    </div>
                     <div id="editResolverRow" class="edit__row">
                         <label class="edit__label" for="editResolverInput" data-locale="subdomains">
                             Subdomains
@@ -533,7 +547,7 @@
     </div>
 </footer>
 
-<script type="text/javascript" src="./libs/tonweb-0.0.55.js"></script>
+<script type="text/javascript" src="./libs/tonweb-0.0.59.js"></script>
 <script type="text/javascript" src="./libs/jquery.min-3.4.1.js"></script>
 <script type="text/javascript" src="./libs/lottie-player-1.6.2.js"></script>
 <script type="text/javascript" src="./libs/qr-code-styling-1.5.0.js"></script>

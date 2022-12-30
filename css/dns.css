@@ -1624,11 +1624,55 @@ p {
     font-size: 16px;
     line-height: 24px;
     word-break: break-word;
-    right: 32px;
+    right: 24px;
 }
 
 .edit__button a {
     color: var(--text-tetriary);
+}
+
+.edit-input {
+    width: 100%;
+}
+
+.edit-row-checkbox {
+    padding-left: 32px;
+    margin-top: -16px;
+}
+
+.edit-row-checkbox input {
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    background-color: var(--background-content);
+    border: 0.5px solid var(--card-border-checkbox);
+    width: 24px;
+    height: 24px;
+    transform: translateY(5px);
+    margin: 0;
+    margin-right: 8px;
+    border-radius: 6px;
+}
+
+.edit-row-checkbox input:checked {
+    background-color: var(--accent-default);
+    border: 0.5px solid var(--accent-default);
+    background: url("/assets/ok_white.svg") center no-repeat, var(--accent-default);
+}
+
+.edit-row-checkbox label {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-primary);
+    cursor: pointer;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .priceContainer {
@@ -1774,6 +1818,21 @@ p {
 
     .edit-form {
         gap: 16px;
+    }
+
+    .edit-row-checkbox {
+        padding-left: 24px;
+        margin-top: -14px;
+    }
+
+    .edit-row-checkbox input {
+        transform: translateY(6px) scale(0.8);
+        margin-right: 4px;
+    }
+
+    .edit-row-checkbox label {
+        font-size: 14px;
+        line-height: 20px;
     }
 
     #otherPaymentsMethodsContainer {
