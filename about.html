@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About</title>
+    <meta charset="UTF-8" />
+
+    <meta name="description" content="Give crypto wallets, smart contracts or websites short readable names." />
+
+    <meta property="og:title" content="Buy .ton domains" />
+    <meta property="og:description" content="Give crypto wallets, smart contracts or websites short readable names." />
+    <meta property="og:image" content="./assets/meta/og_snippet.jpeg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Buy .ton domains" />
+
+    <meta itemProp="name" content="Buy .ton domains" />
+    <meta itemProp="description" content="Give crypto wallets, smart contracts or websites short readable names." />
+    <meta itemProp="image" content="./assets/meta/og_snippet.jpeg" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/meta/favicon_32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/meta/favicon_16x16.png" />
+
+    <meta name="twitter:title" content="Buy .ton domains" />
+    <meta name="twitter:description" content="Give crypto wallets, smart contracts or websites short readable names." />
+    <meta name="twitter:image" content="./assets/meta/og_snippet.jpeg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/meta/apple_touch_icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="mask-icon" href="./assets/meta/safari_pinned_tab.svg" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./css/dns.css?5">
+    <link rel="stylesheet" href="./css/constants.css?5">
+    <link rel="stylesheet" href="./css/about.css?5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="./libs/preloadImages.js?5">
+        preloadImages([
+            '/assets/logo.svg',
+            '/assets/dns_logo.svg',
+            '/assets/dns_logo_hover.svg',
+            '/assets/dns_logo_dark.svg',
+            '/assets/dns_logo_dark_hover.svg',
+        ]);
+    </script>
+    <script type="text/javascript" src="./src/theme.js?5">
+        initTheme();
+    </script>
+</head>
+<body class="about--body">
+<nav class="absolute-header">
+    <div class="container-inner">
+        <div class="badge">
+            <a href="https://ton.org/">
+                <div class="badge-icon"></div>
+            </a>
+            <a href="/" class="badge__dns"></a>
+        </div>
+        <div id="navInput" class="nav-input" style="display: none">
+            <input type="text" placeholder="Enter a domain" />
+        </div>
+        <div class="nav__controls">
+            <a id="aboutDnsLink" href="/about.html" target="_blank">
+                <button class="hover__button" id="aboutButton">
+                    <lottie-player
+                            id="aboutLottieLight"
+                            src="./assets/lottie/about_paper_light.json"
+                            background="transparent"
+                            speed="1"
+                            style="width: 24px; height: 24px;"
+                    >
+                    </lottie-player>
+                    <lottie-player
+                            id="aboutLottieDark"
+                            src="./assets/lottie/about_paper_dark.json"
+                            background="transparent"
+                            speed="1"
+                            style="width: 24px; height: 24px;"
+                    >
+                    </lottie-player>
+                    <span class="bold" data-locale="about">About</span>
+                </button>
+            </a>
+            <button class="hover__button" id="lottie-button" onclick="toggleTheme()">
+                <lottie-player id="sunLottie" src="./assets/lottie/sun_moon.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+                <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+            </button>
+        </div>
+        <div class="mobile">
+            <button class="hover__button menu__controller" onclick="toggleMobileMenu()">
+                <svg class="icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.33281 8.13354C6.67007 8.13354 6.13281 8.6708 6.13281 9.33354C6.13281 9.99629 6.67007 10.5335 7.33281 10.5335H24.6657C25.3284 10.5335 25.8657 9.99629 25.8657 9.33354C25.8657 8.6708 25.3284 8.13354 24.6657 8.13354H7.33281Z" fill="currentColor" />
+                    <path d="M6.13281 16.0002C6.13281 15.3375 6.67007 14.8002 7.33281 14.8002H24.6657C25.3284 14.8002 25.8657 15.3375 25.8657 16.0002C25.8657 16.663 25.3284 17.2002 24.6657 17.2002H7.33281C6.67007 17.2002 6.13281 16.663 6.13281 16.0002Z" fill="currentColor" />
+                    <path d="M6.13281 22.6669C6.13281 22.0041 6.67007 21.4669 7.33281 21.4669H24.6657C25.3284 21.4669 25.8657 22.0041 25.8657 22.6669C25.8657 23.3296 25.3284 23.8669 24.6657 23.8669H7.33281C6.67007 23.8669 6.13281 23.3296 6.13281 22.6669Z" fill="currentColor" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<main id="about" class="animate about fade">
+    <div class="block">
+        <h1 data-locale="what_is_ton_domains">What is TON Domains</h1>
+        <p data-locale="what_is_ton_domains_p1">TON DNS is a service that allows users to assign a human-readable name to crypto wallets, smart contracts, and websites. With TON DNS, access to decentralized services is analogous to access to websites on the internet.</p>
+        <div class="image-container">
+            <div class="image">
+                <img src="assets/about/duck.png" alt="Duck">
+            </div>
+        </div>
+    </div>
+
+    <div class="block">
+        <h2 id="your-nickname" data-locale="your_nickname_on_a_decentralized_network">Your nickname on a decentralized network</h2>
+        <p data-locale="your_nickname_on_a_decentralized_network_p1">You can create an account on social media and some messenger apps by registering a username, enabling others to find you more easily.</p>
+        <p data-locale="your_nickname_on_a_decentralized_network_p2">Now you can register a domain name on the TON blockchain and assign it to your crypto wallet. This domain name will be your nickname on The Open Network.</p>
+        <div class="video-section">
+            <div class="card-container">
+                <div class="video-container">
+                    <video class="video" muted="muted" loop="loop" preload="auto" autoplay="autoplay">
+                        <source src="./assets/about/video_example1.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <span class="description" data-locale="your_nickname_on_a_decentralized_network_video1">Enter the domain name instead of the recipient’s wallet address when sending TON.</span>
+            </div>
+            <div class="card-container">
+                <div class="video-container">
+                    <video class="video" muted="muted" loop="loop" preload="auto" autoplay="autoplay">
+                        <source src="./assets/about/video_example2.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <span class="description" data-locale="your_nickname_on_a_decentralized_network_video2">Enter the domain name in the search field of a TON explorer.</span>
+            </div>
+        </div>
+        <p data-locale="your_nickname_on_a_decentralized_network_p3">The <a target="_blank" href="https://tonkeeper.com/">Tonkeeper</a>, <a target="_blank" href="https://wallet.ton.org/">TON Web Wallet</a>, and <a target="_blank" href="https://tonscan.org/">Tonscan</a> services have already integrated support for TON DNS. Most other TON-based apps also plan to implement support so that nicknames (domain names) can be used across the entirety of the TON ecosystem.</p>
+        <p data-locale="your_nickname_on_a_decentralized_network_p4">In addition to users registering domain names, developers can also register domain names for the smart contracts of their decentralized services. Now, smart contracts will also have their own nicknames, just like bots in messenger apps.</p>
+    </div>
+
+    <div class="block">
+        <h2 id="blockchain" data-locale="a_simple_and_convenient_blockchain">A simple and convenient blockchain</h2>
+        <p data-locale="a_simple_and_convenient_blockchain_p1">TON has made it its mission to attain mass adoption to the point where even complete beginners will be able to reap the benefits of the network and the security provided by decentralized technologies.</p>
+        <p data-locale="a_simple_and_convenient_blockchain_p2">TON developers have recently increased their output to achieve this goal. For example, the <a target="_blank" href="https://t.me/toncoin/400">latest update</a> of the <a target="_blank" href="https://t.me/wallet">@wallet</a> Telegram bot allows users to send Toncoin to other users directly within chats in the messenger, and the <a target="_blank" href="https://t.me/toncoin/441">NFT integration</a> in Tonkeeper has set a new standard for crypto wallets.</p>
+        <p data-locale="a_simple_and_convenient_blockchain_p3">We’ve emphasized avoiding technical jargon and information in TON-based apps — we won’t inundate you with block numbers and transaction hashes.</p>
+        <p data-locale="a_simple_and_convenient_blockchain_p4">The only technical detail immediately visible to the user is the wallet’s address. And although it’s simpler than a telephone or bank card number, we’re excited to know that the launch of TON DNS will simplify this process even more.</p>
+    </div>
+
+    <div class="block">
+        <h2 id="decentralized-internet" data-locale="but_we_are_taking_a_step_even_closer_toward">But we’re taking a step even closer toward a fully decentralized internet</h2>
+        <p data-locale="but_we_are_taking_a_step_even_closer_toward_p1">In Q3 2022, TON Sites and TON Proxy were launched.</p>
+        <p class="note" data-locale="but_we_are_taking_a_step_even_closer_toward_p2">This decentralized technology provides more privacy and security to both the users and website owners.</p>
+        <p data-locale="but_we_are_taking_a_step_even_closer_toward_p3">Besides these releases, there will also be tools to facilitate the interaction between blockchain smart contracts and internet resources and vice versa.</p>
+        <p data-locale="but_we_are_taking_a_step_even_closer_toward_p4">Although you can assign a wallet address to a TON DNS, you’ll also be able to assign TON site.</p>
+        <p data-locale="but_we_are_taking_a_step_even_closer_toward_p5">What we see in TON DNS is a welcome alternative to centralized domain registries, which can often block your site’s domain either for arbitrary reasons or erroneously.</p>
+    </div>
+
+    <div class="block">
+        <h2 id="ton-domain-names" data-locale="ton_domain_names_are_nft">.ton domain names are NFTs</h2>
+        <p data-locale="ton_domain_names_are_nft_p1">The domain zone for TON DNS is called “.ton”. Users will register their domain name like this: “alice.ton”, “.ton” domain names are NFTs.</p>
+        <p class="note" data-locale="ton_domain_names_are_nft_p2">That means that once you obtain a domain name, you’ll be able to store, gift, or sell it — the same way you’d handle regular NFTs.</p>
+        <p data-locale="ton_domain_names_are_nft_p3">Your domain will be stored in your wallet, and you’ll be able to put it up for sale on NFT marketplaces, such as <a target="_blank" href="https://getgems.io/">Getgems</a> or <a target="_blank" href="https://beta.disintar.io/">Disintar</a>, which already support TON DNS.</p>
+        <div class="image-container">
+            <div class="image light">
+                <img src="./assets/about/interface_light.jpg" alt="Getgems interface">
+            </div>
+            <div class="image dark">
+                <img src="./assets/about/interface_dark.jpg" alt="Getgems interface">
+            </div>
+            <span class="description" data-locale="ton_domain_names_are_nft_image1">Domain names for sale on NFT marketplace Getgems.</span>
+        </div>
+    </div>
+
+    <div class="block">
+        <h2 id="rules" data-locale="rules_for_ton_domain_names">Rules for .ton domain names</h2>
+        <p data-locale="rules_for_ton_domain_names_p1">The “.ton” domain name must be at least 4 characters and no more than 126 characters. Registering a domain name with fewer than 4 characters is unavailable
+            to avoid confusion with well-known internet domain names, such as “com”, “org”, “gov”, etc.</p>
+        <p data-locale="rules_for_ton_domain_names_p2">The domain must contain English letters, digits, and hyphen.</p>
+        <p class="note" data-locale="rules_for_ton_domain_names_p3">However, technically, a domain name could depict an emoji, but they’re unavailable because a lot of them look the same — e.g., 😗 and 😙 — which scammers would use to trick unsuspecting users easily.</p>
+        <p data-locale="rules_for_ton_domain_names_p4">Once per year, the domain’s owner will have to send a nanoton to the domain’s smart contract to extend the domain for a year. If the owner fails to extend their domain, it will go up for auction. Such is to prevent losing a domain forever in the event its owner loses access.</p>
+    </div>
+
+    <div class="block">
+        <h2 id="decentralization" data-locale="decentralization">Decentralization</h2>
+        <p data-locale="decentralization_p1">TON DNS is a decentralized domain name system. There is no “administrator” who can block your domain name.</p>
+        <p data-locale="decentralization_p2">For exceptional cases, it is possible to change the owner or delete the domain by means of network-wide voting. Note that most of the network can change not only DNS, but also any configuration of the blockchain, but since there are several hundred independent validators on the network, then such changes need an exceptionally good reason.</p>
+    </div>
+
+    <div class="block">
+        <h2 id="auction_rules" data-locale="auction_rules">Auction rules</h2>
+        <ul>
+            <li data-locale="auction_rules_li1">The domain auction will last one week. In the future, the auction period may be shortened to make the process more convenient for all users.</li>
+            <li data-locale="auction_rules_li2">All users will be able to place bids in Toncoin to win a domain name.</li>
+            <li data-locale="auction_rules_li3">If a bid is placed with less than an hour left in the auction, it will be prolongated by one hour to allow other users to place counterbids.</li>
+            <li data-locale="auction_rules_li4">Every new bid must be at least 5% higher than the previous.</li>
+            <li data-locale="auction_rules_li5">When the auction closes, the user who placed the highest bid will collect their domain name.</li>
+        </ul>
+
+    </div>
+
+    <div class="block">
+        <h2 id="claim-your-ton-domain" data-locale="claim_your_ton_domain">How to claim your TON domain from the auction and assign a wallet to it</h2>
+
+        <h3 data-locale="claim_your_ton_domain_h1">Make sure you’ve won the auction for your domain name</h3>
+        <p data-locale="claim_your_ton_domain_p1">Go to <a target="_blank" href="https://dns.ton.org/">TON DNS</a> and enter your domain. If the auction has closed, you’ll see this:</p>
+        <div class="image-container guide">
+            <div class="image light">
+                <img src="./assets/about/ton_dns_light.jpg" alt="TON DNS interface">
+            </div>
+            <div class="image dark">
+                <img src="./assets/about/ton_dns_dark.jpg" alt="TON DNS interface">
+            </div>
+        </div>
+        <p data-locale="claim_your_ton_domain_p2">Check whether the owner’s address is the same as your wallet address from which you placed bids. The domain is yours. Congratulations!</p>
+
+        <h3 data-locale="claim_your_ton_domain_h2">Claim your domain from the auction</h3>
+        <p data-locale="claim_your_ton_domain_p3">To claim your domain from the auction and become its full owner, you need to complete one final step.</p>
+        <p data-locale="claim_your_ton_domain_p4">You need to assign your wallet address to your domain name. Once you’ve completed this, you’ll be able to use your short .ton domain name instead of your long wallet address in all applications that support this function.</p>
+
+        <h3 data-locale="claim_your_ton_domain_h3">Assign your wallet address with Tonkeeper</h3>
+        <p data-locale="claim_your_ton_domain_p5"><a target="_blank" href="https://tonkeeper.com/">Tonkeeper</a> allows users to store domain names in the “NFT” tab. Also, every TON DNS has a “Link” button — i.e., an “Assign” button to connect a wallet address to a domain.</p>
+        <div class="image-container guide">
+            <div class="image mobile">
+                <img src="./assets/about/tonkeeper_mobile.jpg" alt="DNS support in Tonkeeper">
+            </div>
+            <div class="image desktop">
+                <img src="./assets/about/tonkeeper_desktop.jpg" alt="DNS support in Tonkeeper">
+            </div>
+        </div>
+
+        <h3 data-locale="claim_your_ton_domain_h4">Assign your wallet address with TON Wallet extension</h3>
+        <p data-locale="claim_your_ton_domain_p6">1. Open the Google Chrome web browser on your computer.</p>
+        <p data-locale="claim_your_ton_domain_p7">2. Install the TON extension for Google Chrome by clicking on this <a target="_blank" href="https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd">link</a>.</p>
+        <p data-locale="claim_your_ton_domain_p8">3. Open the extension, click on “Import wallet”, and go to your wallet from which you were bidding and where you have your recovery phrase.</p>
+        <p data-locale="claim_your_ton_domain_p9">4. Now open your domain on <a target="_blank" href="https://dns.ton.org/">TON DNS</a> and click on “Manage your domain”.</p>
+        <p data-locale="claim_your_ton_domain_p10">5. Copy the address of your wallet, paste it into the “Wallet address” field, and click “Save”.</p>
+        <div class="image-container guide">
+            <div class="image light">
+                <div class="mobile">
+                    <img src="./assets/about/assign_wallet_light_mobile.jpg" alt="Assign wallet">
+                </div>
+                <div class="desktop">
+                    <img src="./assets/about/assign_wallet_light_desktop.jpg" alt="Assign wallet">
+                </div>
+            </div>
+            <div class="image dark">
+                <div class="mobile">
+                    <img src="./assets/about/assign_wallet_dark_mobile.jpg" alt="Assign wallet">
+                </div>
+                <div class="desktop">
+                    <img src="./assets/about/assign_wallet_dark_desktop.jpg" alt="Assign wallet">
+                </div>
+            </div>
+        </div>
+        <p data-locale="claim_your_ton_domain_p11">6. Confirm the transaction in the TON extension.</p>
+        <div class="image-container guide">
+            <div class="image light">
+                <div class="mobile">
+                    <img src="./assets/about/confirm_wallet_light_mobile.jpg" alt="Confirm the transaction">
+                </div>
+                <div class="desktop">
+                    <img src="./assets/about/confirm_wallet_light_desktop.jpg" alt="Confirm the transaction">
+                </div>
+            </div>
+            <div class="image dark">
+                <div class="mobile">
+                    <img src="./assets/about/confirm_wallet_dark_mobile.jpg" alt="Confirm the transaction">
+                </div>
+                <div class="desktop">
+                    <img src="./assets/about/confirm_wallet_dark_desktop.jpg" alt="Confirm the transaction">
+                </div>
+            </div>
+        </div>
+
+        <p></p>
+        <a target="_blank" class="button" href="https://ton.org/docs/participate/web3/site-management#how-to-link-a-wallet-to-a-domain">
+            <span data-locale="claim_your_ton_domain_a1">Link TON Sites and subdomains</span>
+            <svg class="arrow" width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="m2 11 5-4.5L2 2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+
+    <div class="block">
+        <h2 id="developers" data-locale="developers">Developers</h2>
+        <p data-locale="developers_p1">Each domain can store up to 2^256 DNS records where you can store not only your wallet addresses and websites but anything you want also.</p>
+        <p data-locale="developers_p2">You can use this in your products.</p>
+        <p class="note" data-locale="developers_p3">A domain can be assigned an arbitrary smart contract responsible for the management of subdomains. It can implement any functionality that can be used to create new mechanics.</p>
+        <p data-locale="developers_p4">We welcome the writing of auxiliary services that could simplify user participation in auctions; for example, so that users do not have to wake up early in the morning if the auction is held at an inconvenient time. Also, services could collect a small commission fee in Toncoin for their work.</p>
+        <a target="_blank" class="button" href="https://ton.org/docs">
+            <span data-locale="developers_a1">Documentation</span>
+            <svg class="arrow" width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="m2 11 5-4.5L2 2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+</main>
+
+<div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-header">
+        <div class="badge">
+            <a href="https://ton.org/">
+                <div class="badge-icon"></div>
+            </a>
+            <a href="/" onclick="closeMenu()" class="badge__dns"></a>
+        </div>
+        <button class="hover__button close-menu-icon" onclick="toggleMobileMenu()">
+            <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.00012 18L18.0001 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M6.00012 6L17.9986 18.0015" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+    </div>
+    <div class="mobile-menu-navigation">
+        <a class="mobile-menu-row" href="/about.html" target="_blank">
+            <div class="mobile-menu-left">
+              <span class="mobile-lottie-container">
+                  <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                  <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+              </span>
+                <span data-locale="about">About</span>
+            </div>
+        </a>
+        <div class="mobile-menu-row">
+            <div class="mobile-menu-left">
+              <span class="mobile-lottie-container">
+                  <lottie-player id="moonLottieBlack" src="./assets/lottie/moon_sun_dark.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+                  <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+              </span>
+                <span id="darkLabel" data-locale="dark_mode">Dark mode</span>
+            </div>
+            <div class="mobile-menu-right">
+                <label class="form-switch">
+                    <input type="checkbox" id="mobile-theme-switch" onclick="toggleTheme()" checked="">
+                    <i></i>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="separator"></div>
+    <div class="copyrights">
+        <div class="copyright">© 2022 TON Foundation</div>
+        <div class="social-links">
+            <a class="social-link" href="https://www.linkedin.com/company/ton-blockchain/" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0a8.972 8.972 0 0 0-6.364 2.636A8.972 8.972 0 0 0 0 9a8.972 8.972 0 0 0 2.636 6.364A8.972 8.972 0 0 0 9 18a8.972 8.972 0 0 0 6.364-2.636A8.972 8.972 0 0 0 18 9a8.972 8.972 0 0 0-2.636-6.364A8.972 8.972 0 0 0 9 0ZM6.543 12.852V7.048H4.614v5.804h1.93ZM5.58 6.255c.672 0 1.091-.445 1.091-1.002-.013-.57-.419-1.003-1.079-1.003-.66 0-1.091.433-1.091 1.003 0 .557.419 1.002 1.066 1.002h.013Zm2.03 6.597h1.93V9.61c0-.174.012-.347.063-.471.14-.347.457-.706.99-.706.698 0 .977.533.977 1.313v3.105h1.929V9.524c0-1.783-.952-2.612-2.221-2.612-1.04 0-1.498.581-1.751.978h.013v-.842h-1.93c.026.545 0 5.804 0 5.804Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="https://t.me/toncoin" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.636 2.636A8.972 8.972 0 0 1 9 0a8.972 8.972 0 0 1 6.364 2.636A8.972 8.972 0 0 1 18 9a8.972 8.972 0 0 1-2.636 6.364A8.972 8.972 0 0 1 9 18a8.972 8.972 0 0 1-6.364-2.636A8.972 8.972 0 0 1 0 9a8.972 8.972 0 0 1 2.636-6.364Zm6.421 3.645c-.895.38-2.685 1.168-5.37 2.362-.435.177-.664.35-.685.52-.035.285.316.398.794.551l.201.066c.47.156 1.103.338 1.432.346.298.006.63-.12.998-.377 2.508-1.729 3.803-2.602 3.885-2.621.057-.014.136-.03.19.019.054.049.049.141.043.166-.035.151-1.412 1.459-2.125 2.135-.222.211-.38.361-.412.395-.072.077-.146.15-.217.219-.437.43-.764.752.018 1.279.376.253.677.462.977.67.328.228.655.456 1.078.739.108.072.211.147.311.22.382.278.725.527 1.148.487.246-.023.5-.259.63-.964.304-1.665.904-5.272 1.043-6.759a1.7 1.7 0 0 0-.016-.37.4.4 0 0 0-.13-.255.597.597 0 0 0-.358-.109c-.346.006-.877.195-3.435 1.281Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="https://github.com/ton-blockchain" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.298 17.704A9 9 0 1 0 0 9a9.003 9.003 0 0 0 6.97 8.77.428.428 0 0 0 .115-.302l-.004-.472-.008-.952c-2.329.506-2.82-1.123-2.82-1.123-.38-.968-.93-1.226-.93-1.226-.76-.52.058-.51.058-.51.84.06 1.282.864 1.282.864.747 1.28 1.96.911 2.437.696.076-.541.293-.91.532-1.12-1.86-.211-3.814-.93-3.814-4.14 0-.915.326-1.663.862-2.249-.086-.212-.374-1.063.082-2.217 0 0 .703-.225 2.302.86a8.035 8.035 0 0 1 2.096-.283 8.038 8.038 0 0 1 2.096.282c1.598-1.084 2.3-.859 2.3-.859.457 1.154.17 2.005.083 2.217.537.586.861 1.334.861 2.249 0 3.218-1.957 3.927-3.822 4.134.3.259.568.77.568 1.551 0 .75-.005 1.401-.008 1.833l-.003.466c0 .08.02.163.063.235Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="https://twitter.com/ton_blockchain" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.636 2.636A8.972 8.972 0 0 1 9 0a8.972 8.972 0 0 1 6.364 2.636A8.972 8.972 0 0 1 18 9a8.972 8.972 0 0 1-2.636 6.364A8.972 8.972 0 0 1 9 18a8.972 8.972 0 0 1-6.364-2.636A8.972 8.972 0 0 1 0 9a8.972 8.972 0 0 1 2.636-6.364Zm10.356 4.655v-.262A3.75 3.75 0 0 0 14 5.955c-.367.17-.76.275-1.178.328.419-.262.746-.655.903-1.139a4.17 4.17 0 0 1-1.309.497A2.043 2.043 0 0 0 10.924 5 2.05 2.05 0 0 0 8.87 7.055c0 .157.013.327.052.471A5.838 5.838 0 0 1 4.694 5.38a2.1 2.1 0 0 0-.275 1.034c0 .72.366 1.348.916 1.714a2.016 2.016 0 0 1-.93-.262v.027c0 .994.708 1.819 1.65 2.002a1.902 1.902 0 0 1-.93.04 2.031 2.031 0 0 0 1.912 1.426A4.153 4.153 0 0 1 4 12.212c.916.576 1.99.916 3.154.916 3.77 0 5.838-3.128 5.838-5.837Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="mailto:partnership@ton.org" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0a8.972 8.972 0 0 0-6.364 2.636A8.972 8.972 0 0 0 0 9a8.972 8.972 0 0 0 2.636 6.364A8.972 8.972 0 0 0 9 18a8.972 8.972 0 0 0 6.364-2.636A8.972 8.972 0 0 0 18 9a8.972 8.972 0 0 0-2.636-6.364A8.972 8.972 0 0 0 9 0Zm0 8.435 4.73-2.775A1.5 1.5 0 0 0 12.5 5h-7a1.5 1.5 0 0 0-1.24.655L9 8.435Zm0 .995a1 1 0 0 0 .5-.135l4.5-2.63V11.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 4 11.5V6.665L8.5 9.3a1 1 0 0 0 .5.13Z" fill="currentColor"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="./libs/jquery.min-3.4.1.js"></script>
+<script type="text/javascript" src="./libs/lottie-player-1.6.2.js"></script>
+<script type="text/javascript" src="./src/utils.js?5"></script>
+<script type="text/javascript" src="./src/lottie.js?5"></script>
+<script type="text/javascript" src="./src/mobile-menu.js?5"></script>
+<script type="text/javascript" src="./src/dynamic-header.js?5"></script>
+<script type="text/javascript" src="./src/about.js?5"></script>
+</body>
+</html>

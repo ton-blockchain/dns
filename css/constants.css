@@ -1,0 +1,170 @@
+html {
+    --block--transition: 0.2s cubic-bezier(0, 1.5, 1, 1.5);
+    --loader--transition: 0.2s ease-in-out;
+    --gradient--animation--transition: 3s linear infinite alternate shine-lines;
+    --opacity--animation--transition: opacity 0.3s ease-in-out;
+    --defatul--transition: 0.3s ease-in-out;
+    --form--switch-transition: 0.3s linear;
+    --bizier--transition--fast: cubic-bezier(.92, .04, 0, 1.03);
+    --bizier--transition--slow: cubic-bezier(.74, .67, .44, 1.1);
+    --app-height: 100%;
+    --menu-timing-function: cubic-bezier(.6, .16, .37, .95);
+    --menu-animation-duration: 0.3s;
+    --bounce--animate-duration: 1s;
+}
+
+html,
+html[data-theme='light'] {
+    --text-primary: #04060B;
+    --text-secondary: #191F2F;
+    --text-tetriary: #728A96;
+    --text-slash: #728A96;
+
+    --background-page: #FFFFFF;
+    --background-content: #F5F7FA;
+    --background-content-upper: #F5F7FA;
+    --disabled--button--background-content: #F7F9FB;
+
+    --background-content-hover: rgba(118, 152, 187, 0.06);
+    --background-suggestions: #FFFFFF;
+    --background-segment: #F2F5F8;
+    --background-fixed-header: rgba(255, 255, 255, 0.56);
+
+    --card-border-default: #DDE3E6;
+    --card-border-checkbox: #DDE3E6;
+    --card-shadow: rgba(114, 138, 150, 0.12);
+
+    --button-secondary-stroke: #E9EEF1;
+
+    --accent-default: #0088CC;
+    --accent-default--border-pressed: rgba(0, 136, 204, 0.8);
+    --accent-hover: #0099E5;
+    --button--background: #0088CC;
+
+    --icon-primary: #232328;
+    --icon-secondary: #98B2BF;
+
+    --separator-alpha: #C0D1D9;
+    --separator-alpha--footer: rgba(223, 229, 232, 0.5);
+
+    --flip-bg-color: #F5F7FA;
+    --flip-text-color: rgba(4, 6, 11, 1);
+    --flip-dots-color: rgba(192, 209, 217, 1);
+    --flip-border-color: rgba(221, 227, 230, 0.9);
+    --flip-shadow-color: #D6DFE9;
+
+    --loader--background--gradient: linear-gradient(89.96deg, #F5F7FA 0.04%, #FAFDFF 50.98%, #F5F7FA 99.96%);
+
+    --text-error: #ED6767;
+    --error--bg: rgb(237, 103, 103, 0.1);
+
+    --input--box--shadow--hover: 0px 0px 1px 6px rgb(5 139 207 / 10%);
+    --default--input--box--shadow--hover: 0px 0px 0px 6px rgba(5, 139, 207, 0.1);
+    --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(5, 139, 207, 0.125);
+    --accent-light-hover: #0099E5;
+    --dns-logo-path: url("/assets/dns_logo.svg");
+    --dns-logo-path-hover: url("/assets/dns_logo_hover.svg");
+    --ton-logo-path: url("/assets/ton_logo_light.svg");
+
+    --free-domain-status-color: #47C58A;
+    --free-domain-loader-bg: rgba(50, 213, 131, 0.2);
+    --free-domain-status-backgroud: rgba(71, 197, 138, 0.08);
+
+    --busy-domain-status-color: #ED6767;
+    --busy-domain-loader-bg: rgba(237, 103, 103, 0.2);
+    --busy-domain-status-backgroud: rgba(230, 70, 70, 0.08);
+    --copy--icon: url("/assets/copy_btn.svg");
+    --copy--icon--completed: url("/assets/copy_btn_done.svg");
+    --arrow--right: url("/assets/arrow_right.svg");
+
+    --socials--color: #98B2BF;
+
+    --tonkeeper__icon: url("/assets/tonkeeper_white.svg");
+    --tonkeeper__icon--mono: url("/assets/tonkeeper_icon.svg");
+    --web__wallet__icon: url("/assets/web_wallet.svg");
+
+    --copy__link__icon: url("/assets/copy_link_icon.svg");
+    --copy__link__icon--success: url("/assets/copy_link_success.svg");
+}
+
+html[data-theme='dark'] {
+    --text-primary: #F3F3F7;
+    --text-secondary: #D5D5D8;
+    --text-tetriary: #ACACAF;
+    --text-slash: #728A96;
+
+    --background-page: #232328;
+    --background-content: #2D2D32;
+    --background-content-upper: #2D2D32;
+    --disabled--button--background-content: #2D2D32;
+
+    --background-content-hover: rgba(255, 255, 255, 0.06);
+    --background-suggestions: #2D2D32;
+    --background-segment: #F2F5F8;
+    --background-fixed-header: rgba(0, 0, 0, 0.24);
+
+    --card-border-default: #2D2D32;
+    --card-border-checkbox: #44444A;
+    --card-shadow: rgba(0, 0, 0, 0.16);
+
+    --button-secondary-stroke: #303035;
+
+
+    --accent-default: #01A4F5;
+    --accent-default--border-pressed: rgba(0, 153, 229, 0.8);
+    --accent-hover: #00AAFF;
+
+    --icon-primary: #E5E5EA;
+    --icon-secondary: #606069;
+
+    --separator-alpha: #4F4F53;
+    --separator-alpha--footer: rgba(79, 79, 83, 0.5);
+
+    --flip-bg-color: rgba(45, 45, 50, 1);
+    --flip-text-color: rgba(243, 243, 246, 1);
+    --flip-dots-color: rgba(69, 69, 75, 1);
+    --flip-border-color: rgba(35, 35, 40, 0.9);
+    --flip-shadow-color: rgba(30, 30, 33, 0.5);
+
+    --loader--background--gradient: linear-gradient(90deg, rgba(45, 45, 50, 0.8) 0%, #3F3F47 48.16%, #2D2D32 98.44%);
+
+    --text-error: #FF5C5C;
+    --error--bg: rgb(255, 92, 92, 0.1);
+
+    --accent-light-hover: #04A2F0;
+    --default--input--box--shadow--hover: 0px 0px 0px 6px rgba(1, 164, 245, 0.1);
+    --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(1, 164, 245, 0.125);
+
+    --dns-logo-path: url("/assets/dns_logo_dark.svg");
+    --dns-logo-path-hover: url("/assets/dns_logo_dark_hover.svg");
+    --ton-logo-path: url("/assets/ton_logo_dark.svg");
+
+    --free-domain-status-color: #32D583;
+    --free-domain-loader-bg: rgba(50, 213, 131, 0.2);
+    --free-domain-status-backgroud: rgba(50, 213, 131, 0.08);
+
+    --busy-domain-status-color: #FF5C5C;
+    --busy-domain-loader-bg: rgba(237, 103, 103, 0.2);
+    --busy-domain-status-backgroud: rgba(255, 92, 92, 0.08);
+
+    --copy--icon: url("/assets/copy_btn_dark.svg");
+    --copy--icon--completed: url("/assets/copy_btn_done_dark.svg");
+
+    --arrow--right: url("/assets/arrow_right_dark.svg");
+    --socials--color: #606069;
+    --tonkeeper__icon: url("/assets/tonkeeper_icon.svg");
+    --tonkeeper__icon--mono: url("/assets/tonkeeper_icon.svg");
+    --web__wallet__icon: url("/assets/web_wallet.svg");
+    --copy__link__icon: url("/assets/copy_link_icon_dark.svg");
+    --copy__link__icon--success: url("/assets/copy_link_success.svg");
+}
+
+@keyframes shine-lines {
+    0% {
+        background-position: -400px
+    }
+
+    100% {
+        background-position: 440px
+    }
+}

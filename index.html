@@ -2,816 +2,562 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TON DNS</title>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <title>TON Domains</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta charSet="UTF-8" />
+
+    <meta name="description" content="Give crypto wallets, smart contracts or websites short readable names." />
+
+    <meta property="og:title" content="Buy .ton domains" />
+    <meta property="og:description" content="Give crypto wallets, smart contracts or websites short readable names." />
+    <meta property="og:image" content="./assets/meta/og_snippet.jpeg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Buy .ton domains" />
+
+    <meta itemProp="name" content="Buy .ton domains" />
+    <meta itemProp="description" content="Give crypto wallets, smart contracts or websites short readable names." />
+    <meta itemProp="image" content="./assets/meta/og_snippet.jpeg" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/meta/favicon_32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/meta/favicon_16x16.png" />
+
+    <meta name="twitter:title" content="Buy .ton domains" />
+    <meta name="twitter:description" content="Give crypto wallets, smart contracts or websites short readable names." />
+    <meta name="twitter:image" content="./assets/meta/og_snippet.jpeg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/meta/apple_touch_icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="mask-icon" href="./assets/meta/safari_pinned_tab.svg" />
+
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="dns.css?3">
-    <script type="text/javascript" src="libs/qr-code-styling-1.5.0.js"></script>
-    <script type="text/javascript" src="libs/tonweb-0.0.59.js"></script>
-<!--    <script type="text/javascript" src="libs/tgs-player-0.4.0.js"></script>-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/constants.css?5">
+    <link rel="stylesheet" href="./css/loader.css?5">
+    <link rel="stylesheet" href="./css/dns.css?5">
+    <link rel="stylesheet" href="./css/flip-clock.css?5">
+    <script type="text/javascript" src="./libs/preloadImages.js?5">
+        preloadImages([
+            '/assets/logo.svg',
+            '/assets/dns_logo.svg',
+            '/assets/dns_logo_hover.svg',
+            '/assets/dns_logo_dark.svg',
+            '/assets/dns_logo_dark_hover.svg',
+        ]);
+    </script>
+    <script type="text/javascript" src="./src/theme.js?5">
+        initTheme();
+    </script>
 </head>
 <body>
-
-<div class="testnet-badge" data-locale="testnet" style="display: none">
-    ATTENTION! This is the test network — don’t send real Toncoin! Test domains can be reset.
-</div>
-
-<div class="badge">
-    <div class="badge-icon"></div>
-    TON DNS
-</div>
-
-<div id="navInput" class="nav-input">
-    <input type="text" placeholder="Enter a domain">
-</div>
-
-<div id="startScreen" class="start">
-    <div class="start-img"></div>
-
-    <div class="strong" style="line-height: 40px">
-        <span data-locale="openAuction">Open auction of domain names</span> <a id="aboutDnsLink" href="https://telegra.ph/TON-DNS-06-30" target="_blank" style="word-break: break-word">TON&nbsp;DNS</a>
+<nav>
+    <div class="testnet-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" class="icon testnet__icon">
+            <g stroke="#ED6767" stroke-width="1.6" clip-path="url(#a)">
+                <path stroke-linecap="round" d="M9.75 11.4951V6.84997m0 7.74183v-.5161"/>
+                <path d="M8.45096 3.25c.57735-1 2.02074-1 2.59804 0l6.7117 11.625c.5774 1-.1443 2.25-1.299 2.25H3.0383c-1.1547 0-1.87639-1.25-1.29904-2.25L8.45096 3.25Z"/>
+            </g>
+            <defs>
+                <clipPath id="a">
+                    <path fill="#fff" d="M0 0h20v20H0z"/>
+                </clipPath>
+            </defs>
+        </svg>
+        <span data-locale="testnet_badge_message">
+            Warning! This is a test network, do not send real Toncoin! Test domains may be dropped.
+        </span>
     </div>
+    <div class="container-inner">
+        <div class="badge">
+            <a href="https://ton.org/">
+                <div class="badge-icon"></div>
+            </a>
+            <span class="badge__dns">
+            </span>
+        </div>
+        <div id="navInput" class="nav-input" style="display: none">
+            <svg class="icon nav-input-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.0666 17.8667C16.8958 17.8667 20 14.7625 20 10.9333C20 7.10416 16.8958 4 13.0666 4C9.23746 4 6.1333 7.10416 6.1333 10.9333C6.1333 14.7625 9.23746 17.8667 13.0666 17.8667Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8 16L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <input enterkeyhint="search" type="text" placeholder="Enter a domain" class="suggestions__input"/>
+        </div>
+        <div class="nav__controls">
+            <a id="aboutDnsLink" href="/about.html" target="_blank">
+                <button class="hover__button" id="aboutButton">
+                    <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                    <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                    <span class="bold" data-locale="about">About</span>
+                </button>
+            </a>
+            <button class="hover__button" id="lottie-button" onclick="toggleTheme()">
+                <lottie-player id="sunLottie" src="./assets/lottie/sun_moon.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+                <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+            </button>
+        </div>
+        <div class="mobile">
+            <button class="hover__button menu__controller" onclick="toggleMobileMenu()">
+                <svg class="icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.33281 8.13354C6.67007 8.13354 6.13281 8.6708 6.13281 9.33354C6.13281 9.99629 6.67007 10.5335 7.33281 10.5335H24.6657C25.3284 10.5335 25.8657 9.99629 25.8657 9.33354C25.8657 8.6708 25.3284 8.13354 24.6657 8.13354H7.33281Z" fill="currentColor" />
+                    <path d="M6.13281 16.0002C6.13281 15.3375 6.67007 14.8002 7.33281 14.8002H24.6657C25.3284 14.8002 25.8657 15.3375 25.8657 16.0002C25.8657 16.663 25.3284 17.2002 24.6657 17.2002H7.33281C6.67007 17.2002 6.13281 16.663 6.13281 16.0002Z" fill="currentColor" />
+                    <path d="M6.13281 22.6669C6.13281 22.0041 6.67007 21.4669 7.33281 21.4669H24.6657C25.3284 21.4669 25.8657 22.0041 25.8657 22.6669C25.8657 23.3296 25.3284 23.8669 24.6657 23.8669H7.33281C6.67007 23.8669 6.13281 23.3296 6.13281 22.6669Z" fill="currentColor" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</nav>
 
+<div id="startScreen" class="start animate">
+    <h1 data-locale="open_auction">Buy .ton domains</h1>
+    <p>
+        <span data-locale="start_splash">Give crypto wallets, smart contracts or websites short readable names.</span>
+        <a class="arrow__link" href="/about.html" target="_blank" data-locale="more_info">
+            More info&nbsp;<span class="icon arrow__right unbreak"></span>
+        </a>
+    </p>
     <div class="start-input-container">
-        <input class="start-input" type="text" placeholder="Enter a domain to start">
+        <svg class="icon start-input-container-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.0666 17.8667C16.8958 17.8667 20 14.7625 20 10.9333C20 7.10416 16.8958 4 13.0666 4C9.23746 4 6.1333 7.10416 6.1333 10.9333C6.1333 14.7625 9.23746 17.8667 13.0666 17.8667Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8 16L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <input enterkeyhint="search" class="start-input suggestions__input" type="text" placeholder="Enter a domain..." />
+        <svg class="icon reset__input--icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.00012 18L18.0001 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M6.00012 6L17.9986 18.0015" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <div class="start-input-container__domain--container">
+            <span class="start-input-container__domain">.ton</span>
+        </div>
     </div>
-
-    <div class="start-error" style="display: none">
-    </div>
-
-    <div class="version">
-        v1.04, <a href="https://t.me/ton_help_bot" target="_blank" data-locale="help">Help me</a>
-    </div>
+    <div class="start-error" style="display: none"></div>
 </div>
 
-<div class="main">
-
-    <div class="h">
-        <span id="domainName"></span>
-        <div id="domainStatus" class="status"></div>
+<div class="main animate">
+    <div id="domainStatus" class="status">
+        <div class="loader"></div>
+        <span></span>
     </div>
 
-    <div id="domainLoading" class="loading"></div>
+    <span id="domainName" class="line-clamp"></span>
 
-    <div id="auctionDomainScreen" class="info">
-        <p data-locale="auction1">
-            This domain is up for auction.
-        </p>
-        <p>
-            <span data-locale="auction2_1">The auction ends on</span>
-            <span id="auctionEndTime" class="strong"></span>
-            <span data-locale="auction2_2">in</span>
-            <span id="auctionLeftTime" class="strong"></span>.
-        </p>
-        <p data-locale="auction3">The current highest bid:</p>
-        <p>
-            <span id="auctionAmount" class="strong"></span>
-            <span data-locale="auctionFrom">by</span>
-            <span id="auctionOwnerAddress" class="addr"></span>.
-        </p>
+    <div id="auctionDomainScreen">
+        <div class="info">
+            <p class="row">
+                <span class="row__title" data-locale="highest_bid">Highest bid</span>
+                <span class="priceContainer">
+                    <span id="auctionAmount" class="sale__price">---</span>
+                    <span id="auctionAmountConverted" class="converted__price">---</span>
+                </span>
+            </p>
 
-        <p class="padding-top">
-            <span data-locale="auction4_1">To place a higher bid, send at least</span> <span id="auctionMinBet" class="strong"></span> <span data-locale="auction4_2">to the domain address:</span>
-        </p>
-        <p id="auctionAddressContainer" class="copy-container">
-            <span id="auctionAddress" class="addr"></span>
-            <span class="copy-btn"><span class="copy-btn-icon"></span></span>
-        </p>
-        <div id="auctionQr"></div>
-        <a id="auctionBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
-        <div class="padding-top" style="margin-left: 16px">
-            <a href="https://ton.org/wallets" target="_blank" data-locale="noWallet">No wallet?</a>
+            <p class="row row--border__bottom align__center">
+                <span class="row__title" data-locale="from">From</span>
+                <span id="auctionOwnerAddress" class="addr node__to__copy"></span>
+            </p>
+
+            <p class="row">
+                <span class="row__title" data-locale="bid_step">Bid step</span>
+                <span class="priceContainer">
+                    <span id="auctionBidStep" class="sale__price">---</span>
+                    <span id="auctionBidStepConverted" class="converted__percent"></span>
+                </span>
+            </p>
+
+            <p class="row">
+                <span class="row__title" data-locale="minimum_bid">Minimum bid</span>
+                <span class="priceContainer">
+                    <span id="auctionMinBet" class="sale__price">---</span>
+                    <span id="auctionMinBetConverted" class="converted__price">---</span>
+                </span>
+            </p>
         </div>
 
-        <p data-locale="send-warning" class="padding-top strong">Send TON from a wallet you control. Do not send directly from exchanges or bots — you will lose coins.</p>
+        <div class="flip__container">
+            <span class="expires__date" data-locale="auction_ends">Auction ends in</span>
+            <div id="auctionEndsRow" class="flip__row">
+                <div id="actionEndDate" class="flip__strong">
+                    <ul class="flip-clock-container" id="auction-bid-flip-clock-container" data-end-date="December 12, 2022 00:00:00"></ul>
+                </div>
+            </div>
+        </div>
 
-        <p  data-locale="auctionInfo1">
-            If someone outbids you, your coins will automatically be returned to your wallet. However, you will be able to place a new bid.
-        </p>
-        <p data-locale="auctionInfo2">
-            When the auction ends, the user who made the highest bid will claim the domain.
+        <p class="buttonWrapper">
+            <a id="auctionBtn" target="_blank" class="btn">
+                <img src="/assets/hammer.svg" alt="Place bid">
+                <span data-locale="place_bid">Place bid</span>
+            </a>
         </p>
     </div>
 
-    <div id="busyDomainScreen" class="info">
+    <div id="busyDomainScreen">
         <div class="info">
-            <p id="busyOwnerRow">
-                <span data-locale="owner">Owner</span>: <span id="busyOwnerAddress" class="addr"></span>.
+            <p id="salePriceRow" class="row">
+                <span class="row__title" data-locale="sale__price">Sale price</span>
+                <span class="priceContainer">
+                    <span id="salePrice" class="sale__price">---</span>
+                    <span id="salePriceConverted" class="converted__price">---</span>
+                </span>
             </p>
-            <p id="busyEndTimeRow">
-                <span data-locale="expires">Expires</span>: <span id="busyEndDate" class="strong"></span>
+            <p id="busyOwnerRow" class="row align__center">
+                <span data-locale="owner" class="row__title">Owner</span>
+                <span id="busyOwnerAddress" class="addr node__to__copy"></span>
             </p>
-            <p>
-                <a id="connectBtn" class="btn" data-locale="connect">Edit</a>
-            </p>
-            <div id="editLoading" class="loading"></div>
-            <div id="domainEditContainer" class="padding-top">
-                <span data-locale="dnsRecords" class="strong">DNS Records:</span>
-
-                <div class="edit-form padding-top">
-                    <div id="editWalletRow" class="edit-row">
-                        <div class="edit-label" data-locale="walletAddress">
-                            Wallet address:
-                        </div>
-                        <div class="edit-input">
-                            <input type="text">
-                        </div>
-                        <div class="edit-btn">
-                            <a>Set</a>
+            <div id="domainEditContainer">
+                <div class="edit-form">
+                    <div id="editWalletRow" class="edit__row">
+                        <label class="edit__label" for="editWalletInput" data-locale="wallet_address">
+                            Wallet address
+                        </label>
+                        <input enterkeyhint="done" class="default__input" type="text" placeholder="Address" id="editWalletInput">
+                        <div class="edit__button">
+                            <a data-locale="save">Save</a>
                         </div>
                     </div>
-                    <div id="editAdnlRow" class="edit-row">
-                        <div class="edit-label" data-locale="adnlAddress">
-                            TON site:
-                        </div>
-                        <div class="edit-input">
-                            <input type="text" placeholder="HEX">
-                        </div>
-                        <div class="edit-btn">
-                            <a data-locale="set" class="edit-btn">Set</a>
+                    <div id="editAdnlRow" class="edit__row">
+                        <label class="edit__label" for="editAdnlInput" data-locale="ton_site">
+                            TON Site
+                        </label>
+                        <input enterkeyhint="done" class="default__input" type="text" placeholder="ADNL address" id="editAdnlInput">
+                        <div class="edit__button">
+                            <a data-locale="save" class="edit__button">Save</a>
                         </div>
                     </div>
-                    <div class="edit-row" style="margin-top: -30px">
+                    <div class="edit-row edit-row-checkbox" >
                         <div class="edit-label">
                         </div>
-                        <div style="font-size: 14px"><input type="checkbox" id="siteStorage"><label for="siteStorage">Hosting in TON Storage</label></div>
+                        <div style="font-size: 14px"><input type="checkbox" id="siteStorage"><label for="siteStorage" data-locale="storage_checkbox">Hosting in TON Storage</label></div>
                     </div>
-                    <div id="editStorageRow" class="edit-row">
-                        <div class="edit-label">
-                            Storage:
+                    <div id="editStorageRow" class="edit-row edit__row">
+                        <div class="edit-label edit__label">
+                            TON Storage
                         </div>
-                        <div class="edit-input">
-                            <input type="text" placeholder="HEX">
-                        </div>
-                        <div class="edit-btn">
-                            <a data-locale="set" class="edit-btn">Set</a>
+                        <input type="text" placeholder="HEX" class="default__input">
+                        <div class="edit-btn edit__button">
+                            <a data-locale="set" class="edit-btn">Save</a>
                         </div>
                     </div>
-                    <div id="editResolverRow" class="edit-row">
-                        <div class="edit-label" data-locale="resolver">
-                            Subdomains:
-                        </div>
-                        <div class="edit-input">
-                            <input type="text">
-                        </div>
-                        <div class="edit-btn">
-                            <a>Set</a>
+                    <div id="editResolverRow" class="edit__row">
+                        <label class="edit__label" for="editResolverInput" data-locale="subdomains">
+                            Subdomains
+                        </label>
+                        <input enterkeyhint="done" class="default__input" type="text" placeholder="Address" id="editResolverInput">
+                        <div class="edit__button" >
+                            <a data-locale="save">Save</a>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>
 
-    <div id="freeDomainScreen" class="info">
-        <p data-locale="free1">This domain is available.</p>
-        <p data-locale="free2">The domain can be purchased at an open auction.</p>
-        <p class="padding-top">
-            <span data-locale="free3_1">To start the auction, make the first bid by sending at least</span> <span id="freeMinBet" class="strong"></span> <span data-locale="free3_2">to the address:</span>
-        </p>
-        <p id="freeAddressContainer" class="copy-container">
-            <span id="freeBuyAddress" class="addr"></span>
-            <span class="copy-btn"><span class="copy-btn-icon"></span></span>
-        </p>
-        <p data-locale="free4">In the transfer comment, specify:</p>
-
-        <p id="freeCommentContainer" class="copy-container">
-            <span id="freeComment" class="strong"></span>
-            <span class="copy-btn"><span class="copy-btn-icon"></span></span>
-        </p>
-
-        <div id="freeQr"></div>
-
-        <a id="freeBtn" target="_blank" class="btn" data-locale="openWallet">Open wallet</a>
-        <div class="padding-top" style="margin-left: 16px">
-            <a href="https://ton.org/wallets" target="_blank" data-locale="noWallet">No wallet?</a>
+        <div class="flip__container">
+            <span class="expires__date" data-locale="expires">
+                Expires on
+                <span id="expiresDate"></span>
+            </span>
+            <div id="busyEndTimeRow" class="flip__row">
+                <div id="busyEndDate" class="flip__strong">
+                    <ul class="flip-clock-container" id="flip-clock-container" data-end-date="December 12, 2022 00:00:00"></ul>
+                </div>
+            </div>
         </div>
 
-        <p data-locale="send-warning" class="padding-top strong">Send TON from a wallet you control. Do not send directly from exchanges or bots — you will lose coins.</p>
-
-        <p ><span data-locale="auctionDuration">The auction’s duration:</span> <span id="auctionDuration"></span></p>
-        <p data-locale="auctionInfo1">
-            If someone outbids you, your coins will automatically be returned to your wallet. However, you will be able to place a new bid.
+        <p class="buttonWrapper">
+            <a id="connectBtn" class="btn">
+                <span data-locale="manage_domain">
+                    Manage a domain
+                </span>
+            </a>
+            <a id="infoBtn" class="btn outline" href="/about.html#claim-your-ton-domain" target="_blank" >
+                <span data-locale="claim_your_domain">
+                    How to claim your TON domain?
+                </span>
+            </a>
         </p>
-        <p data-locale="auctionInfo2">
-            When the auction ends, the user who made the highest bid will claim the domain.
+    </div>
+
+    <div id="freeDomainScreen">
+        <div class="info">
+            <p id="betPriceRow" class="row">
+                <span class="row__title" data-locale="bet_price">Bet price</span>
+                <span class="priceContainer">
+                    <span id="freeMinBet" class="sale__price">---</span>
+                    <span id="freeMinBetConverted" class="converted__price">---</span>
+                </span>
+            </p>
+            <p class="row info__row">
+                <span data-locale="start_bid">The domain can be purchased at an open auction. To&nbsp;start the auction, make the first bid.</span>
+            </p>
+        </div>
+
+        <div class="flip__container">
+            <span class="expires__date" data-locale="auction_duration">Auction duration</span>
+            <div id="auctionTimeTimeRow" class="flip__row">
+                <div id="auctionEndDate" class="flip__strong">
+                    <ul class="flip-clock-container" id="bid-flip-clock-container" data-end-date="December 12, 2022 00:00:00"></ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="buttonWrapper">
+            <a id="bidButton" class="btn">
+                <img src="/assets/hammer.svg" alt="Place bid">
+                <span data-locale="bid_to_start">
+                    Place a bid to start the auction
+                </span>
+            </a>
+        </p>
+    </div>
+
+    <div id="domainLoadingScreen">
+        <div class="info">
+        </div>
+
+        <p class="buttonWrapper">
+            <a class="btn"></a>
         </p>
     </div>
 </div>
 
-<script>
-    const $ = (selector) => document.querySelector(selector);
-
-    const toggle = (name, isVisible, display) => {
-        $(name).style.display = isVisible ? (display || 'flex') : 'none';
-    }
-
-    const setScreen = (name) => {
-        toggle('#startScreen', name === 'startScreen');
-        if (name === 'startScreen') {
-            setTimeout(() => {
-                $('.start-input').focus();
-            }, 10);
-        }
-        toggle('#navInput', name !== 'startScreen');
-        toggle('.main', name !== 'startScreen');
-        toggle('#auctionDomainScreen', name === 'auctionDomainScreen', 'block');
-        toggle('#busyDomainScreen', name === 'busyDomainScreen', 'block');
-        toggle('#freeDomainScreen', name === 'freeDomainScreen', 'block');
-        toggle('#domainStatus', name !== 'main');
-        toggle('#domainLoading', name === 'main');
-        if (name === 'auctionDomainScreen') {
-            $('#domainStatus').classList.remove('busy');
-            $('#domainStatus').classList.add('free');
-            $('#domainStatus').innerText = locale.auction;
-        } else if (name === 'freeDomainScreen') {
-            $('#domainStatus').classList.remove('busy');
-            $('#domainStatus').classList.add('free');
-            $('#domainStatus').innerText = locale.free;
-        } else if (name === 'busyDomainScreen') {
-            $('#domainStatus').classList.add('busy');
-            $('#domainStatus').classList.remove('free');
-            $('#domainStatus').innerText = locale.busy;
-        }
-    }
-    // LANG
-
-    const localeDict = {
-        'ru': {
-            'testnet': 'ВНИМАНИЕ! Это тестовая сеть, не посылайте настоящие монеты! Тестовые домены могут быть сброшены.',
-            'navInputPlaceholder': 'Введите домен',
-            'startInputPlaceholder': 'Введите домен, чтобы начать',
-            'auction1': 'Проходит аукцион на этот домен.',
-            'auction2_1': 'Аукцион закончится',
-            'auction2_2': 'через',
-            'auction3': 'Лучшая ставка на данный момент:',
-            'auctionFrom': 'от',
-            'auction4_1': 'Чтобы поднять ставку, отправьте не менее',
-            'auction4_2': 'на адрес домена:',
-            'openWallet': 'Открыть кошелек',
-            'auctionInfo1': 'Если ваша ставка будет перебита, ваши монеты автоматически вернутся на ваш кошелек. Вы сможете сделать новую ставку.',
-            'auctionInfo2': 'После окончания аукциона пользователь, сделавший лучшую ставку, забирает домен.',
-            'owner': 'Владелец',
-            'free1': 'Этот домен свободен.',
-            'free2': 'Домен можно приобрести через открытый аукцион.',
-            'free3_1': 'Чтобы начать аукцион, сделайте первую ставку, отправив не менее',
-            'free3_2': 'на адрес:',
-            'free4': 'В комментарии к переводу укажите:',
-            'auctionDuration': 'Длительность аукциона:',
-            'free': 'Свободен',
-            'busy': 'Занят',
-            'auction': 'Аукцион',
-            'errorLength': 'Минимум 4 символа, максимум 126 символов',
-            'subdomainsNotAllowed': 'Субдомены не разрешены',
-            'invalidChars': ' Допустимы латинские буквы (a-z), цифры (0-9) и дефис (-). Дефис не может находиться в начале и конце.',
-            'week': 'неделя',
-            'day': 'день',
-            'hour': 'час',
-            'days': 'дней',
-            'hours': 'часов',
-            'min': 'мин.',
-            'sec': 'сек',
-            'cantCopy': 'Буфер омена не доступен',
-            'connect': 'Редактировать',
-            'dnsRecords': 'DNS-записи:',
-            'notOwner': 'Вы не владелец домена',
-            'walletAddress': 'Адрес кошелька:',
-            'adnlAddress': 'TON-сайт:',
-            'invalidAddress': 'Неверный адрес',
-            'resolver': 'Субдомены:',
-            'set': 'Сохр.',
-            'installExtension': 'Пожалуйста, установите TON Chrome расширение, чтобы редактировать домен.',
-            'updateExtension': 'Пожалуйста, обновите расширение TON Chrome.',
-            'expires': 'Истекает',
-            'send-warning': 'Отправляйте монеты с кошелька, который вы контролируете. Не отправляйте напрямую с бирж или ботов - вы потеряете монеты.',
-            'begin': 'Открытый аукцион доменных имен TON DNS начинается сегодня.',
-            'about_dns': 'Узнать больше о TON DNS',
-            'help': 'Помощь',
-            'noWallet': 'Нет кошелька?',
-            'openAuction': 'Открытый аукцион доменных имен'
-        },
-        'en': {
-            'free': 'Available',
-            'busy': 'Taken',
-            'auction': 'Auction',
-            'errorLength': 'Minimum 4 characters, maximum 126 characters',
-            'subdomainsNotAllowed': 'Subdomains are not allowed',
-            'invalidChars': 'Latin letters (a-z), numbers (0-9) and hyphens (-) are allowed. A hyphen cannot be at the beginning or end.',
-            'week': 'week',
-            'day': 'day',
-            'hour': 'hour',
-            'days': 'days',
-            'hours': 'hours',
-            'min': 'min.',
-            'sec': 'sec',
-            'cantCopy': 'Can’t copy to clipboard',
-            'notOwner': 'You are not the owner of this domain',
-            'invalidAddress': 'Invalid address',
-            'set': 'Set',
-            'installExtension': 'Please update your TON Chrome extension',
-            'updateExtension': 'Please install the TON Chrome extension to edit the domain',
-        }
-    }
-
-    const browserLang = navigator.language || navigator.userLanguage;
-    const lang = (browserLang === 'ru-RU') || (browserLang === 'ru') || (browserLang === 'be-BY') || (browserLang === 'be') || (browserLang === 'kk-KZ') || (browserLang === 'kk') ? 'ru' : 'en';
-    const locale = localeDict[lang];
-
-    if (lang !== 'en') {
-        $('.start-input').placeholder = locale.startInputPlaceholder;
-        $('#navInput input').placeholder = locale.navInputPlaceholder;
-        document.querySelectorAll('[data-locale]').forEach(div => {
-            const key = div.attributes['data-locale'].value;
-            div.innerText = locale[key];
-        });
-        $('#aboutDnsLink').href = 'https://telegra.ph/TON-DNS-06-27';
-    }
-
-    const formatDuration = millis => {
-        if (millis < 0) millis = 0;
-        let seconds = Math.floor((millis / 1000) % 60);
-        let minutes = Math.floor((millis / (1000 * 60)) % 60);
-        let hours = Math.floor((millis / (1000 * 60 * 60)) % 24);
-        let days = Math.floor((millis / (1000 * 60 * 60 * 24)));
-
-        if (days === 7) {
-            return '1 ' + locale.week;
-        }
-
-        minutes = (minutes < 10) ? '0' + minutes : minutes;
-        seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-        let result = '';
-        if (days > 0) {
-            result += days + ' ' + (days === 1 ? locale.day : locale.days) + ' ';
-        }
-        if (days > 0 || hours > 0) {
-            result += hours + ' ' + (hours === 1 ? locale.hour : locale.hours) + ' ';
-        }
-        result += minutes + ' ' + locale.min + ' ' + seconds + ' ' + locale.sec;
-
-        return result;
-    }
-
-    // MAINNET / TESTNET
-
-    const isTestnet = window.location.href.indexOf('testnet=true') > -1;
-
-    const one_month = 2592000; // 1 month in seconds = 60 * 60 * 24 * 30
-    const auction_start_time = isTestnet ? 1659125865 : 1659171600;
-
-    if (isTestnet) {
-        toggle('.testnet-badge', true, 'block');
-        document.body.classList.add('testnet-padding');
-    }
-
-    const toncenterUrl = isTestnet ? 'https://testnet.toncenter.com/api/v2/jsonRPC' : 'https://toncenter.com/api/v2/jsonRPC';
-    const tonRootAddress = isTestnet ? new TonWeb.Address('EQDjPtM6QusgMgWfl9kMcG-EALslbTITnKcH8VZK1pnH3UZA').toString(true, true, true, true) : 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz'; // .ton root smart contract in bounceable form
-
-    const tonweb = new TonWeb(new TonWeb.HttpProvider(toncenterUrl, {apiKey: 'cf29c6480217595ee17158db12a72e3f70b36377f2f79b72487621576a0df10b'}));
-
-    const dnsCollection = new TonWeb.dns.DnsCollection(tonweb.provider, {
-        address: tonRootAddress
-    });
-
-    // UI
-
-    let updateIntervalId = 0;
-    let auctionTimerIntervalId = 0;
-    let freeQrUrl = null;
-    let auctionQrUrl = null;
-    let currentDomain = null;
-    let currentOwner = null;
-    let currentDnsItem = null;
-
-    const clear = () => {
-        clearInterval(updateIntervalId);
-        clearInterval(auctionTimerIntervalId);
-        freeQrUrl = null;
-        auctionQrUrl = null;
-        currentDomain = null;
-        currentOwner = null;
-        currentDnsItem = null;
-        $('#busyDomainScreen').classList.remove('edit-expand');
-        $('#busyDomainScreen').classList.remove('edit-loading');
-    }
-
-    $('.badge').addEventListener('click', () => {
-        clear();
-        window.history.pushState('', 'TON DNS ', '#');
-        setScreen('startScreen');
-    });
-
-    // SET DOMAIN
-
-    const validateDomain = (domain) => {
-        if (domain.length < 4 || domain.length > 126) {
-            return locale.errorLength;
-        }
-        for (let i = 0; i < domain.length; i++) {
-            if (domain.charAt(i) === '.') {
-                return locale.subdomainsNotAllowed;
-            }
-            const char = domain.charCodeAt(i);
-            const isHyphen = (char === 45);
-            const isValidChar = (isHyphen && (i > 0) && (i < domain.length - 1)) || ((char >= 48) && (char <= 57)) || ((char >= 97) && (char <= 122)); // '-' or 0-9 or a-z ;  abcdefghijklmnopqrstuvwxyz-0123456789
-
-            if (!isValidChar) {
-                return locale.invalidChars;
-            }
-        }
-    }
-
-    const setDomain = (domain) => {
-        currentDomain = domain;
-
-        const loadDomain = async () => {
-            const domainAddress = await dnsCollection.resolve(domain, TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER, true);
-            const domainAddressString = domainAddress.toString(true, true, true, isTestnet);
-            const accountInfo = await tonweb.provider.getAddressInfo(domainAddressString);
-            let dnsItem;
-            let domainExists = accountInfo.state === 'active';
-            let ownerAddress = null;
-            if (domainExists) {
-                dnsItem = new TonWeb.dns.DnsItem(tonweb.provider, {address: domainAddress});
-                const data = await dnsItem.methods.getData();
-                if (!data.isInitialized) {
-                    domainExists = false;
-                } else {
-                    ownerAddress = data.ownerAddress;
-                }
-            }
-            let auctionInfo = null;
-            if (domainExists && !ownerAddress) {
-                auctionInfo = await dnsItem.methods.getAuctionInfo();
-                if (auctionInfo.auctionEndTime < Date.now() / 1000) {
-                    ownerAddress = auctionInfo.maxBidAddress;
-                }
-            }
-            let lastFillUpTime = 0;
-            if (domainExists && ownerAddress) {
-                lastFillUpTime = await dnsItem.methods.getLastFillUpTime();
-            }
-
-            if (currentDomain === domain) {
-                if (!domainExists) {
-                    setScreen('freeDomainScreen');
-                    renderFreeDomain(domain);
-                } else if (ownerAddress) {
-                    currentOwner = ownerAddress.toString(true, true, true, isTestnet);
-                    currentDnsItem = dnsItem;
-                    setScreen('busyDomainScreen');
-                    renderBusyDomain(domain, domainAddressString, ownerAddress.toString(true, true, true, isTestnet), lastFillUpTime);
-                } else {
-                    setScreen('auctionDomainScreen');
-                    renderAuctionDomain(domain, domainAddressString, auctionInfo);
-                }
-            }
-        }
-
-        clearInterval(auctionTimerIntervalId);
-        freeQrUrl = null;
-        auctionQrUrl = null;
-        currentOwner = null;
-        currentDnsItem = null;
-        $('#busyDomainScreen').classList.remove('edit-expand');
-        $('#busyDomainScreen').classList.remove('edit-loading');
-        $('#navInput input').value = '';
-        $('.start-input').value = '';
-
-        setScreen('main');
-        $('#domainName').innerText = domain + '.ton';
-
-        clearInterval(updateIntervalId);
-        updateIntervalId = setInterval(() => loadDomain(), 10 * 1000);
-        loadDomain();
-    }
-
-    const onInput = (e) => {
-        if (e.key === 'Enter') {
-            let domain = e.target.value.toLowerCase().trim();
-            if (domain.endsWith('.ton')) {
-                domain = domain.substring(0, domain.length - 4);
-            }
-            const error = validateDomain(domain);
-            if (error) {
-                $('.start-error').innerText = error;
-                toggle('.start-error', true);
-            } else {
-                window.history.pushState(domain, 'TON DNS - ' + domain, '#' + encodeURIComponent(domain));
-                setDomain(domain);
-            }
-        } else {
-            toggle('.start-error', false);
-        }
-    };
-
-    $('.start-input').addEventListener('keydown', onInput);
-    $('#navInput input').addEventListener('keydown', onInput);
-
-    const processUrl = () => {
-        clear();
-        const domainFromUrl = decodeURIComponent(window.location.hash.substring(1)).toLowerCase();
-        if (domainFromUrl) {
-            const error = validateDomain(domainFromUrl);
-            if (error) {
-                setScreen('startScreen')
-            } else {
-                setDomain(domainFromUrl);
-            }
-        } else {
-            setScreen('startScreen')
-        }
-    }
-    processUrl();
-
-    window.onpopstate = () => processUrl();
-
-    // RENDER UI
-
-    const renderQr = (name, url) => {
-        const qrCode = new QRCodeStyling({
-            "width": 220,
-            "height": 220,
-            "data": url,
-            "margin": 0,
-            "qrOptions": {"typeNumber": "0", "mode": "Byte", "errorCorrectionLevel": "Q"},
-            "imageOptions": {"hideBackgroundDots": true, "imageSize": 0.2, "margin": 0},
-            "dotsOptions": {"type": "rounded", "color": "#000000", "gradient": null},
-            "backgroundOptions": {"color": "#ffffff"},
-            "image": "assets/qr-logo.png",
-            "cornersSquareOptions": {"type": "extra-rounded", "color": "#000000"},
-            "cornersDotOptions": {"type": "dot", "color": "#000000"},
-        });
-
-        const canvasContainer = $(name);
-        canvasContainer.innerHTML = '';
-        qrCode.append(canvasContainer);
-    }
-
-    const shortAddress = (address) => {
-        return address.substring(0, 8) + '...' + address.substring(address.length - 8);
-    }
-
-    const getMinPriceConfig = (domainCharCount) => {
-        switch (domainCharCount) {
-            case 4: return ['1000', '100'];
-            case 5: return ['500', '50'];
-            case 6: return ['400', '40'];
-            case 7: return ['300', '30'];
-            case 8: return ['200', '20'];
-            case 9: return ['100', '10'];
-            case 10: return ['50', '5'];
-            default:
-                return ['10', '1'];
-        }
-    }
-
-    const getMinPrice = (domain) => {
-        const arr = getMinPriceConfig(domain.length);
-        let startMinPrice = TonWeb.utils.toNano(arr[0]);
-        const endMinPrice = TonWeb.utils.toNano(arr[1]);
-        const nowTime = Math.floor(Date.now() / 1000);
-        const seconds = nowTime - auction_start_time;
-        const months = Math.floor(seconds / one_month);
-        if (months > 21) {
-            return endMinPrice;
-        }
-        for (let i = 0; i < months; i++) {
-            startMinPrice = startMinPrice.mul(new TonWeb.utils.BN(90)).div(new TonWeb.utils.BN(100));
-        }
-        return startMinPrice;
-    }
-
-    const getAuctionDuration = () => {
-        const auction_start_duration = 60 * 60 * 24 * 7; // 5 min (in mainnet 1 week)
-        const auction_end_duration = 60 * 60; // 1 min (in mainnet 1 hour)
-
-        const nowTime = Math.floor(Date.now() / 1000);
-        const seconds = nowTime - auction_start_time;
-        let months = Math.floor(seconds / one_month);
-        if (months > 12) {
-            months = 12;
-        }
-        return auction_start_duration - (auction_start_duration - auction_end_duration) * months / 12;
-    }
-
-    const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
-        const auctionEndTime = auctionInfo.auctionEndTime; // unixtime
-        const bestBidAmount = auctionInfo.maxBidAmount;
-        const bestBidAddress = auctionInfo.maxBidAddress.toString(true, true, true, isTestnet);
-
-        const endDate = new Date(auctionEndTime * 1000);
-
-        const setLeftTime = () => {
-            const now = Date.now();
-            let delta = (auctionEndTime * 1000) - now;
-            $('#auctionLeftTime').innerText = formatDuration(delta);
-        }
-
-        clearInterval(auctionTimerIntervalId);
-        auctionTimerIntervalId = setInterval(() => setLeftTime(), 1000);
-        setLeftTime();
-
-        $('#auctionEndTime').innerText = endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString();
-        $('#auctionAmount').innerText = TonWeb.utils.fromNano(bestBidAmount) + ' TON';
-        $('#auctionOwnerAddress').innerText = shortAddress(bestBidAddress);
-        $('#auctionAddress').innerText = domainItemAddress;
-        $('#auctionMinBet').innerText = TonWeb.utils.fromNano(bestBidAmount.mul(new TonWeb.utils.BN(105)).div(new TonWeb.utils.BN(100))) + ' TON';
-
-        const auctionUrl = 'ton://transfer/' + domainItemAddress;
-        $('#auctionBtn').href = auctionUrl;
-        if (auctionQrUrl !== auctionUrl) {
-            auctionQrUrl = auctionUrl;
-            renderQr('#auctionQr', auctionUrl);
-        }
-    }
-
-    const renderFreeDomain = (domain) => {
-        $('#freeBuyAddress').innerText = tonRootAddress;
-        $('#freeComment').innerText = domain;
-
-        $('#freeMinBet').innerText = TonWeb.utils.fromNano(getMinPrice(domain)) + ' TON';
-        $('#auctionDuration').innerText = formatDuration(getAuctionDuration() * 1000) + '.';
-
-        const buyUrl = 'ton://transfer/' + tonRootAddress + '?text=' + encodeURIComponent(domain);
-        $('#freeBtn').href = buyUrl;
-        if (freeQrUrl !== buyUrl) {
-            freeQrUrl = buyUrl;
-            renderQr('#freeQr', buyUrl);
-        }
-    }
-
-    const renderBusyDomain = (domain, domainItemAddress, ownerAddress, lastFillUpTime) => {
-        $('#busyOwnerAddress').innerText = shortAddress(ownerAddress);
-        const ONE_YEAR = 31622400 * 1000;
-        const endDate = new Date(lastFillUpTime * 1000 + ONE_YEAR);
-        $('#busyEndDate').innerText = endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString();
-    }
-
-    // COPY TO CLIPBOARD
-
-    const copyToClipboard = async (name, btnName) => {
-        try {
-            const div = $(name);
-            const btn = $(btnName);
-            await navigator.clipboard.writeText(div.innerText);
-            btn.style.backgroundImage = 'url("assets/ok.svg")';
-            setTimeout(() => {
-                btn.style.backgroundImage = 'url("assets/copy.svg")';
-            }, 300);
-        } catch (e) {
-            alert(locale.cantCopy);
-        }
-    }
-
-    $('#auctionAddressContainer').addEventListener('click', () => {
-        copyToClipboard('#auctionAddress', '#auctionAddressContainer .copy-btn-icon');
-    });
-
-    $('#freeAddressContainer').addEventListener('click', () => {
-        copyToClipboard('#freeBuyAddress', '#freeAddressContainer .copy-btn-icon');
-    });
-
-    $('#freeCommentContainer').addEventListener('click', () => {
-        copyToClipboard('#freeComment', '#freeCommentContainer .copy-btn-icon');
-    });
-
-    // EDIT
-
-    const createEditBtn = (containerName) => {
-        const container = $(containerName);
-        container.innerHTML = '';
-        const btn = document.createElement('a');
-        btn.innerText = locale.set;
-        btn.classList.add('edit-btn');
-        container.appendChild(btn);
-        return btn;
-    }
-
-    const connectExtension = async (domain, dnsItem) => {
-        const provider = window.ton;
-
-        if (!provider) {
-            alert(locale.installExtension);
-            return;
-        }
-
-        if (!window.tonProtocolVersion || window.tonProtocolVersion < 1) {
-            alert(locale.updateExtension);
-            return;
-        }
-
-        const accounts = await provider.send('ton_requestAccounts');
-        const account = new TonWeb.Address(accounts[0]).toString(true, true, true, isTestnet);
-        if (account !== currentOwner) {
-            alert(locale.notOwner);
-            return;
-        }
-
-        $('#busyDomainScreen').classList.add('edit-loading');
-
-        try {
-            const dnsRecordWallet = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_WALLET);
-            const dnsRecordSite = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_SITE);
-            const isSiteInStorage = dnsRecordSite instanceof TonWeb.utils.StorageBagId;
-            const dnsRecordStorage = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_STORAGE);
-            const dnsRecordResolver = await dnsItem.resolve('.', TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER);
-            if (domain === currentDomain) {
-                $('#editWalletRow input').value = dnsRecordWallet ? dnsRecordWallet.toString(true, true, true, isTestnet) : '';
-                $('#editAdnlRow input').value = dnsRecordSite ? dnsRecordSite.toHex() : '';
-                $('#siteStorage').checked = isSiteInStorage;
-                $('#editStorageRow input').value = dnsRecordStorage ? dnsRecordStorage.toHex() : '';
-                $('#editResolverRow input').value = dnsRecordResolver ? dnsRecordResolver.toString(true, true, true, isTestnet) : '';
-
-                const setTx = async (key, value) => {
-                    const dataCell = await TonWeb.dns.DnsItem.createChangeContentEntryBody({
-                        category: key,
-                        value: value
-                    });
-                    const data = TonWeb.utils.bytesToBase64(await dataCell.toBoc(false));
-
-                    provider.send(
-                        'ton_sendTransaction',
-                        [{
-                            to: (await dnsItem.getAddress()).toString(true, true, true, isTestnet),
-                            value: TonWeb.utils.toNano('0.05').toString(),
-                            data: data,
-                            dataType: 'boc'
-                        }]
-                    );
-                }
-
-                createEditBtn('#editWalletRow .edit-btn').addEventListener('click', () => {
-                    const value = $('#editWalletRow input').value;
-                    if (!value || TonWeb.Address.isValid(value)) {
-                        setTx(TonWeb.dns.DNS_CATEGORY_WALLET, value ? TonWeb.dns.createSmartContractAddressRecord(new TonWeb.Address(value)) : null);
-                    } else {
-                        alert(locale.invalidAddress);
-                    }
-                });
-                createEditBtn('#editAdnlRow .edit-btn').addEventListener('click', () => {
-                    const value = $('#editAdnlRow input').value; // hex
-                    let record = null;
-                    if (value) {
-                        try {
-                            if ($('#siteStorage').checked) {
-                                const bagId = new TonWeb.utils.StorageBagId(value);
-                                record = TonWeb.dns.createStorageBagIdRecord(bagId);
-                            } else {
-                                const adnlAddress = new TonWeb.utils.AdnlAddress(value);
-                                record = TonWeb.dns.createAdnlAddressRecord(adnlAddress);
-                            }
-                        } catch (e) {
-                            console.error(e);
-                            alert(locale.invalidAddress);
-                            return;
-                        }
-                    }
-                    
-                    setTx(TonWeb.dns.DNS_CATEGORY_SITE, value ? record : null);
-                });
-                createEditBtn('#editStorageRow .edit-btn').addEventListener('click', () => {
-                    const value = $('#editStorageRow input').value; // hex
-
-                    let record = null;
-                    if (value) {
-                        try {
-                            const bagId = new TonWeb.utils.StorageBagId(value);
-                            record = TonWeb.dns.createStorageBagIdRecord(bagId);
-                        } catch (e) {
-                            console.error(e);
-                            alert(locale.invalidAddress);
-                            return;
-                        }
-                    }
-
-                    setTx(TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
-                });
-                createEditBtn('#editResolverRow .edit-btn').addEventListener('click', () => {
-                    const value = $('#editResolverRow input').value;
-                    if (!value || TonWeb.Address.isValid(value)) {
-                        setTx(TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER, value ? TonWeb.dns.createNextResolverRecord(new TonWeb.Address(value)) : null);
-                    } else {
-                        alert(locale.invalidAddress);
-                    }
-                });
-            }
-        } catch (e) {
-            console.error(e);
-            $('#busyDomainScreen').classList.remove('edit-loading');
-            return;
-        }
-
-        $('#busyDomainScreen').classList.remove('edit-loading');
-        $('#busyDomainScreen').classList.add('edit-expand');
-    }
-
-    $('#connectBtn').addEventListener('click', () => connectExtension(currentDomain, currentDnsItem));
-</script>
+<div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-header">
+        <div class="badge">
+            <a href="https://ton.org/">
+                <div class="badge-icon"></div>
+            </a>
+            <span class="badge__dns badge__dns-mobile">
+        </span>
+        </div>
+        <button class="hover__button close-menu-icon" onclick="toggleMobileMenu()">
+            <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.00012 18L18.0001 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path d="M6.00012 6L17.9986 18.0015" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </button>
+    </div>
+    <div class="mobile-menu-navigation">
+        <a class="mobile-menu-row" href="/about.html" target="_blank">
+            <div class="mobile-menu-left">
+            <span class="mobile-lottie-container">
+                <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+            </span>
+                <span data-locale="about">About</span>
+            </div>
+        </a>
+        <div class="mobile-menu-row">
+            <div class="mobile-menu-left">
+            <span class="mobile-lottie-container">
+                <lottie-player id="moonLottieBlack" src="./assets/lottie/moon_sun_dark.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+                <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
+            </span>
+                <span id="darkLabel" data-locale="dark_mode">Dark mode</span>
+            </div>
+            <div class="mobile-menu-right">
+                <label class="form-switch">
+                    <input type="checkbox" id="mobile-theme-switch" onclick="toggleTheme()" checked="">
+                    <i></i>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bid__modal--backdrop animate">
+    <div class="bid__modal">
+        <div class="bid__modal--first__step">
+        <span
+                class="line-clamp bid__modal--header bid__modal--domain__name"
+                id="domainName--bid__modal"
+                data-locale="place_bid"
+        >
+            Place a bid
+        </span>
+            <span class="bid__modal--subheader" data-locale="enter_amount">Enter your bid amount</span>
+            <div class="bid__input--container">
+                <svg class="icon bid__input--icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.92179 3H14.0784C14.6114 2.99998 15.0724 2.99996 15.439 3.0336C15.8104 3.06767 16.2346 3.14549 16.5994 3.41049C17.0923 3.76854 17.4102 4.31891 17.474 4.92479C17.5212 5.37322 17.3767 5.77949 17.2206 6.11821C17.0665 6.45262 16.8362 6.85187 16.5698 7.31356L10.7797 17.3498C10.6189 17.6284 10.3217 17.8 10.0001 17.8C9.67845 17.8 9.38126 17.6284 9.22053 17.3498L3.43043 7.31358C3.16404 6.85188 2.93367 6.45262 2.77958 6.11821C2.6235 5.77949 2.47895 5.37322 2.52618 4.92479C2.59 4.31891 2.90787 3.76854 3.40079 3.41049C3.76561 3.14549 4.18974 3.06767 4.56114 3.0336C4.9278 2.99996 5.38875 2.99998 5.92179 3ZM4.4494 4.87379C4.37749 4.92975 4.33022 5.01158 4.31769 5.10184C4.32054 5.11916 4.33566 5.19411 4.41437 5.36492C4.52964 5.61508 4.71729 5.94215 5.01011 6.4497L9.10009 13.539V4.8H5.96291C5.37696 4.8 4.99988 4.80091 4.72559 4.82607C4.5383 4.84325 4.46583 4.86761 4.4494 4.87379ZM10.9001 4.8V13.539L14.9901 6.4497C15.2829 5.94215 15.4705 5.61508 15.5858 5.36492C15.6645 5.19411 15.6796 5.11916 15.6825 5.10184C15.67 5.01158 15.6227 4.92975 15.5508 4.87379C15.5344 4.86761 15.4619 4.84325 15.2746 4.82607C15.0003 4.80091 14.6232 4.8 14.0373 4.8H10.9001Z" fill="#0088CC"/>
+                    </svg>
+                </svg>
+                <input enterkeyhint="done" id="bid__modal--bid__input" class="bid_modal--input default__input" />
+            </div>
+            <div class="bid__modal--message__container">
+                <span id="bid__input--converted__price" class="converted__price">---</span>
+
+                <div class="bid__input--error" data-locale="small_bid_error">
+                    Bid is too small
+                </div>
+            </div>
+            <div class="button__container">
+                <button id="bid__modal--submit__step" class="btn">
+            <span data-locale="place_label">
+                Place a&nbsp;
+            </span>
+                    <svg class="bid__modal--ton__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.92179 3H14.0784C14.6114 2.99998 15.0724 2.99996 15.439 3.0336C15.8104 3.06767 16.2346 3.14549 16.5994 3.41049C17.0923 3.76854 17.4102 4.31891 17.474 4.92479C17.5212 5.37322 17.3767 5.77949 17.2206 6.11821C17.0665 6.45262 16.8362 6.85187 16.5698 7.31356L10.7797 17.3498C10.6189 17.6284 10.3217 17.8 10.0001 17.8C9.67845 17.8 9.38126 17.6284 9.22053 17.3498L3.43043 7.31358C3.16404 6.85188 2.93367 6.45262 2.77958 6.11821C2.6235 5.77949 2.47895 5.37322 2.52618 4.92479C2.59 4.31891 2.90787 3.76854 3.40079 3.41049C3.76561 3.14549 4.18974 3.06767 4.56114 3.0336C4.9278 2.99996 5.38875 2.99998 5.92179 3ZM4.4494 4.87379C4.37749 4.92975 4.33022 5.01158 4.31769 5.10184C4.32054 5.11916 4.33566 5.19411 4.41437 5.36492C4.52964 5.61508 4.71729 5.94215 5.01011 6.4497L9.10009 13.539V4.8H5.96291C5.37696 4.8 4.99988 4.80091 4.72559 4.82607C4.5383 4.84325 4.46583 4.86761 4.4494 4.87379ZM10.9001 4.8V13.539L14.9901 6.4497C15.2829 5.94215 15.4705 5.61508 15.5858 5.36492C15.6645 5.19411 15.6796 5.11916 15.6825 5.10184C15.67 5.01158 15.6227 4.92975 15.5508 4.87379C15.5344 4.86761 15.4619 4.84325 15.2746 4.82607C15.0003 4.80091 14.6232 4.8 14.0373 4.8H10.9001Z" fill="white"/>
+                    </svg>
+                    <span id="bid__modal--submit__price"></span>
+                    &nbsp;
+                    <span data-locale="place_label_2">
+                bid
+            </span>
+                </button>
+            </div>
+        </div>
+
+        <div class="bid__modal--second__step">
+        <span
+                class="line-clamp bid__modal--header bid__modal--domain__name"
+                id="domainName--bid__modal--payment"
+                data-locale="place_bid"
+        >
+            Place a bid
+        </span>
+            <span class="bid__modal--subheader">
+            <span data-locale="pay_mobile" class="hide__desktop">Pay</span>
+            <span data-locale="scan_qr" class="hide__mobile">Scan the QR code and pay</span>
+            <span id="priceContainer">
+                <svg class="bidPrice-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32961 2.7002H12.6706C13.1503 2.70018 13.5651 2.70016 13.8951 2.73043C14.2294 2.7611 14.6111 2.83113 14.9395 3.06964C15.3831 3.39189 15.6692 3.88721 15.7266 4.4325C15.7691 4.8361 15.639 5.20173 15.4985 5.50659C15.3599 5.80755 15.1525 6.16688 14.9128 6.5824L9.70169 15.615C9.55704 15.8657 9.28956 16.0202 9.00008 16.0202C8.71061 16.0202 8.44313 15.8657 8.29847 15.615L3.08738 6.58242C2.84763 6.16689 2.6403 5.80755 2.50162 5.50659C2.36115 5.20173 2.23106 4.8361 2.27357 4.4325C2.331 3.88721 2.61708 3.39189 3.06071 3.06964C3.38905 2.83113 3.77077 2.7611 4.10503 2.73043C4.43502 2.70016 4.84988 2.70018 5.32961 2.7002ZM4.00446 4.38661C3.93974 4.43697 3.8972 4.51062 3.88592 4.59185C3.88849 4.60744 3.9021 4.67489 3.97293 4.82862C4.07668 5.05377 4.24557 5.34813 4.5091 5.80492L8.19008 12.1853V4.3202H5.36662C4.83926 4.3202 4.49989 4.32101 4.25303 4.34366C4.08447 4.35912 4.01925 4.38105 4.00446 4.38661ZM9.81008 4.3202V12.1853L13.4911 5.80492C13.7546 5.34813 13.9235 5.05377 14.0272 4.82862C14.0981 4.6749 14.1117 4.60744 14.1143 4.59185C14.103 4.51062 14.0604 4.43697 13.9957 4.38661C13.9809 4.38104 13.9157 4.35912 13.7471 4.34366C13.5003 4.32101 13.1609 4.3202 12.6335 4.3202H9.81008Z" fill="currentColor" />
+                </svg>
+                <span id="bidPrice"></span>
+            </span>
+             
+            <span class="bidPrice--tonkepeer" data-locale="scan_qr_link">via Tonkeeper.</span>
+        </span>
+
+            <div id="freeQr" class="bid__modal--qr"></div>
+
+            <div class="button__container">
+                <a id="tonkeeperButton" target="_blank" class="btn">
+                    <span class="mobile__bid--label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 19 18" class="icon bid__modal--icon">
+                          <g clip-path="url(#a)">
+                            <path fill="#fff" d="M9.49977 7.3.433105 3.9 9.49977.5l9.06663 3.4-9.06663 3.4Z"/>
+                            <path fill="#D1E1F4" d="m9.5 7.2999 9.0667-3.4-9.0667 13.6v-10.2Z"/>
+                            <path fill="#A2C4E9" d="m9.49977 7.2999-9.066665-3.4 9.066665 13.6v-10.2Z" opacity=".8"/>
+                          </g>
+                          <defs>
+                            <clipPath id="a">
+                              <path fill="#fff" d="M.433105.5h18.1333v17H.433105z"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                        <span data-locale="place_with_app">
+                            Place a bid via Tonkeeper
+                        </span>
+                    </span>
+                </a>
+                <a id="otherPaymentsMethods" class="btn outline no__underline secondary__mobile">
+                    <span data-locale="use_other_payments">
+                        Use other payment methods
+                        <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <div id="otherPaymentsMethodsContainer" class="bid__modal--payments">
+            <div class="bid__modal--alert">
+                <span data-locale="pay_attention">
+                    Use only <a class="unbreak" href="https://ton.org/wallets?filterBy=non_custodial" target="_blank">non-custodial</a> wallets to place bets.
+                </span>
+            </div>
+
+            <div class="bid__modal--meta">
+                <p class="row align__center">
+                    <span class="row__title" data-locale="sent_to">Sent to</span>
+                    <span id="freeBuyAddress" class="addr node__to__copy"></span>
+                    <button class="copy__addr"></button>
+                </p>
+
+                <p class="row align__center">
+                    <span class="row__title" data-locale="message">Message</span><span id="freeComment" class="domain__name node__to__copy"></span>
+                    <button class="copy__name"></button>
+                </p>
+            </div>
+
+            <div class="button__container">
+                <a id="freeBtn" target="_blank" class="btn inversed__mobile">
+                    <span class="mobile__bid--default__label">
+                        <span data-locale="place_with_extension">
+                            Open wallet
+                        </span>
+                    </span>
+                </a>
+                <a id="copyLinkbutton" class="btn outline secondary">
+                    <span class="mobile__bid--default__label">
+                        <span class="icon copy__link__icon unbreak"></span>
+                        <span class="icon copy__link--success__icon unbreak"></span>
+                        <span class="default__label" data-locale="copy_link">
+                            Copy the payment link
+                        </span>
+                        <span class="copied__label" data-locale="copy_link_copied">
+                            Copied!
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="payment__spacer">
+            -
+            -
+            -
+        </div>
+    </div>
+</div>
+
+<div class="careete__helper"></div>
+
+<footer class="footer">
+    <div class="separator"></div>
+    <div class="copyrights">
+        <div class="copyright">© 2022 TON Foundation</div>
+        <div class="social-links">
+            <a class="social-link" href="https://www.linkedin.com/company/ton-blockchain/" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0a8.972 8.972 0 0 0-6.364 2.636A8.972 8.972 0 0 0 0 9a8.972 8.972 0 0 0 2.636 6.364A8.972 8.972 0 0 0 9 18a8.972 8.972 0 0 0 6.364-2.636A8.972 8.972 0 0 0 18 9a8.972 8.972 0 0 0-2.636-6.364A8.972 8.972 0 0 0 9 0ZM6.543 12.852V7.048H4.614v5.804h1.93ZM5.58 6.255c.672 0 1.091-.445 1.091-1.002-.013-.57-.419-1.003-1.079-1.003-.66 0-1.091.433-1.091 1.003 0 .557.419 1.002 1.066 1.002h.013Zm2.03 6.597h1.93V9.61c0-.174.012-.347.063-.471.14-.347.457-.706.99-.706.698 0 .977.533.977 1.313v3.105h1.929V9.524c0-1.783-.952-2.612-2.221-2.612-1.04 0-1.498.581-1.751.978h.013v-.842h-1.93c.026.545 0 5.804 0 5.804Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="https://t.me/toncoin" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.636 2.636A8.972 8.972 0 0 1 9 0a8.972 8.972 0 0 1 6.364 2.636A8.972 8.972 0 0 1 18 9a8.972 8.972 0 0 1-2.636 6.364A8.972 8.972 0 0 1 9 18a8.972 8.972 0 0 1-6.364-2.636A8.972 8.972 0 0 1 0 9a8.972 8.972 0 0 1 2.636-6.364Zm6.421 3.645c-.895.38-2.685 1.168-5.37 2.362-.435.177-.664.35-.685.52-.035.285.316.398.794.551l.201.066c.47.156 1.103.338 1.432.346.298.006.63-.12.998-.377 2.508-1.729 3.803-2.602 3.885-2.621.057-.014.136-.03.19.019.054.049.049.141.043.166-.035.151-1.412 1.459-2.125 2.135-.222.211-.38.361-.412.395-.072.077-.146.15-.217.219-.437.43-.764.752.018 1.279.376.253.677.462.977.67.328.228.655.456 1.078.739.108.072.211.147.311.22.382.278.725.527 1.148.487.246-.023.5-.259.63-.964.304-1.665.904-5.272 1.043-6.759a1.7 1.7 0 0 0-.016-.37.4.4 0 0 0-.13-.255.597.597 0 0 0-.358-.109c-.346.006-.877.195-3.435 1.281Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="https://github.com/ton-blockchain" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.298 17.704A9 9 0 1 0 0 9a9.003 9.003 0 0 0 6.97 8.77.428.428 0 0 0 .115-.302l-.004-.472-.008-.952c-2.329.506-2.82-1.123-2.82-1.123-.38-.968-.93-1.226-.93-1.226-.76-.52.058-.51.058-.51.84.06 1.282.864 1.282.864.747 1.28 1.96.911 2.437.696.076-.541.293-.91.532-1.12-1.86-.211-3.814-.93-3.814-4.14 0-.915.326-1.663.862-2.249-.086-.212-.374-1.063.082-2.217 0 0 .703-.225 2.302.86a8.035 8.035 0 0 1 2.096-.283 8.038 8.038 0 0 1 2.096.282c1.598-1.084 2.3-.859 2.3-.859.457 1.154.17 2.005.083 2.217.537.586.861 1.334.861 2.249 0 3.218-1.957 3.927-3.822 4.134.3.259.568.77.568 1.551 0 .75-.005 1.401-.008 1.833l-.003.466c0 .08.02.163.063.235Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="https://twitter.com/ton_blockchain" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.636 2.636A8.972 8.972 0 0 1 9 0a8.972 8.972 0 0 1 6.364 2.636A8.972 8.972 0 0 1 18 9a8.972 8.972 0 0 1-2.636 6.364A8.972 8.972 0 0 1 9 18a8.972 8.972 0 0 1-6.364-2.636A8.972 8.972 0 0 1 0 9a8.972 8.972 0 0 1 2.636-6.364Zm10.356 4.655v-.262A3.75 3.75 0 0 0 14 5.955c-.367.17-.76.275-1.178.328.419-.262.746-.655.903-1.139a4.17 4.17 0 0 1-1.309.497A2.043 2.043 0 0 0 10.924 5 2.05 2.05 0 0 0 8.87 7.055c0 .157.013.327.052.471A5.838 5.838 0 0 1 4.694 5.38a2.1 2.1 0 0 0-.275 1.034c0 .72.366 1.348.916 1.714a2.016 2.016 0 0 1-.93-.262v.027c0 .994.708 1.819 1.65 2.002a1.902 1.902 0 0 1-.93.04 2.031 2.031 0 0 0 1.912 1.426A4.153 4.153 0 0 1 4 12.212c.916.576 1.99.916 3.154.916 3.77 0 5.838-3.128 5.838-5.837Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="social-link" href="mailto:partnership@ton.org" target="_blank" rel="noreferrer noopener">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9 0a8.972 8.972 0 0 0-6.364 2.636A8.972 8.972 0 0 0 0 9a8.972 8.972 0 0 0 2.636 6.364A8.972 8.972 0 0 0 9 18a8.972 8.972 0 0 0 6.364-2.636A8.972 8.972 0 0 0 18 9a8.972 8.972 0 0 0-2.636-6.364A8.972 8.972 0 0 0 9 0Zm0 8.435 4.73-2.775A1.5 1.5 0 0 0 12.5 5h-7a1.5 1.5 0 0 0-1.24.655L9 8.435Zm0 .995a1 1 0 0 0 .5-.135l4.5-2.63V11.5a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 4 11.5V6.665L8.5 9.3a1 1 0 0 0 .5.13Z" fill="currentColor"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="./libs/tonweb-0.0.59.js"></script>
+<script type="text/javascript" src="./libs/jquery.min-3.4.1.js"></script>
+<script type="text/javascript" src="./libs/lottie-player-1.6.2.js"></script>
+<script type="text/javascript" src="./libs/qr-code-styling-1.5.0.js"></script>
+<script type="text/javascript" src="./src/utils.js?5"></script>
+<script type="text/javascript" src="./src/flip-clock.js?5"></script>
+<script type="text/javascript" src="./src/flip.js?5"></script>
+<script type="text/javascript" src="./src/lottie.js?5"></script>
+<script type="text/javascript" src="./src/mobile-menu.js?5"></script>
+<script type="text/javascript" src="./libs/mask.js?5"></script>
+<script type="text/javascript" src="./src/index.js?5"></script>
 
 </body>
 </html>
