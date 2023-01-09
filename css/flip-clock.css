@@ -19,7 +19,7 @@
     -webkit-box-direction: reverse;
     -ms-flex-direction: row-reverse;
     flex-direction: row-reverse;
-    gap: 38px;
+    gap: 33px;
 }
 
 .flip-clock-container * {
@@ -48,7 +48,7 @@
 }
 
 .flip-clock-container .flip-item-days .flip-digit {
-    width: 100px !important;
+    width: 114px !important;
 }
 
 .flip-clock-container [class|="flip-item"]::before {
@@ -56,7 +56,7 @@
     font-family: Consolas;
     font-size: 40px;
     color: var(--flip-dots-color);
-    margin: 0 -25px;
+    margin: 0 -23px;
     position: absolute;
     top: -3px;
 }
@@ -158,7 +158,7 @@
     }
 
     .flip-clock-container .flip-item-days .flip-digit {
-        width: 73px !important;
+        width: 86px !important;
     }
 
     .flip-clock-container [class|="flip-item"]::before {
