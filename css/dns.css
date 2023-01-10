@@ -18,6 +18,9 @@ body {
     background-color: var(--background-page);
     color: var(--text-secondary);
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 * {
@@ -282,8 +285,6 @@ body.scroll__disabled {
 /* START PAGE */
 
 .start {
-    margin-top: 186px;
-    margin-bottom: 306px;
     padding: 0 16px;
     text-align: center;
     display: flex;
@@ -322,11 +323,6 @@ body.scroll__disabled {
     body {
         display: flex;
         flex-direction: column;
-    }
-
-    .start {
-        margin-top: 120px;
-        margin-bottom: 0;
     }
 
     .start p {
