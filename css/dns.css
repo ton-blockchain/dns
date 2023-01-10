@@ -325,6 +325,10 @@ body.scroll__disabled {
         flex-direction: column;
     }
 
+    .start {
+        margin-top: 120px;
+    }
+
     .start p {
         font-weight: 400;
         font-size: 16px;
