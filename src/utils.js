@@ -343,3 +343,7 @@ window.BROWSER = (function (agent) {
         default: return "other";
     }
 })(window.navigator.userAgent.toLowerCase());
+
+function encodeHTML(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+}
