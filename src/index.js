@@ -247,16 +247,34 @@ const setDomain = (domain) => {
                 ownerAddress = data.ownerAddress
             }
         }
+        let isTimerLoadFail = false
         let auctionInfo = null
+
         if (domainExists && !ownerAddress) {
             auctionInfo = await dnsItem.methods.getAuctionInfo()
+            if(!accountInfo){
+                auctionInfo = await dnsItem.methods.getAuctionInfo()
+            }
+            if(!accountInfo){
+                isTimerLoadFail = true
+            }
+
             if (auctionInfo.auctionEndTime < Date.now() / 1000) {
+                isTimerLoadFail = false
                 ownerAddress = auctionInfo.maxBidAddress
             }
         }
         let lastFillUpTime = 0
         if (domainExists && ownerAddress) {
             lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+            if(!lastFillUpTime){
+                lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+            }
+            if(!lastFillUpTime){
+                isTimerLoadFail = true
+            }else{
+                isTimerLoadFail = false
+            }
         }
 
         if (currentDomain === domain) {
@@ -272,12 +290,13 @@ const setDomain = (domain) => {
                     domain,
                     domainAddressString,
                     ownerAddress.toString(true, true, true, IS_TESTNET),
-                    lastFillUpTime
+                    lastFillUpTime,
+                    isTimerLoadFail
                 )
                 setScreen('busyDomainScreen')
             } else {
                 storeDomainStatus('auction')
-                renderAuctionDomain(domain, domainAddressString, auctionInfo)
+                renderAuctionDomain(domain, domainAddressString, auctionInfo, isTimerLoadFail)
                 setScreen('auctionDomainScreen')
             }
         }
@@ -416,7 +435,7 @@ function renderStatusLoading() {
 
 }
 
-const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
+const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoadFail) => {
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
     const bestBidAmount = auctionInfo.maxBidAmount
     const bestBidAddress = auctionInfo.maxBidAddress.toString(
@@ -425,9 +444,16 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         true,
         IS_TESTNET
     )
+    if(isTimerLoadFail){
+        toggle('#auction-failed-timer-block', true, 'block')
+        toggle('#auction-flip-timer-container', false, 'flex')
+    }else{
+        toggle('#auction-failed-timer-block', false, 'block')
+        toggle('#auction-flip-timer-container', true, 'flex')
+        $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
+        initFlipTimer('#auction-bid-flip-clock-container', true)
+    }
 
-    $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
-    initFlipTimer('#auction-bid-flip-clock-container', true)
 
     getCoinPrice().then((price) => {
         const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
@@ -467,6 +493,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
 const renderFreeDomain = (domain) => {
     getCoinPrice().then((price) => {
+
         const salePrice = TonWeb.utils.fromNano(getMinPrice(domain))
 
         $('#freeMinBet').innerText = formatNumber(salePrice, false)
@@ -475,6 +502,8 @@ const renderFreeDomain = (domain) => {
         $('#bid-flip-clock-container').dataset.endDate = new Date(
             Date.now() + getAuctionDuration() * 1000
         ).toISOString()
+
+
         initFlipTimer('#bid-flip-clock-container', false)
 
         attachBidModalListeners(domain, salePrice, '#bidButton')
@@ -485,14 +514,25 @@ const renderBusyDomain = (
     domain,
     domainItemAddress,
     ownerAddress,
-    lastFillUpTime
+    lastFillUpTime,
+    isTimerLoadFail
 ) => {
     setAddress($('#busyOwnerAddress'), ownerAddress)
-    const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
 
-    $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
-    $('#flip-clock-container').dataset.endDate = expiresDate
-    initFlipTimer('#flip-clock-container', true)
+    if(isTimerLoadFail){
+        toggle('#busy-flip-timer-container', false, 'flex')
+        toggle('#busy-failed-timer-block', true, 'block')
+    }else{
+        toggle('#busy-flip-timer-container', true, 'flex')
+        toggle('#busy-failed-timer-block', false, 'block')
+
+        const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
+
+        $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
+        $('#flip-clock-container').dataset.endDate = expiresDate
+
+        initFlipTimer('#flip-clock-container', true)
+    }
 }
 
 const renderSearchHistory = (node) => {

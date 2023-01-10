@@ -174,12 +174,26 @@
             </p>
         </div>
 
-        <div class="flip__container">
+        <div class="flip__container" id="auction-flip-timer-container">
             <span class="expires__date" data-locale="auction_ends">Auction ends in</span>
             <div id="auctionEndsRow" class="flip__row">
                 <div id="actionEndDate" class="flip__strong">
                     <ul class="flip-clock-container" id="auction-bid-flip-clock-container" data-end-date="December 12, 2022 00:00:00"></ul>
                 </div>
+            </div>
+        </div>
+
+        <div id="auction-failed-timer-block">
+
+            <span class="buttonWrapper expires__date" data-locale="failed_timer">
+                Не получилось определить длительность аукциона
+            </span>
+            <div class="buttonWrapper">
+            <a class="btn" onclick="refreshPage()">
+                <span data-locale="refresh_page">
+                    Refresh page
+                </span>
+            </a>
             </div>
         </div>
 
@@ -251,7 +265,7 @@
             </div>
         </div>
 
-        <div class="flip__container">
+        <div class="flip__container" id="busy-flip-timer-container">
             <span class="expires__date" data-locale="expires">
                 Expires on
                 <span id="expiresDate"></span>
@@ -261,6 +275,21 @@
                     <ul class="flip-clock-container" id="flip-clock-container" data-end-date="December 12, 2022 00:00:00"></ul>
                 </div>
             </div>
+        </div>
+
+        <div id="busy-failed-timer-block">
+            <p class="buttonWrapper">
+                <span class="expires__date" data-locale="failed_timer">
+                    Не получилось определить длительность аукциона
+                </span>
+            </p>
+            <p class="buttonWrapper">
+                <a class="btn" onclick="refreshPage()">
+                    <span data-locale="refresh_page">
+                        Refresh page
+                    </span>
+                </a>
+            </p>
         </div>
 
         <p class="buttonWrapper">
