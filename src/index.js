@@ -1029,6 +1029,7 @@ function setCareeteHelperValue(value) {
     const resetInputIcon = $('.icon.reset__input--icon')
     const careeteHelper = $('.start-input-container__domain--container')
     const careeteHelperText = $('.start-input-container__domain')
+    const isValueContainDotTon = value?.length ? value.slice(value.length - 4) === '.ton' : false
 
     if (value !== oldStartInputValue) {
         oldStartInputValue = value;
@@ -1047,6 +1048,10 @@ function setCareeteHelperValue(value) {
                 careeteHelper.style.visibility = 'visible';
             }
         }
+    }
+
+    if(isValueContainDotTon){
+        careeteHelper.style.visibility = 'hidden';
     }
 }
 
