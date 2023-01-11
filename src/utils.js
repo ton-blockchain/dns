@@ -343,3 +343,7 @@ window.BROWSER = (function (agent) {
         default: return "other";
     }
 })(window.navigator.userAgent.toLowerCase());
+
+function togglePageVisible(){
+    document.body.classList.toggle('hidden')
+}

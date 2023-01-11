@@ -18,6 +18,7 @@ body {
     background-color: var(--background-page);
     color: var(--text-secondary);
     position: relative;
+    transition: 0.1s opacity;
 }
 
 * {
@@ -34,6 +35,10 @@ body.scroll__disabled {
     top: 0;
     bottom: 0;
     right: 0;
+}
+
+body.hidden{
+    opacity: 0;
 }
 
 .btn {
