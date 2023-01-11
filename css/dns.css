@@ -1881,10 +1881,6 @@ p {
     align-items: center;
 }
 
-.footer .copyright {
-    opacity: 0.7;
-}
-
 .footer .ton-logo-top {
     color: var(--text-primary);
     height: 28px;
@@ -1905,6 +1901,11 @@ p {
 .footer .social-link {
     color: var(--socials--color);
     height: 18px;
+}
+
+.footer .support-link{
+    opacity: 0.7;
+    color: unset;
 }
 
 .footer .social-link:hover {
