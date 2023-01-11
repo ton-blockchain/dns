@@ -426,8 +426,14 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         IS_TESTNET
     )
 
-    $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
-    initFlipTimer('#auction-bid-flip-clock-container', true)
+    const prevDate = $('#auction-bid-flip-clock-container').dataset.endDate
+    const endDate = new Date(auctionEndTime * 1000)
+    const isDateEqual = String(prevDate) === String(endDate)
+
+    if (!isDateEqual){
+        $('#auction-bid-flip-clock-container').dataset.endDate = endDate
+        initFlipTimer('#auction-bid-flip-clock-container', true)
+    }
 
     getCoinPrice().then((price) => {
         const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
@@ -495,10 +501,15 @@ const renderBusyDomain = (
 ) => {
     setAddress($('#busyOwnerAddress'), ownerAddress)
     const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
+    const prevDate = $('#flip-clock-container').dataset.endDate
+    const isDateEqual = String(prevDate) === String(expiresDate)
 
     $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
-    $('#flip-clock-container').dataset.endDate = expiresDate
-    initFlipTimer('#flip-clock-container', true)
+
+    if (!isDateEqual) {
+        $('#flip-clock-container').dataset.endDate = expiresDate
+        initFlipTimer('#flip-clock-container', true)
+    }
 }
 
 const renderSearchHistory = (node) => {
