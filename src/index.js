@@ -89,7 +89,6 @@ const localeDict = {
         invalid_address: 'The address is invalid.',
         install_extension: 'Please install the TON Wallet extension to edit the domain',
         auction: 'On auction',
-        failed_timer: 'Could not determine the duration of the auction',
         free: 'Available',
         busy: 'Taken',
         update_extension: 'Please update your TON Wallet extension',
@@ -419,6 +418,21 @@ function renderDomainLoadingScreen() {
     $('.main').classList.toggle('main--loading')
 }
 
+function setTimerLoadingScreen(id){
+    const container = $(`#${id}`)
+    if(!container){
+        return
+    }
+    container.classList.add('flipTimerContainer--loading')
+}
+function removeTimerLoadingScreen(id){
+    const container = $(`#${id}`)
+    if(!container){
+        return;
+    }
+    container.classList.remove('flipTimerContainer--loading')
+}
+
 let timeoutId = null;
 
 function renderStatusLoading() {
@@ -446,11 +460,9 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoad
         IS_TESTNET
     )
     if(isTimerLoadFail){
-        toggle('#auction-failed-timer-block', true, 'block')
-        toggle('#auction-flip-timer-container', false, 'flex')
+        setTimerLoadingScreen('auction-flip-timer-container')
     }else{
-        toggle('#auction-failed-timer-block', false, 'block')
-        toggle('#auction-flip-timer-container', true, 'flex')
+        removeTimerLoadingScreen('auction-flip-timer-container')
         $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
         initFlipTimer('#auction-bid-flip-clock-container', true)
     }
@@ -519,13 +531,10 @@ const renderBusyDomain = (
     isTimerLoadFail
 ) => {
     setAddress($('#busyOwnerAddress'), ownerAddress)
-
     if(isTimerLoadFail){
-        toggle('#busy-flip-timer-container', false, 'flex')
-        toggle('#busy-failed-timer-block', true, 'block')
+        setTimerLoadingScreen('busy-flip-timer-container')
     }else{
-        toggle('#busy-flip-timer-container', true, 'flex')
-        toggle('#busy-failed-timer-block', false, 'block')
+        removeTimerLoadingScreen('busy-flip-timer-container')
 
         const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
 

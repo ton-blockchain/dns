@@ -2068,6 +2068,16 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     line-height: 28px;
 }
 
+.flipTimerContainer--loading{
+    border-radius: 24px;
+    margin-top: 24px;
+    background: var(--loader--background--gradient);
+    animation: var(--gradient--animation--transition);
+}
+.flipTimerContainer--loading *{
+    opacity: 0;
+}
+
 @media screen and (max-width: 568px) {
     .expires__date {
         font-size: 16px;
