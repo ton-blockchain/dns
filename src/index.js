@@ -89,6 +89,7 @@ const localeDict = {
         invalid_address: 'The address is invalid.',
         install_extension: 'Please install the TON Wallet extension to edit the domain',
         auction: 'On auction',
+        failed_timer: 'Could not determine the duration of the auction',
         free: 'Available',
         busy: 'Taken',
         update_extension: 'Please update your TON Wallet extension',
