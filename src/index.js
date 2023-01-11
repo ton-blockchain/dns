@@ -272,7 +272,7 @@ const setDomain = (domain) => {
             }
             if(!lastFillUpTime){
                 isTimerLoadFail = true
-            }else{
+            } else{
                 isTimerLoadFail = false
             }
         }
@@ -451,6 +451,7 @@ function renderStatusLoading() {
 }
 
 const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoadFail) => {
+
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
     const bestBidAmount = auctionInfo.maxBidAmount
     const bestBidAddress = auctionInfo.maxBidAddress.toString(
@@ -461,7 +462,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoad
     )
     if(isTimerLoadFail){
         setTimerLoadingScreen('auction-flip-timer-container')
-    }else{
+    } else{
         removeTimerLoadingScreen('auction-flip-timer-container')
         $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
         initFlipTimer('#auction-bid-flip-clock-container', true)
@@ -533,7 +534,7 @@ const renderBusyDomain = (
     setAddress($('#busyOwnerAddress'), ownerAddress)
     if(isTimerLoadFail){
         setTimerLoadingScreen('busy-flip-timer-container')
-    }else{
+    } else{
         removeTimerLoadingScreen('busy-flip-timer-container')
 
         const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
