@@ -2038,16 +2038,36 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
 .in {
     opacity: 1;
 }
+.failedTimerIconContainer{
+    background: unset;
+    width: max-content;
+    margin: 0 auto;
+    padding: 0;
+}
 
+.failedTimerIcon{
+    display: block;
+    width: 32px;
+    height: 32px;
+    mask: url("/assets/refresh.svg") no-repeat center / contain;
+    background-color: red;
+}
 /* FLIP */
 
 .flip__container {
+    width: 448px;
     padding-top: 24px;
     display: flex;
     gap: 12px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+@media screen and (max-width: 568px) {
+    .flip__container {
+        width: 343px;
+    }
 }
 
 .flip__row {
@@ -2066,16 +2086,6 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
-}
-
-.flipTimerContainer--loading{
-    border-radius: 24px;
-    margin-top: 24px;
-    background: var(--loader--background--gradient);
-    animation: var(--gradient--animation--transition);
-}
-.flipTimerContainer--loading *{
-    opacity: 0;
 }
 
 @media screen and (max-width: 568px) {

@@ -183,6 +183,15 @@
             </div>
         </div>
 
+        <div class="flip__container" id="auction-failed-timer-block">
+            <span class="expires__date" data-locale="failed_timer">
+                Auction duration
+            </span>
+            <a class="btn failedTimerIconContainer" onclick="refetchAuctionDomainTimerInfo()">
+                <span class="failedTimerIcon"/>
+            </a>
+        </div>
+
         <p class="buttonWrapper">
             <a id="auctionBtn" target="_blank" class="btn">
                 <img src="/assets/hammer.svg" alt="Place bid">
@@ -252,7 +261,7 @@
         </div>
 
         <div class="flip__container flipTimerContainer" id="busy-flip-timer-container">
-            <span class="expires__date" data-locale="expires">
+            <span class="expires__date" data-locale="expires" id="expiresDateContainer">
                 Expires on
                 <span id="expiresDate"></span>
             </span>
@@ -261,6 +270,15 @@
                     <ul class="flip-clock-container" id="flip-clock-container" data-end-date="December 12, 2022 00:00:00"></ul>
                 </div>
             </div>
+        </div>
+
+        <div class="flip__container" id="busy-failed-timer-block">
+            <span class="expires__date" data-locale="failed_timer">
+                Auction duration
+            </span>
+            <a class="btn failedTimerIconContainer" onclick="refetchBusyDomainTimerInfo()">
+                <span class="failedTimerIcon"/>
+            </a>
         </div>
 
         <p class="buttonWrapper">

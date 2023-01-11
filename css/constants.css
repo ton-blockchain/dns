@@ -168,3 +168,24 @@ html[data-theme='dark'] {
         background-position: 440px
     }
 }
+
+
+@keyframes shine-lines-timer-days {
+    0% {
+        background-position: -114px
+    }
+
+    100% {
+        background-position: 114px
+    }
+}
+
+@keyframes shine-lines-timer-item {
+    0% {
+        background-position: -38px
+    }
+
+    100% {
+        background-position: 38px
+    }
+}

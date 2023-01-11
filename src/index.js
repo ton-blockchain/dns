@@ -75,6 +75,8 @@ const localeDict = {
             '                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
             '                </svg>',
         storage_checkbox: "Хостинг на TON Storage",
+        footer_support: "Помощь",
+        failed_timer: "Длительность аукциона"
     },
     en: {
         address: 'Address',
@@ -92,6 +94,8 @@ const localeDict = {
         free: 'Available',
         busy: 'Taken',
         update_extension: 'Please update your TON Wallet extension',
+        footer_support: 'Support',
+        failed_timer: "Auction duration"
     },
 }
 
@@ -109,6 +113,8 @@ if (lang !== 'en') {
 }
 
 const IS_TESTNET = window.location.href.indexOf('testnet=true') > -1
+
+const MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN = 2
 
 const AUCTION_START_TIME = IS_TESTNET ? 1659125865 : 1659171600
 
@@ -149,6 +155,9 @@ let currentDomain = null
 let currentOwner = null
 let currentDnsItem = null
 let previousBid = null
+let counterOfAuctionDomainTimerLoadError = 0
+let counterOfBusyDomainTimerLoadError = 0
+
 const removeListeners = {}
 
 const clear = () => {
@@ -202,6 +211,70 @@ const validateDomain = (domain) => {
     }
 }
 
+async function getDomainInfo(domain){
+    const domainAddress = await dnsCollection.resolve(
+        domain,
+        TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER,
+        true
+    )
+    const domainAddressString = domainAddress.toString(
+        true,
+        true,
+        true,
+        IS_TESTNET
+    )
+    const accountInfo = await tonweb.provider.getAddressInfo(
+        domainAddressString
+    )
+
+    let dnsItem
+    let domainExists = accountInfo.state === 'active'
+    let ownerAddress = null
+    let auctionInfo = null
+    let lastFillUpTime = 0
+
+    if (domainExists) {
+        dnsItem = new TonWeb.dns.DnsItem(tonweb.provider, {
+            address: domainAddress,
+        })
+        const data = await dnsItem.methods.getData()
+        if (!data.isInitialized) {
+            domainExists = false
+        } else {
+            ownerAddress = data.ownerAddress
+        }
+    }
+
+    if (domainExists && !ownerAddress) {
+        auctionInfo = await dnsItem.methods.getAuctionInfo()
+        if(!accountInfo){
+            auctionInfo = await dnsItem.methods.getAuctionInfo()
+        }
+
+        if (auctionInfo.auctionEndTime < Date.now() / 1000) {
+            ownerAddress = auctionInfo.maxBidAddress
+        }
+    }
+
+    if (domainExists && ownerAddress) {
+        lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+        if(!lastFillUpTime){
+            lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+        }
+    }
+
+    return {
+        domainAddress,
+        domainAddressString,
+        ownerAddress,
+        domainExists,
+        dnsItem,
+        accountInfo,
+        auctionInfo,
+        lastFillUpTime
+    }
+}
+
 const setDomain = (domain) => {
     scrollToTop()
     currentDomain = domain
@@ -217,59 +290,29 @@ const setDomain = (domain) => {
             }
         }
 
-        const domainAddress = await dnsCollection.resolve(
-            domain,
-            TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER,
-            true
-        )
-        const domainAddressString = domainAddress.toString(
-            true,
-            true,
-            true,
-            IS_TESTNET
-        )
-        const accountInfo = await tonweb.provider.getAddressInfo(
-            domainAddressString
-        )
+        const domainInfo = await getDomainInfo(domain)
 
-        let dnsItem
-        let domainExists = accountInfo.state === 'active'
-        let ownerAddress = null
-
-        if (domainExists) {
-            dnsItem = new TonWeb.dns.DnsItem(tonweb.provider, {
-                address: domainAddress,
-            })
-            const data = await dnsItem.methods.getData()
-            if (!data.isInitialized) {
-                domainExists = false
-            } else {
-                ownerAddress = data.ownerAddress
-            }
-        }
+        let domainAddress = domainInfo.domainAddress
+        let domainAddressString = domainInfo.domainAddressString
+        let ownerAddress = domainInfo.ownerAddress
+        let domainExists = domainInfo.domainExists
+        let dnsItem = domainInfo.dnsItem
+        let accountInfo = domainInfo.domainAddress
+        let auctionInfo = domainInfo.auctionInfo
+        let lastFillUpTime = domainInfo.lastFillUpTime
         let isTimerLoadFail = false
-        let auctionInfo = null
 
         if (domainExists && !ownerAddress) {
-            auctionInfo = await dnsItem.methods.getAuctionInfo()
-            if(!accountInfo){
-                auctionInfo = await dnsItem.methods.getAuctionInfo()
-            }
             if(!accountInfo){
                 isTimerLoadFail = true
             }
 
             if (auctionInfo.auctionEndTime < Date.now() / 1000) {
                 isTimerLoadFail = false
-                ownerAddress = auctionInfo.maxBidAddress
             }
         }
-        let lastFillUpTime = 0
+
         if (domainExists && ownerAddress) {
-            lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
-            if(!lastFillUpTime){
-                lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
-            }
             if(!lastFillUpTime){
                 isTimerLoadFail = true
             } else{
@@ -450,6 +493,59 @@ function renderStatusLoading() {
 
 }
 
+async function refetchAuctionDomainTimerInfo(){
+    setTimerLoadingScreen('auction-flip-timer-container')
+    toggle('#auction-flip-timer-container', true, 'flex')
+    toggle('#auction-failed-timer-block', false, 'flex')
+    const {dnsItem, accountInfo} = await getDomainInfo(currentDomain)
+
+    let auctionInfo;
+    let isTimerLoadFail = false
+
+    auctionInfo = await dnsItem.methods.getAuctionInfo()
+
+    if(!accountInfo){
+        auctionInfo = await dnsItem.methods.getAuctionInfo()
+    }
+    if(!accountInfo){
+        isTimerLoadFail = true
+    }
+    if (auctionInfo.auctionEndTime < Date.now() / 1000) {
+        isTimerLoadFail = false
+    }
+
+    const auctionEndTime = auctionInfo.auctionEndTime // unixtime
+
+    renderAuctionDomainTimer(auctionEndTime, isTimerLoadFail)
+}
+
+function renderAuctionDomainTimer(auctionEndTime, isTimerLoadFail){
+    if(isTimerLoadFail){
+        counterOfAuctionDomainTimerLoadError += 1
+
+        if(counterOfAuctionDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
+            setTimerLoadingScreen('auction-flip-timer-container')
+            toggle('#auction-failed-timer-block', false, 'flex')
+        } else{
+            toggle('#auction-flip-timer-container', false, 'flex')
+            removeTimerLoadingScreen('auction-flip-timer-container')
+            toggle('#auction-failed-timer-block', true, 'flex')
+        }
+
+    } else{
+        counterOfAuctionDomainTimerLoadError = 0
+
+        $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
+
+        setTimerLoadingScreen('auction-flip-timer-container')
+
+        toggle('#auction-flip-timer-container', true, 'flex')
+        toggle('#auction-failed-timer-block', false, 'flex')
+        removeTimerLoadingScreen('auction-flip-timer-container')
+    }
+    initFlipTimer('#auction-bid-flip-clock-container', true)
+}
+
 const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoadFail) => {
 
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
@@ -460,14 +556,8 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoad
         true,
         IS_TESTNET
     )
-    if(isTimerLoadFail){
-        setTimerLoadingScreen('auction-flip-timer-container')
-    } else{
-        removeTimerLoadingScreen('auction-flip-timer-container')
-        $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
-        initFlipTimer('#auction-bid-flip-clock-container', true)
-    }
 
+    renderAuctionDomainTimer(auctionEndTime, isTimerLoadFail)
 
     getCoinPrice().then((price) => {
         const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
@@ -524,6 +614,60 @@ const renderFreeDomain = (domain) => {
     })
 }
 
+async function refetchBusyDomainTimerInfo(){
+    setTimerLoadingScreen('busy-flip-timer-container')
+    toggle('#busy-flip-timer-container', true, 'flex')
+    toggle('#busy-failed-timer-block', false, 'flex')
+
+    const {domainExists, ownerAddress, dnsItem} = await getDomainInfo(currentDomain)
+    let lastFillUpTime = 0
+    let isTimerLoadFail = true
+
+    if (domainExists && ownerAddress) {
+        lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+        if(!lastFillUpTime){
+            lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+        }
+        if(!lastFillUpTime){
+            isTimerLoadFail = true
+        } else{
+            isTimerLoadFail = false
+        }
+    }
+
+    renderBusyDomainTimer(lastFillUpTime, isTimerLoadFail)
+}
+function renderBusyDomainTimer(lastFillUpTime, isTimerLoadFail){
+    const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
+
+    if(isTimerLoadFail){
+        counterOfBusyDomainTimerLoadError += 1
+
+        toggle('#expiresDateContainer', false, 'block')
+
+        if(counterOfBusyDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
+            setTimerLoadingScreen('busy-flip-timer-container')
+            toggle('#busy-failed-timer-block', false, 'flex')
+        } else{
+            toggle('#busy-flip-timer-container', false, 'flex')
+            removeTimerLoadingScreen('busy-flip-timer-container')
+            toggle('#busy-failed-timer-block', true, 'flex')
+        }
+    } else{
+        counterOfBusyDomainTimerLoadError = 0
+        toggle('#expiresDateContainer', true, 'block')
+        $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
+        $('#flip-clock-container').dataset.endDate = expiresDate
+        setTimerLoadingScreen('busy-flip-timer-container')
+
+        toggle('#busy-flip-timer-container', true, 'flex')
+        toggle('#busy-failed-timer-block', false, 'flex')
+        removeTimerLoadingScreen('busy-flip-timer-container')
+    }
+
+    initFlipTimer('#flip-clock-container', true)
+}
+
 const renderBusyDomain = (
     domain,
     domainItemAddress,
@@ -532,18 +676,11 @@ const renderBusyDomain = (
     isTimerLoadFail
 ) => {
     setAddress($('#busyOwnerAddress'), ownerAddress)
-    if(isTimerLoadFail){
-        setTimerLoadingScreen('busy-flip-timer-container')
-    } else{
-        removeTimerLoadingScreen('busy-flip-timer-container')
-
+    if(!isTimerLoadFail){
         const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
-
         $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
-        $('#flip-clock-container').dataset.endDate = expiresDate
-
-        initFlipTimer('#flip-clock-container', true)
     }
+    renderBusyDomainTimer(lastFillUpTime, isTimerLoadFail)
 }
 
 const renderSearchHistory = (node) => {
