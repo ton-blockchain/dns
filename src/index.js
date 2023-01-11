@@ -291,12 +291,12 @@ const setDomain = (domain) => {
                     domainAddressString,
                     ownerAddress.toString(true, true, true, IS_TESTNET),
                     lastFillUpTime,
-                    isTimerLoadFail
+                    true
                 )
                 setScreen('busyDomainScreen')
             } else {
                 storeDomainStatus('auction')
-                renderAuctionDomain(domain, domainAddressString, auctionInfo, isTimerLoadFail)
+                renderAuctionDomain(domain, domainAddressString, auctionInfo, true)
                 setScreen('auctionDomainScreen')
             }
         }
