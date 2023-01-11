@@ -110,6 +110,8 @@ if (lang !== 'en') {
     })
 }
 
+togglePageVisible()
+
 const IS_TESTNET = window.location.href.indexOf('testnet=true') > -1
 
 const AUCTION_START_TIME = IS_TESTNET ? 1659125865 : 1659171600

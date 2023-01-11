@@ -347,3 +347,7 @@ window.BROWSER = (function (agent) {
 function encodeHTML(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 }
+
+function togglePageVisible(){
+    document.body.classList.toggle('hidden')
+}
