@@ -1913,6 +1913,10 @@ p {
     color: unset;
 }
 
+.footer .support-link:hover{
+    color: var(--accent-default)
+}
+
 .footer .social-link:hover {
     color: var(--accent-default);
 }
@@ -2328,7 +2332,7 @@ a:after, a:active, a:focus {
     text-decoration: none;
 }
 
-a:hover:not(.badge__dns):not(.btn):not(#aboutDnsLink):not(.edit-btn) {
+a:hover:not(.badge__dns):not(.btn):not(#aboutDnsLink):not(.edit-btn):not(.support-link) {
     color: var(--accent-hover);
     text-decoration: underline;
 }
