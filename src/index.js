@@ -187,6 +187,13 @@ $('.badge__dns-mobile').addEventListener('click', () => {
     setScreen('startScreen')
 })
 
+const AUCTION_BID_FLIP_CLOCK_CONTAINER_ID = 'auction-bid-flip-clock-container'
+const AUCTION_FLIP_TIMER_CONTAINER_ID = 'auction-flip-timer-container'
+const AUCTION_FAILED_TIMER_BLOCK_ID = 'auction-failed-timer-block'
+const BUSY_FLIP_TIMER_CONTAINER_ID = 'busy-flip-timer-container'
+const BUSY_FAILED_TIMER_BLOCK_ID = 'busy-failed-timer-block'
+const EXPIRES_DATE_CONTAINER_ID = 'expires-date-container'
+
 // SET DOMAIN
 
 const validateDomain = (domain) => {
@@ -227,8 +234,9 @@ async function getDomainInfo(domain){
         domainAddressString
     )
 
-    let dnsItem
+
     let domainExists = accountInfo.state === 'active'
+    let dnsItem = null
     let ownerAddress = null
     let auctionInfo = null
     let lastFillUpTime = 0
@@ -472,19 +480,21 @@ function renderDomainLoadingScreen() {
     $('.main').classList.toggle('main--loading')
 }
 
+const FLIP_TIMER_CONTAINER_LOADING_CLASSNAME = 'flipTimerContainer--loading'
+
 function setTimerLoadingScreen(id){
     const container = $(`#${id}`)
     if(!container){
         return
     }
-    container.classList.add('flipTimerContainer--loading')
+    container.classList.add(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
 }
 function removeTimerLoadingScreen(id){
     const container = $(`#${id}`)
     if(!container){
         return;
     }
-    container.classList.remove('flipTimerContainer--loading')
+    container.classList.remove(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
 }
 
 let timeoutId = null;
@@ -505,14 +515,12 @@ function renderStatusLoading() {
 }
 
 async function reFetchAuctionDomainTimerInfo(){
-    setTimerLoadingScreen('auction-flip-timer-container')
-    toggle('#auction-flip-timer-container', true, 'flex')
-    toggle('#auction-failed-timer-block', false, 'flex')
+    setTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
+    toggle(`#${AUCTION_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+    toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
 
-    const {dnsItem} = await getDomainInfo(currentDomain)
-    let auctionInfo;
-
-    auctionInfo = await dnsItem.methods.getAuctionInfo()
+    const { dnsItem } = await getDomainInfo(currentDomain)
+    const auctionInfo = await dnsItem.methods.getAuctionInfo()
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
 
     renderAuctionDomainTimer(auctionEndTime)
@@ -527,23 +535,23 @@ function renderAuctionDomainTimer(auctionEndTime){
         counterOfAuctionDomainTimerLoadError += 1
 
         if(counterOfAuctionDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
-            setTimerLoadingScreen('auction-flip-timer-container')
-            toggle('#auction-failed-timer-block', false, 'flex')
+            setTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
+            toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
         } else {
-            toggle('#auction-flip-timer-container', false, 'flex')
-            toggle('#auction-failed-timer-block', true, 'flex')
-            removeTimerLoadingScreen('auction-flip-timer-container')
+            toggle(`#${AUCTION_FLIP_TIMER_CONTAINER_ID}`, false, 'flex')
+            toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, true, 'flex')
+            removeTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
         }
 
     } else {
         counterOfAuctionDomainTimerLoadError = 0
 
-        $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
-        toggle('#auction-flip-timer-container', true, 'flex')
-        toggle('#auction-failed-timer-block', false, 'flex')
-        removeTimerLoadingScreen('auction-flip-timer-container')
+        $(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`).dataset.endDate = new Date(auctionEndTime * 1000)
+        toggle(`#${AUCTION_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+        toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+        removeTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
     }
-    initFlipTimer('#auction-bid-flip-clock-container', true)
+    initFlipTimer(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`, true)
 }
 
 const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
@@ -597,7 +605,6 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
 const renderFreeDomain = (domain) => {
     getCoinPrice().then((price) => {
-
         const salePrice = TonWeb.utils.fromNano(getMinPrice(domain))
 
         $('#freeMinBet').innerText = formatNumber(salePrice, false)
@@ -607,19 +614,24 @@ const renderFreeDomain = (domain) => {
             Date.now() + getAuctionDuration() * 1000
         ).toISOString()
 
-
         initFlipTimer('#bid-flip-clock-container', false)
 
         attachBidModalListeners(domain, salePrice, '#bidButton')
     })
 }
 
-async function reFetchBusyDomainTimerInfo(){
-    setTimerLoadingScreen('busy-flip-timer-container')
-    toggle('#busy-flip-timer-container', true, 'flex')
-    toggle('#busy-failed-timer-block', false, 'flex')
 
-    const {domainExists, ownerAddress, dnsItem} = await getDomainInfo(currentDomain)
+async function reFetchBusyDomainTimerInfo(){
+    setTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
+    toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+    toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+
+    const {
+        domainExists,
+        ownerAddress,
+        dnsItem
+    } = await getDomainInfo(currentDomain)
+    
     let lastFillUpTime = 0
 
     if (domainExists && ownerAddress) {
@@ -634,15 +646,15 @@ function renderBusyDomainTimer(lastFillUpTime){
 
     if(isTimerLoadFail){
         counterOfBusyDomainTimerLoadError += 1
-        toggle('#expiresDateContainer', false, 'block')
+        toggle(`#${EXPIRES_DATE_CONTAINER_ID}`, false, 'block')
 
         if(counterOfBusyDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
-            setTimerLoadingScreen('busy-flip-timer-container')
-            toggle('#busy-failed-timer-block', false, 'flex')
+            setTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
+            toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
         } else {
-            toggle('#busy-flip-timer-container', false, 'flex')
-            toggle('#busy-failed-timer-block', true, 'flex')
-            removeTimerLoadingScreen('busy-flip-timer-container')
+            toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, false, 'flex')
+            toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, true, 'flex')
+            removeTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
         }
     }
     else {
@@ -652,10 +664,10 @@ function renderBusyDomainTimer(lastFillUpTime){
         $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
         $('#flip-clock-container').dataset.endDate = expiresDate
 
-        toggle('#expiresDateContainer', true, 'block')
-        toggle('#busy-flip-timer-container', true, 'flex')
-        toggle('#busy-failed-timer-block', false, 'flex')
-        removeTimerLoadingScreen('busy-flip-timer-container')
+        toggle(`#${EXPIRES_DATE_CONTAINER_ID}`, true, 'block')
+        toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+        toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+        removeTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
     }
 
     initFlipTimer('#flip-clock-container', true)
