@@ -233,8 +233,7 @@ async function getDomainInfo(domain){
     const accountInfo = await tonweb.provider.getAddressInfo(
         domainAddressString
     )
-
-
+    
     let domainExists = accountInfo.state === 'active'
     let dnsItem = null
     let ownerAddress = null
@@ -530,7 +529,6 @@ function renderAuctionDomainTimer(auctionEndTime){
     // const isTimerLoadFail = !auctionEndTime || auctionEndTime < Date.now() / 1000
     const isTimerLoadFail = counterOfAuctionDomainTimerLoadError < 2 ? true : false
 
-
     if(isTimerLoadFail){
         counterOfAuctionDomainTimerLoadError += 1
 
@@ -576,7 +574,6 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
         previousBid = auctionAmount
 
-
         $('#auctionAmount').innerText = formatNumber(auctionAmount, false)
         $('#auctionAmountConverted').innerText = formatNumber(auctionAmount * price, 2)
         setAddress($('#auctionOwnerAddress'), bestBidAddress)
@@ -620,7 +617,6 @@ const renderFreeDomain = (domain) => {
     })
 }
 
-
 async function reFetchBusyDomainTimerInfo(){
     setTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
     toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
@@ -631,7 +627,7 @@ async function reFetchBusyDomainTimerInfo(){
         ownerAddress,
         dnsItem
     } = await getDomainInfo(currentDomain)
-    
+
     let lastFillUpTime = 0
 
     if (domainExists && ownerAddress) {
@@ -1018,12 +1014,10 @@ const connectExtension = async (domain, dnsItem) => {
         return
     }
 
-
     if (!window.tonProtocolVersion || window.tonProtocolVersion < 1) {
         alert(locale.update_extension)
         return
     }
-
 
     const accounts = await provider.send('ton_requestAccounts')
     const account = new TonWeb.Address(accounts[0]).toString(
@@ -1117,7 +1111,6 @@ const connectExtension = async (domain, dnsItem) => {
             )
 
             $('#editAdnlRow input').placeholder = locale.adnl
-
 
             createEditBtn('#editAdnlRow .edit__button').addEventListener('click', () => {
                 const value = $('#editAdnlRow input').value // hex
