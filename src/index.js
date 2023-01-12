@@ -187,6 +187,7 @@ $('.badge__dns-mobile').addEventListener('click', () => {
     setScreen('startScreen')
 })
 
+const FLIP_TIMER_CONTAINER_LOADING_CLASSNAME = 'flipTimerContainer--loading'
 const AUCTION_BID_FLIP_CLOCK_CONTAINER_ID = 'auction-bid-flip-clock-container'
 const AUCTION_FLIP_TIMER_CONTAINER_ID = 'auction-flip-timer-container'
 const AUCTION_FAILED_TIMER_BLOCK_ID = 'auction-failed-timer-block'
@@ -478,8 +479,6 @@ window.onpopstate = () => processUrl()
 function renderDomainLoadingScreen() {
     $('.main').classList.toggle('main--loading')
 }
-
-const FLIP_TIMER_CONTAINER_LOADING_CLASSNAME = 'flipTimerContainer--loading'
 
 function setTimerLoadingScreen(id){
     const container = $(`#${id}`)
