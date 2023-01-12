@@ -320,34 +320,16 @@ const setDomain = (domain) => {
                 ownerAddress = data.ownerAddress
             }
         }
-
-        let isTimerLoadFail = false
         let auctionInfo = null
-
         if (domainExists && !ownerAddress) {
             auctionInfo = await dnsItem.methods.getAuctionInfo()
-            if(!accountInfo){
-                auctionInfo = await dnsItem.methods.getAuctionInfo()
-            }
-            if(!accountInfo){
-                isTimerLoadFail = true
-            }
             if (auctionInfo.auctionEndTime < Date.now() / 1000) {
-                isTimerLoadFail = false
                 ownerAddress = auctionInfo.maxBidAddress
             }
         }
         let lastFillUpTime = 0
         if (domainExists && ownerAddress) {
             lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
-            if(!lastFillUpTime){
-                lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
-            }
-            if(!lastFillUpTime){
-                isTimerLoadFail = true
-            } else{
-                isTimerLoadFail = false
-            }
         }
 
         if (currentDomain === domain) {
@@ -363,13 +345,12 @@ const setDomain = (domain) => {
                     domain,
                     domainAddressString,
                     ownerAddress.toString(true, true, true, IS_TESTNET),
-                    lastFillUpTime,
-                    true
+                    lastFillUpTime
                 )
                 setScreen('busyDomainScreen')
             } else {
                 storeDomainStatus('auction')
-                renderAuctionDomain(domain, domainAddressString, auctionInfo, true)
+                renderAuctionDomain(domain, domainAddressString, auctionInfo)
                 setScreen('auctionDomainScreen')
             }
         }
@@ -523,52 +504,41 @@ function renderStatusLoading() {
 
 }
 
-async function refetchAuctionDomainTimerInfo(){
+async function reFetchAuctionDomainTimerInfo(){
     setTimerLoadingScreen('auction-flip-timer-container')
     toggle('#auction-flip-timer-container', true, 'flex')
     toggle('#auction-failed-timer-block', false, 'flex')
-    const {dnsItem, accountInfo} = await getDomainInfo(currentDomain)
 
+    const {dnsItem} = await getDomainInfo(currentDomain)
     let auctionInfo;
-    let isTimerLoadFail = false
 
     auctionInfo = await dnsItem.methods.getAuctionInfo()
-
-    if(!accountInfo){
-        auctionInfo = await dnsItem.methods.getAuctionInfo()
-    }
-    if(!accountInfo){
-        isTimerLoadFail = true
-    }
-    if (auctionInfo.auctionEndTime < Date.now() / 1000) {
-        isTimerLoadFail = false
-    }
-
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
 
-    renderAuctionDomainTimer(auctionEndTime, isTimerLoadFail)
+    renderAuctionDomainTimer(auctionEndTime)
 }
 
-function renderAuctionDomainTimer(auctionEndTime, isTimerLoadFail){
+function renderAuctionDomainTimer(auctionEndTime){
+    // const isTimerLoadFail = !auctionEndTime || auctionEndTime < Date.now() / 1000
+    const isTimerLoadFail = counterOfAuctionDomainTimerLoadError < 2 ? true : false
+
+
     if(isTimerLoadFail){
         counterOfAuctionDomainTimerLoadError += 1
 
         if(counterOfAuctionDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
             setTimerLoadingScreen('auction-flip-timer-container')
             toggle('#auction-failed-timer-block', false, 'flex')
-        } else{
+        } else {
             toggle('#auction-flip-timer-container', false, 'flex')
-            removeTimerLoadingScreen('auction-flip-timer-container')
             toggle('#auction-failed-timer-block', true, 'flex')
+            removeTimerLoadingScreen('auction-flip-timer-container')
         }
 
-    } else{
+    } else {
         counterOfAuctionDomainTimerLoadError = 0
 
         $('#auction-bid-flip-clock-container').dataset.endDate = new Date(auctionEndTime * 1000)
-
-        setTimerLoadingScreen('auction-flip-timer-container')
-
         toggle('#auction-flip-timer-container', true, 'flex')
         toggle('#auction-failed-timer-block', false, 'flex')
         removeTimerLoadingScreen('auction-flip-timer-container')
@@ -576,7 +546,7 @@ function renderAuctionDomainTimer(auctionEndTime, isTimerLoadFail){
     initFlipTimer('#auction-bid-flip-clock-container', true)
 }
 
-const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoadFail) => {
+const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
     const bestBidAmount = auctionInfo.maxBidAmount
@@ -587,7 +557,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo, isTimerLoad
         IS_TESTNET
     )
 
-    renderAuctionDomainTimer(auctionEndTime, isTimerLoadFail)
+    renderAuctionDomainTimer(auctionEndTime)
 
     getCoinPrice().then((price) => {
         const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
@@ -644,52 +614,45 @@ const renderFreeDomain = (domain) => {
     })
 }
 
-async function refetchBusyDomainTimerInfo(){
+async function reFetchBusyDomainTimerInfo(){
     setTimerLoadingScreen('busy-flip-timer-container')
     toggle('#busy-flip-timer-container', true, 'flex')
     toggle('#busy-failed-timer-block', false, 'flex')
 
     const {domainExists, ownerAddress, dnsItem} = await getDomainInfo(currentDomain)
     let lastFillUpTime = 0
-    let isTimerLoadFail = true
 
     if (domainExists && ownerAddress) {
         lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
-        if(!lastFillUpTime){
-            lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
-        }
-        if(!lastFillUpTime){
-            isTimerLoadFail = true
-        } else{
-            isTimerLoadFail = false
-        }
     }
 
-    renderBusyDomainTimer(lastFillUpTime, isTimerLoadFail)
+    renderBusyDomainTimer(lastFillUpTime)
 }
-function renderBusyDomainTimer(lastFillUpTime, isTimerLoadFail){
-    const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
+function renderBusyDomainTimer(lastFillUpTime){
+    // const isTimerLoadFail = !lastFillUpTime
+    const isTimerLoadFail = counterOfBusyDomainTimerLoadError < 2 ? true : false
 
     if(isTimerLoadFail){
         counterOfBusyDomainTimerLoadError += 1
-
         toggle('#expiresDateContainer', false, 'block')
 
         if(counterOfBusyDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
             setTimerLoadingScreen('busy-flip-timer-container')
             toggle('#busy-failed-timer-block', false, 'flex')
-        } else{
+        } else {
             toggle('#busy-flip-timer-container', false, 'flex')
-            removeTimerLoadingScreen('busy-flip-timer-container')
             toggle('#busy-failed-timer-block', true, 'flex')
+            removeTimerLoadingScreen('busy-flip-timer-container')
         }
-    } else{
+    }
+    else {
         counterOfBusyDomainTimerLoadError = 0
-        toggle('#expiresDateContainer', true, 'block')
+        const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
+
         $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
         $('#flip-clock-container').dataset.endDate = expiresDate
-        setTimerLoadingScreen('busy-flip-timer-container')
 
+        toggle('#expiresDateContainer', true, 'block')
         toggle('#busy-flip-timer-container', true, 'flex')
         toggle('#busy-failed-timer-block', false, 'flex')
         removeTimerLoadingScreen('busy-flip-timer-container')
@@ -703,14 +666,9 @@ const renderBusyDomain = (
     domainItemAddress,
     ownerAddress,
     lastFillUpTime,
-    isTimerLoadFail
 ) => {
     setAddress($('#busyOwnerAddress'), ownerAddress)
-    if(!isTimerLoadFail){
-        const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
-        $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
-    }
-    renderBusyDomainTimer(lastFillUpTime, isTimerLoadFail)
+    renderBusyDomainTimer(lastFillUpTime)
 }
 
 const renderSearchHistory = (node) => {
