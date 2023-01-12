@@ -233,7 +233,7 @@ async function getDomainInfo(domain){
     const accountInfo = await tonweb.provider.getAddressInfo(
         domainAddressString
     )
-    
+
     let domainExists = accountInfo.state === 'active'
     let dnsItem = null
     let ownerAddress = null
@@ -657,7 +657,12 @@ function renderBusyDomainTimer(lastFillUpTime){
         counterOfBusyDomainTimerLoadError = 0
         const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
 
-        $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
+        $('#expiresDate').innerText = expiresDate
+            .toISOString()
+            .slice(0,10)
+            .split('-')
+            .reverse()
+            .join(".")
         $('#flip-clock-container').dataset.endDate = expiresDate
 
         toggle(`#${EXPIRES_DATE_CONTAINER_ID}`, true, 'block')
