@@ -79,6 +79,8 @@ if (lang !== 'en') {
     })
 }
 
+togglePageVisible()
+
 ;(function () {
     window.onload = function () {
         toggle('#about', true, 'flex')
