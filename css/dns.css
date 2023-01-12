@@ -1911,10 +1911,26 @@ p {
 .footer .support-link{
     opacity: 0.7;
     color: unset;
+    display: flex;
+    gap: 4px;
+    align-items: center;
 }
 
 .footer .support-link:hover{
     color: var(--accent-default)
+}
+
+.footer .support-link .support-link__icon{
+    display: block;
+    width: 16px;
+    height: 16px;
+    mask: url("/assets/discuss.svg");
+    -webkit-mask: url("/assets/discuss.svg");
+    background-color: var(--text-tetriary);
+}
+
+.footer .support-link:hover .support-link__icon{
+    background-color: var(--accent-default);
 }
 
 .footer .social-link:hover {
