@@ -2050,7 +2050,7 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     width: 32px;
     height: 32px;
     mask: url("/assets/refresh.svg") no-repeat center / contain;
-    background-color: red;
+    background-color: var(--accent-default);
 }
 /* FLIP */
 
