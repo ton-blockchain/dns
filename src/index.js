@@ -304,9 +304,11 @@ const setDomain = (domain) => {
         const accountInfo = await tonweb.provider.getAddressInfo(
             domainAddressString
         )
+
         let dnsItem
         let domainExists = accountInfo.state === 'active'
         let ownerAddress = null
+
         if (domainExists) {
             dnsItem = new TonWeb.dns.DnsItem(tonweb.provider, {
                 address: domainAddress,
@@ -318,8 +320,10 @@ const setDomain = (domain) => {
                 ownerAddress = data.ownerAddress
             }
         }
+
         let isTimerLoadFail = false
         let auctionInfo = null
+
         if (domainExists && !ownerAddress) {
             auctionInfo = await dnsItem.methods.getAuctionInfo()
             if(!accountInfo){
