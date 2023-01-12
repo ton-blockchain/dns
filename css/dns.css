@@ -1917,6 +1917,7 @@ p {
 }
 
 .footer .support-link:hover{
+    opacity: 1;
     color: var(--accent-default)
 }
 
