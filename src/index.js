@@ -290,29 +290,55 @@ const setDomain = (domain) => {
             }
         }
 
-        const domainInfo = await getDomainInfo(domain)
-
-        let domainAddress = domainInfo.domainAddress
-        let domainAddressString = domainInfo.domainAddressString
-        let ownerAddress = domainInfo.ownerAddress
-        let domainExists = domainInfo.domainExists
-        let dnsItem = domainInfo.dnsItem
-        let accountInfo = domainInfo.domainAddress
-        let auctionInfo = domainInfo.auctionInfo
-        let lastFillUpTime = domainInfo.lastFillUpTime
+        const domainAddress = await dnsCollection.resolve(
+            domain,
+            TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER,
+            true
+        )
+        const domainAddressString = domainAddress.toString(
+            true,
+            true,
+            true,
+            IS_TESTNET
+        )
+        const accountInfo = await tonweb.provider.getAddressInfo(
+            domainAddressString
+        )
+        let dnsItem
+        let domainExists = accountInfo.state === 'active'
+        let ownerAddress = null
+        if (domainExists) {
+            dnsItem = new TonWeb.dns.DnsItem(tonweb.provider, {
+                address: domainAddress,
+            })
+            const data = await dnsItem.methods.getData()
+            if (!data.isInitialized) {
+                domainExists = false
+            } else {
+                ownerAddress = data.ownerAddress
+            }
+        }
         let isTimerLoadFail = false
-
+        let auctionInfo = null
         if (domainExists && !ownerAddress) {
+            auctionInfo = await dnsItem.methods.getAuctionInfo()
+            if(!accountInfo){
+                auctionInfo = await dnsItem.methods.getAuctionInfo()
+            }
             if(!accountInfo){
                 isTimerLoadFail = true
             }
-
             if (auctionInfo.auctionEndTime < Date.now() / 1000) {
                 isTimerLoadFail = false
+                ownerAddress = auctionInfo.maxBidAddress
             }
         }
-
+        let lastFillUpTime = 0
         if (domainExists && ownerAddress) {
+            lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+            if(!lastFillUpTime){
+                lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+            }
             if(!lastFillUpTime){
                 isTimerLoadFail = true
             } else{

@@ -2045,6 +2045,14 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     padding: 0;
 }
 
+.failedTimerIconContainer:hover{
+    background: unset;
+}
+
+.failedTimerIconContainer:hover .failedTimerIcon{
+    background-color: var(--accent-hover);
+}
+
 .failedTimerIcon{
     display: block;
     width: 32px;
