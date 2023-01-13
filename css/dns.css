@@ -1694,7 +1694,7 @@ p {
 }
 
 .converted__price:before {
-    content: '≈ $';
+    content: '\2248\ \ $';
 }
 
 .converted__percent:after {
