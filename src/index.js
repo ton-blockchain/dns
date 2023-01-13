@@ -462,6 +462,39 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         $('#auctionBidStepConverted').innerText = formatNumber(bidStepToPercent.toFixed(2))
 
         attachBidModalListeners(domain, minBet, '#auctionBtn', domainItemAddress)
+    }).catch(() => {
+        const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
+
+        if (previousBid !== auctionAmount) {
+            closeBidModal()
+        }
+
+        previousBid = auctionAmount
+
+
+        $('#auctionAmount').innerText = formatNumber(auctionAmount, false)
+        $('#auctionAmountConverted').innerText = formatNumber(auctionAmount * price, 2)
+        setAddress($('#auctionOwnerAddress'), bestBidAddress)
+
+        const minBet = TonWeb.utils.fromNano(
+            bestBidAmount.mul(new TonWeb.utils.BN(105)).div(new TonWeb.utils.BN(100))
+        )
+
+        $('#auctionMinBet').innerText = formatNumber(minBet, false)
+        $('#auctionMinBetConverted').innerText = formatNumber(minBet * price, 2)
+
+        const bidStep = TonWeb.utils.fromNano(
+            bestBidAmount
+                .mul(new TonWeb.utils.BN(105))
+                .div(new TonWeb.utils.BN(100))
+                .sub(bestBidAmount)
+        )
+        const bidStepToPercent = (bidStep / auctionAmount) * 100
+
+        $('#auctionBidStep').innerText = formatNumber(bidStep, false)
+        $('#auctionBidStepConverted').innerText = formatNumber(bidStepToPercent.toFixed(2))
+
+        attachBidModalListeners(domain, minBet, '#auctionBtn', domainItemAddress)
     })
 }
 
