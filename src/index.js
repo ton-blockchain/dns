@@ -462,7 +462,9 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         $('#auctionBidStepConverted').innerText = formatNumber(bidStepToPercent.toFixed(2))
 
         attachBidModalListeners(domain, minBet, '#auctionBtn', domainItemAddress)
-    }).catch(() => {
+    }).catch((e) => {
+        let price = undefined
+
         const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
 
         if (previousBid !== auctionAmount) {
