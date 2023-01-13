@@ -28,8 +28,16 @@ const calculateExpiresTime = (endDate) => {
     const ONE_HOUR = ONE_MINUTE * 60
     const ONE_DAY = 24 * 60 * 60 * 1000
 
-    const todayDate = new Date()
-    const dateDifference = Math.abs(todayDate - endDate)
+    const todayDateTimestamp = new Date().getTime()
+    const todayDateString = String(todayDateTimestamp)
+    const stringEndDateTimestamp = String(endDate.getTime())
+    const arrayEndDateTimestamp = stringEndDateTimestamp.split('')
+    arrayEndDateTimestamp[arrayEndDateTimestamp.length - 1] = todayDateString[todayDateString.length - 1]
+    arrayEndDateTimestamp[arrayEndDateTimestamp.length - 2] = todayDateString[todayDateString.length - 2]
+    arrayEndDateTimestamp[arrayEndDateTimestamp.length - 3] = todayDateString[todayDateString.length - 3]
+
+    const formattedEndDateTimestamp = Number(arrayEndDateTimestamp.join(''))
+    const dateDifference = Math.abs(todayDateTimestamp - formattedEndDateTimestamp)
 
     const daysLeft = Math.max(0, Math.floor(dateDifference / ONE_DAY))
     const hoursLeft = Math.max(0, Math.floor((dateDifference / ONE_HOUR) % 24))
