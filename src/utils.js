@@ -111,7 +111,7 @@ let LAST_PRICE_UPDATED_DATE = null
 let LAST_PRICE;
 
 const getCoinPrice = () => {
-    if (LAST_PRICE_UPDATED_DATE && (Date.now() - LAST_PRICE_UPDATED_DATE < 100 * 60 * 5)) { // 30 sec
+    if (LAST_PRICE && LAST_PRICE_UPDATED_DATE && (Date.now() - LAST_PRICE_UPDATED_DATE < 100 * 60 * 5)) { // 30 sec
         return Promise.resolve(LAST_PRICE)
     }
 
@@ -122,6 +122,8 @@ const getCoinPrice = () => {
             LAST_PRICE_UPDATED_DATE = Date.now()
 
             return res.market_data.current_price.usd
+        }).catch(() => {
+            return 0
         })
 }
 

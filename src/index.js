@@ -440,7 +440,9 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
 
         $('#auctionAmount').innerText = formatNumber(auctionAmount, false)
-        $('#auctionAmountConverted').innerText = formatNumber(auctionAmount * price, 2)
+        if (price) {
+            $('#auctionAmountConverted').innerText = formatNumber(auctionAmount * price, 2)
+        }
         setAddress($('#auctionOwnerAddress'), bestBidAddress)
 
         const minBet = TonWeb.utils.fromNano(
@@ -448,7 +450,9 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         )
 
         $('#auctionMinBet').innerText = formatNumber(minBet, false)
-        $('#auctionMinBetConverted').innerText = formatNumber(minBet * price, 2)
+        if (price) {
+            $('#auctionMinBetConverted').innerText = formatNumber(minBet * price, 2)
+        }
 
         const bidStep = TonWeb.utils.fromNano(
             bestBidAmount
@@ -470,7 +474,9 @@ const renderFreeDomain = (domain) => {
         const salePrice = TonWeb.utils.fromNano(getMinPrice(domain))
 
         $('#freeMinBet').innerText = formatNumber(salePrice, false)
-        $('#freeMinBetConverted').innerText = formatNumber(salePrice * price, 2)
+        if (price) {
+            $('#freeMinBetConverted').innerText = formatNumber(salePrice * price, 2)
+        }
 
         $('#bid-flip-clock-container').dataset.endDate = new Date(
             Date.now() + getAuctionDuration() * 1000
@@ -785,7 +791,9 @@ function renderOtherPaymentsMethods() {
 
 const renderConvertedTonPrice = (node, priceToCovert) => {
     getCoinPrice().then((price) => {
-        node.innerText = formatNumber(priceToCovert * price, 2)
+        if (price) {
+            node.innerText = formatNumber(priceToCovert * price, 2)
+        }
     })
 }
 
