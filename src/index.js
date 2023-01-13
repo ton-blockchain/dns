@@ -49,7 +49,7 @@ const localeDict = {
         scan_qr: 'Отсканируйте QR-код и отправьте',
         pay_mobile: 'К оплате',
         scan_qr_link: 'через Tonkeeper.',
-        pay_attention: 'Используйте только <a class="unbreak" href="https://ton.org/wallets?filterBy=non_custodial" target="_blank">некастодиальные</a> кошельки для&nbsp;оплаты.',
+        pay_attention: 'Используйте только <a class="unbreak" href="https://ton.org/wallets?filterBy=wallets_non_custodial" target="_blank">некастодиальные</a> кошельки для&nbsp;оплаты.',
         sent_to: 'Адрес',
         message: 'Комментарий',
         place_with_extension: 'Открыть кошелек',
