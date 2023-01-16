@@ -22,6 +22,8 @@ const getEndDate = (container) => {
     return formattedDate
 }
 
+const NUMBER_CHARACTER_TO_COPY = 3
+
 const calculateExpiresTime = (endDate) => {
     const ONE_SECOND = 1000
     const ONE_MINUTE = ONE_SECOND * 60
@@ -32,9 +34,10 @@ const calculateExpiresTime = (endDate) => {
     const todayDateString = String(todayDateTimestamp)
     const stringEndDateTimestamp = String(endDate.getTime())
     const arrayEndDateTimestamp = stringEndDateTimestamp.split('')
-    arrayEndDateTimestamp[arrayEndDateTimestamp.length - 1] = todayDateString[todayDateString.length - 1]
-    arrayEndDateTimestamp[arrayEndDateTimestamp.length - 2] = todayDateString[todayDateString.length - 2]
-    arrayEndDateTimestamp[arrayEndDateTimestamp.length - 3] = todayDateString[todayDateString.length - 3]
+
+    for (let i = 1; i < NUMBER_CHARACTER_TO_COPY + 1; i++) {
+        arrayEndDateTimestamp[arrayEndDateTimestamp.length - i] = todayDateString[todayDateString.length - i]
+    }
 
     const formattedEndDateTimestamp = Number(arrayEndDateTimestamp.join(''))
     const dateDifference = Math.abs(todayDateTimestamp - formattedEndDateTimestamp)
