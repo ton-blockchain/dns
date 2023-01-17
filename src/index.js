@@ -1014,6 +1014,7 @@ $(".reset__input--icon").addEventListener('click', (e) => {
 
 // COMMON
 var oldStartInputValue = '';
+const DEFAULT_CARETE_HELPER_TEXT = '.ton'
 
 function setCareeteHelperValue(value) {
     const helper = $('.careete__helper');
@@ -1022,7 +1023,21 @@ function setCareeteHelperValue(value) {
     const resetInputIcon = $('.icon.reset__input--icon')
     const careeteHelper = $('.start-input-container__domain--container')
     const careeteHelperText = $('.start-input-container__domain')
-    const isValueContainDotTon = value?.length ? value.slice(value.length - 4) === '.ton' : false
+
+    function getSubStrAfterSubStr(str, substring) {
+        let lastIndex = str.lastIndexOf(substring);
+        if (lastIndex === -1) {
+            return 0;
+        }
+
+        return str.slice(lastIndex)
+    }
+
+    const cuttedHintText = getSubStrAfterSubStr(value, '.')
+
+    $('.start-input-container__domain').innerText = cuttedHintText && DEFAULT_CARETE_HELPER_TEXT.includes(cuttedHintText)
+        ? DEFAULT_CARETE_HELPER_TEXT.slice(cuttedHintText.length)
+        : DEFAULT_CARETE_HELPER_TEXT
 
     if (value !== oldStartInputValue) {
         oldStartInputValue = value;
@@ -1041,10 +1056,6 @@ function setCareeteHelperValue(value) {
                 careeteHelper.style.visibility = 'visible';
             }
         }
-    }
-
-    if(isValueContainDotTon){
-        careeteHelper.style.visibility = 'hidden';
     }
 }
 
