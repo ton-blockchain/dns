@@ -1033,7 +1033,7 @@ function setCareeteHelperValue(value) {
         return str.slice(lastIndex)
     }
 
-    const cuttedHintText = getSubStrAfterSubStr(value, '.')
+    const cuttedHintText = getSubStrAfterSubStr(value, DEFAULT_CARETE_HELPER_TEXT[0])
 
     $('.start-input-container__domain').innerText = cuttedHintText && DEFAULT_CARETE_HELPER_TEXT.includes(cuttedHintText)
         ? DEFAULT_CARETE_HELPER_TEXT.slice(cuttedHintText.length)
