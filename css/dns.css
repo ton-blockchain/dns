@@ -2038,22 +2038,22 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
 .in {
     opacity: 1;
 }
-.failedTimerIconContainer{
+.failed-timer-icon-container{
     background: unset;
     width: max-content;
     margin: 0 auto;
     padding: 0;
 }
 
-.failedTimerIconContainer:hover{
+.failed-timer-icon-container:hover{
     background: unset;
 }
 
-.failedTimerIconContainer:hover .failedTimerIcon{
+.failed-timer-icon-container:hover .failed-timer-icon{
     background-color: var(--accent-hover);
 }
 
-.failedTimerIcon{
+.failed-timer-icon{
     display: block;
     width: 32px;
     height: 32px;

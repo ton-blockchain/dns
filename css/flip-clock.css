@@ -150,15 +150,15 @@
     animation: currentDownShadowAnim 0.9s linear forwards;
 }
 
-.flipTimerContainer--loading .flip-clock-container [class|="flip-item"] .flip-digit{
+.flip-timer-container--loading .flip-clock-container [class|="flip-item"] .flip-digit{
     background: var(--loader--background--gradient);
     animation: 3s linear infinite alternate shine-lines-timer-item;
 }
-.flipTimerContainer--loading .flip-clock-container .flip-item-days .flip-digit{
+.flip-timer-container--loading .flip-clock-container .flip-item-days .flip-digit{
     animation: 3s linear infinite alternate shine-lines-timer-days;
 }
 
-.flipTimerContainer--loading .flip-clock-container [class|="flip-item"] .flip-digit *{
+.flip-timer-container--loading .flip-clock-container [class|="flip-item"] .flip-digit *{
     opacity: 0;
 }
 

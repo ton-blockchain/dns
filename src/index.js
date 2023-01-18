@@ -187,7 +187,7 @@ $('.badge__dns-mobile').addEventListener('click', () => {
     setScreen('startScreen')
 })
 
-const FLIP_TIMER_CONTAINER_LOADING_CLASSNAME = 'flipTimerContainer--loading'
+const FLIP_TIMER_CONTAINER_LOADING_CLASSNAME = 'flip-timer-container--loading'
 const AUCTION_BID_FLIP_CLOCK_CONTAINER_ID = 'auction-bid-flip-clock-container'
 const AUCTION_FLIP_TIMER_CONTAINER_ID = 'auction-flip-timer-container'
 const AUCTION_FAILED_TIMER_BLOCK_ID = 'auction-failed-timer-block'
@@ -255,7 +255,7 @@ async function getDomainInfo(domain){
 
     if (domainExists && !ownerAddress) {
         auctionInfo = await dnsItem.methods.getAuctionInfo()
-        if(!accountInfo){
+        if (!accountInfo){
             auctionInfo = await dnsItem.methods.getAuctionInfo()
         }
 
@@ -266,7 +266,7 @@ async function getDomainInfo(domain){
 
     if (domainExists && ownerAddress) {
         lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
-        if(!lastFillUpTime){
+        if (!lastFillUpTime){
             lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
         }
     }
@@ -482,14 +482,14 @@ function renderDomainLoadingScreen() {
 
 function setTimerLoadingScreen(id){
     const container = $(`#${id}`)
-    if(!container){
+    if (!container){
         return
     }
     container.classList.add(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
 }
 function removeTimerLoadingScreen(id){
     const container = $(`#${id}`)
-    if(!container){
+    if (!container){
         return;
     }
     container.classList.remove(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
@@ -525,13 +525,12 @@ async function reFetchAuctionDomainTimerInfo(){
 }
 
 function renderAuctionDomainTimer(auctionEndTime){
-    // const isTimerLoadFail = !auctionEndTime || auctionEndTime < Date.now() / 1000
-    const isTimerLoadFail = counterOfAuctionDomainTimerLoadError < 2 ? true : false
+    const isTimerLoadFail = !auctionEndTime || auctionEndTime < Date.now() / 1000
 
-    if(isTimerLoadFail){
+    if (isTimerLoadFail){
         counterOfAuctionDomainTimerLoadError += 1
 
-        if(counterOfAuctionDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
+        if (counterOfAuctionDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
             setTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
             toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
         } else {
@@ -636,14 +635,13 @@ async function reFetchBusyDomainTimerInfo(){
     renderBusyDomainTimer(lastFillUpTime)
 }
 function renderBusyDomainTimer(lastFillUpTime){
-    // const isTimerLoadFail = !lastFillUpTime
-    const isTimerLoadFail = counterOfBusyDomainTimerLoadError < 2 ? true : false
+    const isTimerLoadFail = !lastFillUpTime
 
-    if(isTimerLoadFail){
+    if (isTimerLoadFail){
         counterOfBusyDomainTimerLoadError += 1
         toggle(`#${EXPIRES_DATE_CONTAINER_ID}`, false, 'block')
 
-        if(counterOfBusyDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
+        if (counterOfBusyDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
             setTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
             toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
         } else {
