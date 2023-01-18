@@ -487,6 +487,7 @@ function setTimerLoadingScreen(id){
     }
     container.classList.add(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
 }
+
 function removeTimerLoadingScreen(id){
     const container = $(`#${id}`)
     if (!container){
@@ -634,6 +635,7 @@ async function reFetchBusyDomainTimerInfo(){
 
     renderBusyDomainTimer(lastFillUpTime)
 }
+
 function renderBusyDomainTimer(lastFillUpTime){
     const isTimerLoadFail = !lastFillUpTime
 
@@ -675,7 +677,7 @@ const renderBusyDomain = (
     domain,
     domainItemAddress,
     ownerAddress,
-    lastFillUpTime,
+    lastFillUpTime
 ) => {
     setAddress($('#busyOwnerAddress'), ownerAddress)
     renderBusyDomainTimer(lastFillUpTime)
