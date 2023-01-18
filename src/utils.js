@@ -344,6 +344,6 @@ window.BROWSER = (function (agent) {
     }
 })(window.navigator.userAgent.toLowerCase());
 
-function togglePageVisible(){
-    document.body.classList.toggle('hidden')
+function makePageVisible(){
+    document.body.classList.remove('hidden')
 }

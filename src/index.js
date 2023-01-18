@@ -108,7 +108,7 @@ if (lang !== 'en') {
     })
 }
 
-togglePageVisible()
+makePageVisible()
 
 const IS_TESTNET = window.location.href.indexOf('testnet=true') > -1
 

@@ -79,7 +79,7 @@ if (lang !== 'en') {
     })
 }
 
-togglePageVisible()
+makePageVisible()
 
 ;(function () {
     window.onload = function () {
