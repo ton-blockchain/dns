@@ -1015,6 +1015,7 @@ $(".reset__input--icon").addEventListener('click', (e) => {
 // COMMON
 var oldStartInputValue = '';
 const DEFAULT_CARETE_HELPER_TEXT = '.ton'
+const OFFSET_BETWEEN_TEXT_AND_CARRETE = 1
 
 function setCareeteHelperValue(value) {
     const helper = $('.careete__helper');
@@ -1045,7 +1046,7 @@ function setCareeteHelperValue(value) {
         const {width} = helper.getBoundingClientRect();
 
         if (careeteHelper) {
-            careeteHelper.style.left = `${(windowWidth > 568 ? 72 : 56) + width}px`
+            careeteHelper.style.left = `${(windowWidth > 568 ? 72 : 56) + width + OFFSET_BETWEEN_TEXT_AND_CARRETE}px`
 
             const iconDimensions = resetInputIcon.getBoundingClientRect();
             const careeteHelperDimensions = careeteHelperText.getBoundingClientRect();
