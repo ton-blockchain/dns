@@ -291,6 +291,7 @@ body.scroll__disabled {
     align-items: center;
     flex-direction: column;
     box-sizing: border-box;
+    margin-bottom: 120px;
 }
 
 .start p {
