@@ -484,9 +484,11 @@ const renderFreeDomain = (domain) => {
             $('#freeMinBetConverted').innerText = formatNumber(salePrice * price, 2)
         }
 
-        $('#bid-flip-clock-container').dataset.endDate = new Date(
-            Date.now() + getAuctionDuration() * 1000
-        ).toISOString()
+        const auctionDuration = getAuctionDuration()
+        const formattedDuration = Date.now() + auctionDuration * 1000
+        const formattedDurationDate = new Date(formattedDuration)
+        $('#bid-flip-clock-container').dataset.endDate = formattedDurationDate.toISOString()
+
         initFlipTimer('#bid-flip-clock-container', false)
 
         attachBidModalListeners(domain, salePrice, '#bidButton')

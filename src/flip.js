@@ -22,14 +22,25 @@ const getEndDate = (container) => {
     return formattedDate
 }
 
+const NUMBER_CHARACTER_TO_COPY = 3
+
 const calculateExpiresTime = (endDate) => {
     const ONE_SECOND = 1000
     const ONE_MINUTE = ONE_SECOND * 60
     const ONE_HOUR = ONE_MINUTE * 60
     const ONE_DAY = 24 * 60 * 60 * 1000
 
-    const todayDate = new Date()
-    const dateDifference = Math.abs(todayDate - endDate)
+    const todayDateTimestamp = new Date().getTime()
+    const todayDateString = String(todayDateTimestamp)
+    const stringEndDateTimestamp = String(endDate.getTime())
+    const arrayEndDateTimestamp = stringEndDateTimestamp.split('')
+
+    for (let i = 1; i < NUMBER_CHARACTER_TO_COPY + 1; i++) {
+        arrayEndDateTimestamp[arrayEndDateTimestamp.length - i] = todayDateString[todayDateString.length - i]
+    }
+
+    const formattedEndDateTimestamp = Number(arrayEndDateTimestamp.join(''))
+    const dateDifference = Math.abs(todayDateTimestamp - formattedEndDateTimestamp)
 
     const daysLeft = Math.max(0, Math.floor(dateDifference / ONE_DAY))
     const hoursLeft = Math.max(0, Math.floor((dateDifference / ONE_HOUR) % 24))
