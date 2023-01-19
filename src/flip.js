@@ -85,6 +85,7 @@ const initTimer = (selector, start) => {
 }
 
 const unmountTimer = () => {
+    isTimerMounted = false
     document.querySelectorAll('.flip-clock-container').forEach((container) => {
         container.innerHTML = ''
     })

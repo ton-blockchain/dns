@@ -193,7 +193,9 @@ const AUCTION_FLIP_TIMER_CONTAINER_ID = 'auction-flip-timer-container'
 const AUCTION_FAILED_TIMER_BLOCK_ID = 'auction-failed-timer-block'
 const BUSY_FLIP_TIMER_CONTAINER_ID = 'busy-flip-timer-container'
 const BUSY_FAILED_TIMER_BLOCK_ID = 'busy-failed-timer-block'
+const BUSY_TIMER_BLOCK_ID = 'flip-clock-container'
 const EXPIRES_DATE_CONTAINER_ID = 'expires-date-container'
+const FREE_TIMER_BLOCK_ID = 'bid-flip-clock-container'
 
 // SET DOMAIN
 
@@ -480,22 +482,6 @@ function renderDomainLoadingScreen() {
     $('.main').classList.toggle('main--loading')
 }
 
-function setTimerLoadingScreen(id){
-    const container = $(`#${id}`)
-    if (!container){
-        return
-    }
-    container.classList.add(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
-}
-
-function removeTimerLoadingScreen(id){
-    const container = $(`#${id}`)
-    if (!container){
-        return;
-    }
-    container.classList.remove(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
-}
-
 let timeoutId = null;
 
 function renderStatusLoading() {
@@ -542,20 +528,26 @@ function renderAuctionDomainTimer(auctionEndTime){
 
     } else {
         counterOfAuctionDomainTimerLoadError = 0
-        const prevDate = $('#auction-bid-flip-clock-container').dataset.endDate
+        const prevDate = $(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`).dataset.endDate
         const endDate = new Date(auctionEndTime * 1000)
         const isDateEqual = String(prevDate) === String(endDate)
-
-        if (!isDateEqual){
-            $('#auction-bid-flip-clock-container').dataset.endDate = endDate
-            initFlipTimer('#auction-bid-flip-clock-container', true)
-        }
 
         toggle(`#${AUCTION_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
         toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
         removeTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
+
+        if (!isDateEqual){
+            $(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`).dataset.endDate = endDate
+        }
+
+        if(!isDateEqual || !isTimerMounted){
+            initFlipTimer(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`, true)
+        }
     }
-    initFlipTimer(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`, true)
+
+    if(!isTimerMounted){
+        initFlipTimer(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`, false)
+    }
 }
 
 const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
@@ -622,9 +614,9 @@ const renderFreeDomain = (domain) => {
         const auctionDuration = getAuctionDuration()
         const formattedDuration = Date.now() + auctionDuration * 1000
         const formattedDurationDate = new Date(formattedDuration)
-        $('#bid-flip-clock-container').dataset.endDate = formattedDurationDate.toISOString()
+        $(`#${FREE_TIMER_BLOCK_ID}`).dataset.endDate = formattedDurationDate.toISOString()
 
-        initFlipTimer('#bid-flip-clock-container', false)
+        initFlipTimer(`#${FREE_TIMER_BLOCK_ID}`, false)
 
         attachBidModalListeners(domain, salePrice, '#bidButton')
     })
@@ -669,7 +661,7 @@ function renderBusyDomainTimer(lastFillUpTime){
     else {
         counterOfBusyDomainTimerLoadError = 0
         const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
-        const prevDate = $('#flip-clock-container').dataset.endDate
+        const prevDate = $(`#${BUSY_TIMER_BLOCK_ID}`).dataset.endDate
         const isDateEqual = String(prevDate) === String(expiresDate)
 
         $('#expiresDate').innerText = expiresDate
@@ -679,18 +671,22 @@ function renderBusyDomainTimer(lastFillUpTime){
             .reverse()
             .join(".")
 
-        if (!isDateEqual) {
-            $('#flip-clock-container').dataset.endDate = expiresDate
-            initFlipTimer('#flip-clock-container', true)
-        }
-
         toggle(`#${EXPIRES_DATE_CONTAINER_ID}`, true, 'block')
         toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
         toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
         removeTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
+
+        if (!isDateEqual) {
+            $(`#${BUSY_TIMER_BLOCK_ID}`).dataset.endDate = expiresDate
+        }
+        if(!isDateEqual || !isTimerMounted){
+            initFlipTimer(`#${BUSY_TIMER_BLOCK_ID}`, true)
+        }
     }
 
-    initFlipTimer('#flip-clock-container', false)
+    if(!isTimerMounted){
+        initFlipTimer(`#${BUSY_TIMER_BLOCK_ID}`, false)
+    }
 }
 
 const renderBusyDomain = (

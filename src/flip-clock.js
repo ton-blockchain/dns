@@ -106,9 +106,18 @@ renderTimer = function ($, start) {
         var flipElements = {}
         var timestamp = 0
         var itemCount = 0
+        const timerId = flipContainer[0]?.parentElement?.id || ''
+
         flipContainer.children().each(function () {
             var element = $(this)
             var number = parseInt(element.text())
+
+            if (isNaN(number)){
+                setTimerLoadingScreen(timerId)
+            } else{
+                removeTimerLoadingScreen(timerId)
+            }
+
             var getFlipItemChildObj = prepareFlipItemChild(element, number)
 
             if (element.hasClass('flip-item-seconds')) {
