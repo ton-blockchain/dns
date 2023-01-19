@@ -150,6 +150,18 @@
     animation: currentDownShadowAnim 0.9s linear forwards;
 }
 
+.flip-timer-container--loading .flip-clock-container [class|="flip-item"] .flip-digit{
+    background: var(--loader--background--gradient);
+    animation: 3s linear infinite alternate shine-lines-timer-item;
+}
+.flip-timer-container--loading .flip-clock-container .flip-item-days .flip-digit{
+    animation: 3s linear infinite alternate shine-lines-timer-days;
+}
+
+.flip-timer-container--loading .flip-clock-container [class|="flip-item"] .flip-digit *{
+    opacity: 0;
+}
+
 @media screen and (max-width: 568px) {
     .flip-clock-container {
         width: 343px;

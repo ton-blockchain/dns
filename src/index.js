@@ -75,6 +75,8 @@ const localeDict = {
             '                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
             '                </svg>',
         storage_checkbox: "Хостинг на TON Storage",
+        footer_support: "Помощь",
+        failed_timer: "Длительность аукциона"
     },
     en: {
         address: 'Address',
@@ -92,6 +94,8 @@ const localeDict = {
         free: 'Available',
         busy: 'Taken',
         update_extension: 'Please update your TON Wallet extension',
+        footer_support: 'Support',
+        failed_timer: "Auction duration"
     },
 }
 
@@ -109,6 +113,8 @@ if (lang !== 'en') {
 }
 
 const IS_TESTNET = window.location.href.indexOf('testnet=true') > -1
+
+const MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN = 2
 
 const AUCTION_START_TIME = IS_TESTNET ? 1659125865 : 1659171600
 
@@ -149,6 +155,9 @@ let currentDomain = null
 let currentOwner = null
 let currentDnsItem = null
 let previousBid = null
+let counterOfAuctionDomainTimerLoadError = 0
+let counterOfBusyDomainTimerLoadError = 0
+
 const removeListeners = {}
 
 const clear = () => {
@@ -178,6 +187,14 @@ $('.badge__dns-mobile').addEventListener('click', () => {
     setScreen('startScreen')
 })
 
+const FLIP_TIMER_CONTAINER_LOADING_CLASSNAME = 'flip-timer-container--loading'
+const AUCTION_BID_FLIP_CLOCK_CONTAINER_ID = 'auction-bid-flip-clock-container'
+const AUCTION_FLIP_TIMER_CONTAINER_ID = 'auction-flip-timer-container'
+const AUCTION_FAILED_TIMER_BLOCK_ID = 'auction-failed-timer-block'
+const BUSY_FLIP_TIMER_CONTAINER_ID = 'busy-flip-timer-container'
+const BUSY_FAILED_TIMER_BLOCK_ID = 'busy-failed-timer-block'
+const EXPIRES_DATE_CONTAINER_ID = 'expires-date-container'
+
 // SET DOMAIN
 
 const validateDomain = (domain) => {
@@ -199,6 +216,70 @@ const validateDomain = (domain) => {
         if (!isValidChar) {
             return locale.invalid_chars
         }
+    }
+}
+
+async function getDomainInfo(domain){
+    const domainAddress = await dnsCollection.resolve(
+        domain,
+        TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER,
+        true
+    )
+    const domainAddressString = domainAddress.toString(
+        true,
+        true,
+        true,
+        IS_TESTNET
+    )
+    const accountInfo = await tonweb.provider.getAddressInfo(
+        domainAddressString
+    )
+
+    let domainExists = accountInfo.state === 'active'
+    let dnsItem = null
+    let ownerAddress = null
+    let auctionInfo = null
+    let lastFillUpTime = 0
+
+    if (domainExists) {
+        dnsItem = new TonWeb.dns.DnsItem(tonweb.provider, {
+            address: domainAddress,
+        })
+        const data = await dnsItem.methods.getData()
+        if (!data.isInitialized) {
+            domainExists = false
+        } else {
+            ownerAddress = data.ownerAddress
+        }
+    }
+
+    if (domainExists && !ownerAddress) {
+        auctionInfo = await dnsItem.methods.getAuctionInfo()
+        if (!accountInfo){
+            auctionInfo = await dnsItem.methods.getAuctionInfo()
+        }
+
+        if (auctionInfo.auctionEndTime < Date.now() / 1000) {
+            ownerAddress = auctionInfo.maxBidAddress
+        }
+    }
+
+    if (domainExists && ownerAddress) {
+        lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+        if (!lastFillUpTime){
+            lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+        }
+    }
+
+    return {
+        domainAddress,
+        domainAddressString,
+        ownerAddress,
+        domainExists,
+        dnsItem,
+        accountInfo,
+        auctionInfo,
+        lastFillUpTime
     }
 }
 
@@ -399,6 +480,22 @@ function renderDomainLoadingScreen() {
     $('.main').classList.toggle('main--loading')
 }
 
+function setTimerLoadingScreen(id){
+    const container = $(`#${id}`)
+    if (!container){
+        return
+    }
+    container.classList.add(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
+}
+
+function removeTimerLoadingScreen(id){
+    const container = $(`#${id}`)
+    if (!container){
+        return;
+    }
+    container.classList.remove(FLIP_TIMER_CONTAINER_LOADING_CLASSNAME)
+}
+
 let timeoutId = null;
 
 function renderStatusLoading() {
@@ -416,7 +513,53 @@ function renderStatusLoading() {
 
 }
 
+async function reFetchAuctionDomainTimerInfo(){
+    setTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
+    toggle(`#${AUCTION_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+    toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+
+    const { dnsItem } = await getDomainInfo(currentDomain)
+    const auctionInfo = await dnsItem.methods.getAuctionInfo()
+    const auctionEndTime = auctionInfo.auctionEndTime // unixtime
+
+    renderAuctionDomainTimer(auctionEndTime)
+}
+
+function renderAuctionDomainTimer(auctionEndTime){
+    const isTimerLoadFail = !auctionEndTime || auctionEndTime < Date.now() / 1000
+
+    if (isTimerLoadFail){
+        counterOfAuctionDomainTimerLoadError += 1
+
+        if (counterOfAuctionDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
+            setTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
+            toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+        } else {
+            toggle(`#${AUCTION_FLIP_TIMER_CONTAINER_ID}`, false, 'flex')
+            toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, true, 'flex')
+            removeTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
+        }
+
+    } else {
+        counterOfAuctionDomainTimerLoadError = 0
+        const prevDate = $('#auction-bid-flip-clock-container').dataset.endDate
+        const endDate = new Date(auctionEndTime * 1000)
+        const isDateEqual = String(prevDate) === String(endDate)
+
+        if (!isDateEqual){
+            $('#auction-bid-flip-clock-container').dataset.endDate = endDate
+            initFlipTimer('#auction-bid-flip-clock-container', true)
+        }
+
+        toggle(`#${AUCTION_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+        toggle(`#${AUCTION_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+        removeTimerLoadingScreen(AUCTION_FLIP_TIMER_CONTAINER_ID)
+    }
+    initFlipTimer(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`, true)
+}
+
 const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
+
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
     const bestBidAmount = auctionInfo.maxBidAmount
     const bestBidAddress = auctionInfo.maxBidAddress.toString(
@@ -426,14 +569,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         IS_TESTNET
     )
 
-    const prevDate = $('#auction-bid-flip-clock-container').dataset.endDate
-    const endDate = new Date(auctionEndTime * 1000)
-    const isDateEqual = String(prevDate) === String(endDate)
-
-    if (!isDateEqual){
-        $('#auction-bid-flip-clock-container').dataset.endDate = endDate
-        initFlipTimer('#auction-bid-flip-clock-container', true)
-    }
+    renderAuctionDomainTimer(auctionEndTime)
 
     getCoinPrice().then((price) => {
         const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
@@ -443,7 +579,6 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         }
 
         previousBid = auctionAmount
-
 
         $('#auctionAmount').innerText = formatNumber(auctionAmount, false)
         if (price) {
@@ -495,6 +630,69 @@ const renderFreeDomain = (domain) => {
     })
 }
 
+async function reFetchBusyDomainTimerInfo(){
+    setTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
+    toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+    toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+
+    const {
+        domainExists,
+        ownerAddress,
+        dnsItem
+    } = await getDomainInfo(currentDomain)
+
+    let lastFillUpTime = 0
+
+    if (domainExists && ownerAddress) {
+        lastFillUpTime = await dnsItem.methods.getLastFillUpTime()
+    }
+
+    renderBusyDomainTimer(lastFillUpTime)
+}
+
+function renderBusyDomainTimer(lastFillUpTime){
+    const isTimerLoadFail = !lastFillUpTime
+
+    if (isTimerLoadFail){
+        counterOfBusyDomainTimerLoadError += 1
+        toggle(`#${EXPIRES_DATE_CONTAINER_ID}`, false, 'block')
+
+        if (counterOfBusyDomainTimerLoadError < MAX_COUNT_OF_TIMER_ERROR_BEFORE_SHOW_BTN){
+            setTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
+            toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+        } else {
+            toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, false, 'flex')
+            toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, true, 'flex')
+            removeTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
+        }
+    }
+    else {
+        counterOfBusyDomainTimerLoadError = 0
+        const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
+        const prevDate = $('#flip-clock-container').dataset.endDate
+        const isDateEqual = String(prevDate) === String(expiresDate)
+
+        $('#expiresDate').innerText = expiresDate
+            .toISOString()
+            .slice(0,10)
+            .split('-')
+            .reverse()
+            .join(".")
+
+        if (!isDateEqual) {
+            $('#flip-clock-container').dataset.endDate = expiresDate
+            initFlipTimer('#flip-clock-container', true)
+        }
+
+        toggle(`#${EXPIRES_DATE_CONTAINER_ID}`, true, 'block')
+        toggle(`#${BUSY_FLIP_TIMER_CONTAINER_ID}`, true, 'flex')
+        toggle(`#${BUSY_FAILED_TIMER_BLOCK_ID}`, false, 'flex')
+        removeTimerLoadingScreen(BUSY_FLIP_TIMER_CONTAINER_ID)
+    }
+
+    initFlipTimer('#flip-clock-container', false)
+}
+
 const renderBusyDomain = (
     domain,
     domainItemAddress,
@@ -502,16 +700,7 @@ const renderBusyDomain = (
     lastFillUpTime
 ) => {
     setAddress($('#busyOwnerAddress'), ownerAddress)
-    const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
-    const prevDate = $('#flip-clock-container').dataset.endDate
-    const isDateEqual = String(prevDate) === String(expiresDate)
-
-    $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
-
-    if (!isDateEqual) {
-        $('#flip-clock-container').dataset.endDate = expiresDate
-        initFlipTimer('#flip-clock-container', true)
-    }
+    renderBusyDomainTimer(lastFillUpTime)
 }
 
 const renderSearchHistory = (node) => {
@@ -851,12 +1040,10 @@ const connectExtension = async (domain, dnsItem) => {
         return
     }
 
-
     if (!window.tonProtocolVersion || window.tonProtocolVersion < 1) {
         alert(locale.update_extension)
         return
     }
-
 
     const accounts = await provider.send('ton_requestAccounts')
     const account = new TonWeb.Address(accounts[0]).toString(
@@ -950,7 +1137,6 @@ const connectExtension = async (domain, dnsItem) => {
             )
 
             $('#editAdnlRow input').placeholder = locale.adnl
-
 
             createEditBtn('#editAdnlRow .edit__button').addEventListener('click', () => {
                 const value = $('#editAdnlRow input').value // hex
