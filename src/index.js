@@ -1020,7 +1020,6 @@ const OFFSET_BETWEEN_TEXT_AND_CARRETE = 1
 function setCareeteHelperValue(value) {
     const helper = $('.careete__helper');
     const windowWidth = window.innerWidth;
-
     const resetInputIcon = $('.icon.reset__input--icon')
     const careeteHelper = $('.start-input-container__domain--container')
     const careeteHelperText = $('.start-input-container__domain')
@@ -1042,7 +1041,8 @@ function setCareeteHelperValue(value) {
 
     if (value !== oldStartInputValue) {
         oldStartInputValue = value;
-        helper.innerText = value;
+        helper.innerText = value.replaceAll(' ', `${'\u00A0'}`);
+
         const {width} = helper.getBoundingClientRect();
 
         if (careeteHelper) {
