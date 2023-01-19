@@ -82,6 +82,7 @@
     display: block;
     -webkit-perspective: 300px;
     perspective: 300px;
+    white-space: nowrap;
 }
 
 .flip-clock-container [class|="flip-item"] .flip-digit > span::after, .flip-clock-container [class|="flip-item"] .flip-digit > span::before {
