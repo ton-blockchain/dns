@@ -75,6 +75,7 @@ const localeDict = {
             '                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
             '                </svg>',
         storage_checkbox: "Хостинг на TON Storage",
+        footer_support: "Помощь",
     },
     en: {
         address: 'Address',
@@ -92,6 +93,7 @@ const localeDict = {
         free: 'Available',
         busy: 'Taken',
         update_extension: 'Please update your TON Wallet extension',
+        footer_support: 'Support',
     },
 }
 
