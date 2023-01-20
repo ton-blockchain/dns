@@ -514,29 +514,97 @@ const renderSearchHistory = (node) => {
     toggle('.start-error', false)
 
     try {
-        const historyMarkup = getHistoryFromStorage().map(
-            (historyRecord) => {
-                const sanitizedValue = encodeHTML(historyRecord)
+        const historyStorage = getHistoryFromStorage()
 
-                return `<button class="hover__button" data-record="${sanitizedValue}">
-                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2.99939 12C2.99939 7.02944 7.02883 3 11.9994 3C16.97 3 20.9994 7.02944 20.9994 12C20.9994 16.9706 16.97 21 11.9994 21C9.44416 21 7.13764 19.9351 5.49939 18.225" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M0.999981 10.9999L2.98998 13.4399L4.97998 10.9999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M12.0273 7.15381V12.3461H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <div class="text--overflow__hidden" data-record="${sanitizedValue}">
-                    	<span>${sanitizedValue}</span>
-                    </div>
-                    <svg data-record="${sanitizedValue}" class="icon history__record remove" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.00012 18L18.0001 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M6.00012 6L17.9986 18.0015" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    </svg>
-                </button>
-            `
-            }
-        )
+        while (historyContainer.firstChild) {
+            historyContainer.removeChild(historyContainer.firstChild);
+        }
 
-        historyContainer.innerHTML = historyMarkup.join('')
+        function createHistoryButton(historyRecord){
+            const button = document.createElement('button');
+            button.classList.add('hover__button');
+            button.setAttribute('data-record', historyRecord);
+
+            const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg1.classList.add('icon');
+                svg1.setAttribute('width', '24');
+                svg1.setAttribute('height', '24');
+                svg1.setAttribute('viewBox', '0 0 24 24');
+                svg1.setAttribute('fill', 'none');
+
+            const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path1.setAttribute('d', 'M2.99939 12C2.99939 7.02944 7.02883 3 11.9994 3C16.97 3 20.9994 7.02944 20.9994 12C20.9994 16.9706 16.97 21 11.9994 21C9.44416 21 7.13764 19.9351 5.49939 18.225');
+                path1.setAttribute('stroke', 'currentColor');
+                path1.setAttribute('stroke-width', '2');
+                path1.setAttribute('stroke-linecap', 'round');
+                path1.setAttribute('stroke-linejoin', 'round');
+            svg1.appendChild(path1);
+
+            const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path2.setAttribute('d', 'M0.999981 10.9999L2.98998 13.4399L4.97998 10.9999');
+                path2.setAttribute('stroke', 'currentColor');
+                path2.setAttribute('stroke-width', '2');
+                path2.setAttribute('stroke-linecap', 'round');
+                path2.setAttribute('stroke-linejoin', 'round');
+            svg1.appendChild(path2);
+
+            const path3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path3.setAttribute('d', 'M12.0273 7.15381V12.3461H17');
+                path3.setAttribute('stroke', 'currentColor');
+                path3.setAttribute('stroke-width', '2');
+                path3.setAttribute('stroke-linecap', 'round');
+                path3.setAttribute('stroke-linejoin', 'round');
+            svg1.appendChild(path3);
+
+            button.appendChild(svg1);
+
+
+            const textBlock = document.createElement('div');
+                textBlock.classList.add('text--overflow__hidden');
+                textBlock.setAttribute('data-record', historyRecord);
+
+            const span = document.createElement('span');
+                span.innerText = historyRecord;
+
+            textBlock.appendChild(span);
+
+            button.appendChild(textBlock)
+
+            const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg2.setAttribute('data-record', historyRecord);
+                svg2.classList.add('icon', 'history__record', 'remove');
+                svg2.setAttribute('width', '24');
+                svg2.setAttribute('height', '24');
+                svg2.setAttribute('viewBox', '0 0 24 24');
+                svg2.setAttribute('fill', 'none');
+
+            const svg2path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                svg2path1.setAttribute('d', 'M6.00012 18L18.0001 6');
+                svg2path1.setAttribute('stroke', 'currentColor');
+                svg2path1.setAttribute('stroke-width', '2');
+                svg2path1.setAttribute('stroke-linecap', 'round');
+            svg2.appendChild(svg2path1);
+
+            const svg2path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                svg2path2.setAttribute('d', 'M6.00012 6L17.9986 18.0015');
+                svg2path2.setAttribute('stroke', 'currentColor');
+                svg2path2.setAttribute('stroke-width', '2');
+                svg2path2.setAttribute('stroke-linecap', 'round');
+            svg2.appendChild(svg2path2);
+
+            button.appendChild(svg2);
+
+            return button
+        }
+
+        historyStorage.forEach(historyRecord => {
+            const sanitizedValue = encodeHTML(historyRecord)
+
+            const historyButton = createHistoryButton(sanitizedValue)
+
+            historyContainer.appendChild(historyButton)
+        })
+
         toggleByNode(historyContainer, true, 'block')
     } catch (e) {
         console.log(e)
