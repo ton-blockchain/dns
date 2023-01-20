@@ -149,7 +149,10 @@ let currentDomain = null
 let currentOwner = null
 let currentDnsItem = null
 let previousBid = null
+
 const removeListeners = {}
+const DEFAULT_CARETE_HELPER_TEXT = '.ton'
+const OFFSET_BETWEEN_TEXT_AND_CARRETE = 1
 
 const clear = () => {
     clearInterval(updateIntervalId)
@@ -1014,8 +1017,6 @@ $(".reset__input--icon").addEventListener('click', (e) => {
 
 // COMMON
 var oldStartInputValue = '';
-const DEFAULT_CARETE_HELPER_TEXT = '.ton'
-const OFFSET_BETWEEN_TEXT_AND_CARRETE = 1
 
 function setCareeteHelperValue(value) {
     const helper = $('.careete__helper');
