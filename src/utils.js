@@ -345,3 +345,7 @@ window.BROWSER = (function (agent) {
         default: return "other";
     }
 })(window.navigator.userAgent.toLowerCase());
+
+function makePageVisible(){
+    document.body.classList.remove('hidden')
+}

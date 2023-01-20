@@ -39,6 +39,10 @@ body.scroll__disabled {
     right: 0;
 }
 
+body.hidden{
+    opacity: 0;
+}
+
 .btn {
     display: inline-flex;
     background: var(--button--background);
