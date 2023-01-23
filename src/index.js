@@ -512,7 +512,9 @@ async function reFetchAuctionDomainTimerInfo(){
 }
 
 function renderAuctionDomainTimer(auctionEndTime){
-    const isTimerLoadFail = !auctionEndTime || auctionEndTime < Date.now() / 1000
+    // const isTimerLoadFail = !auctionEndTime || auctionEndTime < Date.now() / 1000
+    //TODO delete after presentation on demo stand
+    const isTimerLoadFail = counterOfAuctionDomainTimerLoadError > 2 ? false : true
 
     if (isTimerLoadFail){
         counterOfAuctionDomainTimerLoadError += 1
@@ -527,7 +529,8 @@ function renderAuctionDomainTimer(auctionEndTime){
         }
 
     } else {
-        counterOfAuctionDomainTimerLoadError = 0
+        //TODO delete comment after presentation on demo stand
+        // counterOfAuctionDomainTimerLoadError = 0
         const prevDate = $(`#${AUCTION_BID_FLIP_CLOCK_CONTAINER_ID}`).dataset.endDate
         const endDate = new Date(auctionEndTime * 1000)
         const isDateEqual = String(prevDate) === String(endDate)
@@ -643,7 +646,9 @@ async function reFetchBusyDomainTimerInfo(){
 }
 
 function renderBusyDomainTimer(lastFillUpTime){
-    const isTimerLoadFail = !lastFillUpTime
+    // const isTimerLoadFail = !lastFillUpTime
+    //TODO delete after presentation on demo stand
+    const isTimerLoadFail = counterOfBusyDomainTimerLoadError > 2 ? false : true
 
     if (isTimerLoadFail){
         counterOfBusyDomainTimerLoadError += 1
@@ -659,7 +664,8 @@ function renderBusyDomainTimer(lastFillUpTime){
         }
     }
     else {
-        counterOfBusyDomainTimerLoadError = 0
+        //TODO delete comment after presentation on demo stand
+        // counterOfBusyDomainTimerLoadError = 0
         const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
         const prevDate = $(`#${BUSY_TIMER_BLOCK_ID}`).dataset.endDate
         const isDateEqual = String(prevDate) === String(expiresDate)
