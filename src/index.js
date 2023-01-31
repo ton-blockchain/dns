@@ -758,24 +758,24 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
     $('#bidPrice').innerText = formatNumber(localPrice, false)
     const isExtensionInstalled = !isMobile() && window.ton
-    const buyUrl = 'ton://transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
+    const buyUrl = 'ton://transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
 
     if (isExtensionInstalled) {
         $('#freeBtn').href = buyUrl
     } else {
-        $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
+        $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
     }
 
     if (isMobile()) {
         $('#freeBtn').href = buyUrl
     }
 
-    $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000)
+    $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
     $('#copyLinkbutton').setAttribute('address', buyUrl)
 
     if (freeQrUrl !== buyUrl) {
         freeQrUrl = buyUrl
-        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(localPrice * 1000000000))
+        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
     }
 
     $(modalButton).addEventListener('click', toggleBidModal, false)
