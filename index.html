@@ -37,6 +37,8 @@
     <link rel="stylesheet" href="./css/loader.css?5">
     <link rel="stylesheet" href="./css/dns.css?5">
     <link rel="stylesheet" href="./css/flip-clock.css?5">
+    <script type="text/javascript" src="src/state.js"></script>
+    <script type="text/javascript" src="src/controllers/themeController.js"></script>
     <script type="text/javascript" src="./libs/preloadImages.js?5">
         preloadImages([
             '/assets/logo.svg',
@@ -46,10 +48,12 @@
             '/assets/dns_logo_dark_hover.svg',
         ]);
     </script>
-    <script type="text/javascript" src="./src/theme.js?5">
-        initTheme();
-    </script>
+   
 </head>
+<script>
+    const themeController = new ThemeController({store})
+    themeController.init();
+</script>
 <body class="hidden">
 <nav>
     <div class="testnet-badge">
@@ -91,7 +95,7 @@
                     <span class="bold" data-locale="about">About</span>
                 </button>
             </a>
-            <button class="hover__button" id="lottie-button" onclick="toggleTheme()">
+            <button class="hover__button" id="lottie-button" onclick="themeController.toggle()">
                 <lottie-player id="sunLottie" src="./assets/lottie/sun_moon.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
                 <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
             </button>
@@ -355,7 +359,7 @@
             </div>
             <div class="mobile-menu-right">
                 <label class="form-switch">
-                    <input type="checkbox" id="mobile-theme-switch" onclick="toggleTheme()" checked="">
+                    <input type="checkbox" id="mobile-theme-switch" onclick="themeController.toggle()" checked="">
                     <i></i>
                 </label>
             </div>
