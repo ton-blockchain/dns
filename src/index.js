@@ -1,114 +1,13 @@
-TONCENTER_ENDPOINT_TESTNET = 'https://testnet.toncenter.com/api/v2/jsonRPC'
-TONCENTER_ENDPOINT = 'https://toncenter.com/api/v2/jsonRPC'
-
-TONCENTER_API_KEY_TESTNET = '3e9e1698b6eba0fef313e45648c3055d138195756c24523316fd8c5ff1abca17'
-TONCENTER_API_KEY = '438ba5a3cbaced01b8da5b9fabcd14cd2382d67a431125e2c5d4ace714519178'
-
-TON_ROOT_ADDRESS_TESTNET = 'EQDjPtM6QusgMgWfl9kMcG-EALslbTITnKcH8VZK1pnH3UZA'
-TON_ROOT_ADDRESS = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz'
-
-TONSCAN_ENDPOINT_TESTNET = 'https://testnet.tonscan.org'
-TONSCAN_ENDPOINT = 'https://tonscan.org'
-
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
 
-const localeDict = {
-    ru: {
-        about: 'О сервисе',
-        dark_mode: 'Темная тема',
-        address: 'Адрес',
-        adnl: 'ADNL адрес',
-        testnet_badge_message: 'Внимание, это тестовая сеть! Не отправляйте настоящие TON. Тестовые домены могут быть удалены.',
-        open_auction: 'Купить домены .ton',
-        start_input_placeholder: 'Введите домен',
-        start_splash: 'Зарегистрируйте короткие читаемые имена для кошельков, смарт-контрактов и веб-сайтов.',
-        more_info: 'Подробнее<span class="icon arrow__right unbreak"></span>',
-        highest_bid: 'Текущая ставка',
-        from: 'От',
-        bid_step: 'Шаг ставки',
-        minimum_bid: 'Минимальная ставка',
-        auction_ends: 'Аукцион закончится через',
-        place_bid: 'Сделать ставку',
-        sale_price: 'Цена покупки',
-        owner: 'Владелец',
-        wallet_address: 'Адрес кошелька',
-        save: 'Сохранить',
-        ton_site: 'TON Site',
-        subdomains: 'Поддомены',
-        expires: 'Истекает <span id="expiresDate"></span>',
-        edit: 'Редактировать',
-        bet_price: 'Ставка',
-        start_bid: 'Домен можно приобрести на открытом аукционе. Сделайте первую ставку, чтобы начать аукцион.',
-        auction_duration: 'Длительность аукциона',
-        bid_to_start: 'Сделайте ставку и начните аукцион',
-        enter_amount: 'Введите вашу ставку',
-        small_bid_error: 'Ставка слишком маленькая.',
-        place_label: 'Поставить',
-        place_label_2: '',
-        scan_qr: 'Отсканируйте QR-код и отправьте',
-        pay_mobile: 'К оплате',
-        scan_qr_link: 'через Tonkeeper.',
-        pay_attention: 'Используйте только <a class="unbreak" href="https://ton.org/wallets?filterBy=wallets_non_custodial" target="_blank">некастодиальные</a> кошельки для&nbsp;оплаты.',
-        sent_to: 'Адрес',
-        message: 'Комментарий',
-        place_with_extension: 'Открыть кошелек',
-        copy_link: 'Скопировать ссылку для оплаты',
-        copy_link_copied: 'Ссылка скопирована!',
-        place_with_app: 'Сделать ставку через Tonkeeper',
-        error_length: 'Домен должен быть не менее 4 и не более 126 символов.',
-        subdomains_not_allowed: 'Поддомены запрещены.',
-        invalid_chars: 'В домене можно использовать английские символы (a-z), цифры (0-9) и дефис (-). Дефис не может находиться в начале и конце.',
-        not_owner: 'Вы не владелец домена',
-        invalid_address: 'Неправильный адрес',
-        install_extension: 'Установите расширение TON Wallet для управления доменом',
-        auction: 'Аукцион',
-        free: 'Свободен',
-        busy: 'Занят',
-        update_extension: 'Обновите расширение TON Wallet',
-        install_web_extension: 'Установить TON Wallet',
-        install_tonkeeper: 'Установить Tonkeeper',
-        claim_your_domain: 'Как настроить домен?',
-        manage_domain: 'Редактировать',
-        manage_domain_mobile: 'Редактировать в Tonkeeper',
-        use_other_payments: 'Другие способы оплаты <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
-            '                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
-            '                </svg>',
-        storage_checkbox: "Хостинг на TON Storage",
-        footer_support: "Помощь",
-    },
-    en: {
-        address: 'Address',
-        adnl: 'ADNL address',
-        save: 'Save',
-        start_input_placeholder: 'Type the domain you want',
-        start_splash: 'Give crypto wallets, smart contracts or websites short readable names.',
-        error_length: 'The domain name must be at least 4 characters and no more than 126 characters.',
-        subdomains_not_allowed: 'Subdomains are not allowed.',
-        invalid_chars: 'English letters (a-z), numbers (0-9), and hyphens (-) are allowed. A hyphen cannot be at the beginning or the end.',
-        not_owner: 'You are not the owner of this domain.',
-        invalid_address: 'The address is invalid.',
-        install_extension: 'Please install the TON Wallet extension to edit the domain',
-        auction: 'On auction',
-        free: 'Available',
-        busy: 'Taken',
-        update_extension: 'Please update your TON Wallet extension',
-        footer_support: 'Support',
-    },
-}
+let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
 
-const browserLang = navigator.language || navigator.userLanguage
-const lang = (browserLang === 'ru-RU') || (browserLang === 'ru') || (browserLang === 'be-BY') || (browserLang === 'be') || (browserLang === 'kk-KZ') || (browserLang === 'kk') ? 'ru' : 'en';
-const locale = localeDict[lang]
+$('#navInputElement').placeholder = store.localeDict.start_input_placeholder
+$('#startInputElement').placeholder = store.localeDict.start_input_placeholder
 
-if (lang !== 'en') {
-    $('.start-input').placeholder = locale.start_input_placeholder
-    $('#navInput input').placeholder = locale.start_input_placeholder
-    document.querySelectorAll('[data-locale]').forEach((div) => {
-        const key = div.attributes['data-locale'].value
-        div.innerHTML = locale[key]
-    })
-}
+const walletController = new WalletController({store})
+const testnetController = new TestnetController() 
 
 makePageVisible()
 
@@ -195,12 +94,12 @@ $('.badge__dns-mobile').addEventListener('click', () => {
 
 const validateDomain = (domain) => {
     if (domain.length < 4 || domain.length > 126) {
-        return locale.error_length
+        return store.localeDict.error_length
     }
 
     for (let i = 0; i < domain.length; i++) {
         if (domain.charAt(i) === '.') {
-            return locale.subdomains_not_allowed
+            return store.localeDict.subdomains_not_allowed
         }
         const char = domain.charCodeAt(i)
         const isHyphen = char === 45
@@ -210,7 +109,7 @@ const validateDomain = (domain) => {
             (char >= 97 && char <= 122) // '-' or 0-9 or a-z ;  abcdefghijklmnopqrstuvwxyz-0123456789
 
         if (!isValidChar) {
-            return locale.invalid_chars
+            return store.localeDict.invalid_chars
         }
     }
 }
@@ -221,7 +120,7 @@ const setDomain = (domain) => {
 
     const loadDomain = async (setShimmers) => {
         if (setShimmers) {
-            unmountTimer()
+            FlipTimer.unmountTimers()
             setScreen('domainLoadingScreen')
             renderDomainLoadingScreen()
         } else {
@@ -333,8 +232,10 @@ function closeBidModal() {
     toggle('.bid__modal--first__step', false)
     toggle('.bid__modal--second__step', false)
 
+    $('.bid__modal').style.justifyContent = 'center'
     $('#otherPaymentsMethods svg').classList.remove('rotate')
     $('#otherPaymentsMethodsContainer').classList.remove('show')
+    $('#otherPaymentsMethodsContainer').style.display = 'none'
     $('body').classList.remove('scroll__disabled')
     $('#otherPaymentsMethods').removeEventListener('click', renderOtherPaymentsMethods)
 }
@@ -451,7 +352,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
     if (!isDateEqual){
         $('#auction-bid-flip-clock-container').dataset.endDate = endDate
-        initFlipTimer('#auction-bid-flip-clock-container', true)
+        FlipTimer.addTimer('#auction-bid-flip-clock-container', true)
     }
 
     getCoinPrice().then((price) => {
@@ -508,7 +409,7 @@ const renderFreeDomain = (domain) => {
         $('#bid-flip-clock-container').dataset.endDate = new Date(
             Date.now() + getAuctionDuration() * 1000
         ).toISOString()
-        initFlipTimer('#bid-flip-clock-container', false)
+        FlipTimer.addTimer('#bid-flip-clock-container', false)
 
         attachBidModalListeners(domain, salePrice, '#bidButton')
     })
@@ -531,7 +432,7 @@ const renderBusyDomain = (
 
     if (!isDateEqual) {
         $('#flip-clock-container').dataset.endDate = expiresDate
-        initFlipTimer('#flip-clock-container', true)
+        FlipTimer.addTimer('#flip-clock-container', true)
     }
 }
 
@@ -653,6 +554,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 
     let localPrice = price;
+    let paymentStatus = null;
     const bidAddress = address || tonRootAddress;
     const bidModalInput = $("#bid__modal--bid__input")
     const submitStepButton = $("#bid__modal--submit__step")
@@ -661,6 +563,13 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const error = $(".bid__input--error")
     const backdrop = $('.bid__modal--backdrop')
     const showOtherPaymentMethods = $('#otherPaymentsMethods')
+    const paymentLoadingWallet = $('#payment-loading-wallet')
+    const paymentCloseButton = $('#paymentCloseButton')
+    const qrContainer = $('#freeQr')
+    const paymentLottieLoading = $('#paymentLottieLoading')
+    const paymentLottieSuccess = $('#paymentLottieSuccess')
+    const paymentLottieFailure = $('#paymentLottieFailure')
+
 
     const mask = IMask(bidModalInput, {
         mask: Number,
@@ -701,7 +610,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const handleModalClose = (e) => {
         localPrice = price;
 
-        if (!e.target.classList.contains('bid__modal--backdrop')) {
+        if (e && !e.target.classList.contains('bid__modal--backdrop')) {
             return;
         }
 
@@ -710,15 +619,36 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', false)
+        toggle('.bid__modal--payment', false)
         toggle('.bid__modal', false)
         toggle('.bid__modal--backdrop', false, 'flex', true, 200)
+        $('.bid__modal').style.justifyContent = 'center'
         $('#otherPaymentsMethodsContainer').classList.remove('show')
+        $('#otherPaymentsMethodsContainer').style.display = 'none'
         $('#otherPaymentsMethods svg').classList.remove('rotate')
+
+
+        toggle('#paymentLottieLoading', false)
+        toggle('#paymentLottieSuccess', false)
+        toggle('#paymentLottieFailure', false)
+        paymentLottieLoading.stop()
+        paymentLottieSuccess.stop()
+        paymentLottieFailure.stop()
+        paymentLottieLoading.removeEventListener('loop', handlePaymentStatus)
+
+        toggle('#payment-message-loading', false)
+        toggle('#payment-message-success', false)
+        toggle('#payment-message-rejection', false)
+        toggle('#payment-message-error', false)
+
+        qrContainer.innerHTML = ''
+
+        paymentStatus = null
 
         bidModalInput.removeEventListener('input', handleBidInput)
         backdrop.removeEventListener('click', handleModalClose)
-        submitStepButton.removeEventListener('click', renderSecondStep)
-        submitStepButton.removeEventListener('click', renderSecondStep)
+        submitStepButton.removeEventListener('click', checkIfLoggedIn)
+        submitStepButton.removeEventListener('click', checkIfLoggedIn)
         $('body').classList.remove('scroll__disabled')
     }
 
@@ -728,10 +658,22 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         scrollToTop()
         backdrop.addEventListener('click', handleModalClose)
 
+        paymentStatus = null
+
+        toggle('#paymentLottieLoading', false)
+        toggle('#paymentLottieSuccess', false)
+        toggle('#paymentLottieFailure', false)
+
+        toggle('#payment-message-loading', false)
+        toggle('#payment-message-success', false)
+        toggle('#payment-message-rejection', false)
+        toggle('#payment-message-error', false)
+
         toggle('.bid__modal--backdrop', true)
         toggle('.bid__modal', true)
         toggle('.bid__modal--first__step', true)
         toggle('.bid__modal--second__step', false)
+        toggle('.bid__modal--payment', false)
         $('body').classList.add('scroll__disabled')
         pushModalInfoToBrowserHistory('bid__modal')
         renderFirstStep()
@@ -751,24 +693,163 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         bidModalInput.addEventListener('keypress', (e) => {
             if (e.key === "Enter" && !submitStepButton.getAttribute('disabled')) {
-                renderSecondStep()
+                checkIfLoggedIn()
                 hideKeyboard();
             }
         })
-        submitStepButton.addEventListener('click', renderSecondStep)
+
+        submitStepButton.addEventListener('click', checkIfLoggedIn)
         submitPriceLabel.innerText = formatNumber(localPrice)
         renderConvertedTonPrice(convertedPriceSlot, localPrice);
 
         bidModalInput.addEventListener('input', handleBidInput)
     }
 
+    const checkIfLoggedIn = async () => {
+        const isLoggedIn = await walletController.isLoggedIn()
+
+        if (isLoggedIn) {
+            handlePaymentConfirmation()
+        } else {
+            renderSecondStep()
+        }
+    }
+
+    const handlePaymentConfirmation = async () => {
+        renderPaymentLoading()
+
+        if ('universalLink' in walletController.currentWallet && !walletController.currentWallet.embedded && isMobile()) {
+            openLink(addReturnStrategy(walletController.currentWallet.universalLink, 'back'), '_blank');
+        }
+
+        const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
+        await walletController.sendTransaction(
+            transaction, 
+            () => paymentStatus = 'success',
+            () => paymentStatus = 'rejection',
+            () => paymentStatus = 'error'
+        )
+        
+    }
+
+    const renderPaymentLoading = () => {
+        paymentStatus = 'loading'
+        updateBidModalPaymentData()
+        renderPaymentMessage('loading')
+        toggle('.bid__modal--payment', true)
+        toggle('.bid__modal--first__step', false)
+
+        paymentLoadingWallet.innerText = walletController.getCurrentWallet().name
+
+        paymentLottieLoading.addEventListener('loop', handlePaymentStatus)
+
+        paymentCloseButton.style.display = 'none'
+    }
+
+    const renderPaymentSuccess = () => {
+        renderPaymentMessage('success')
+
+        paymentCloseButton.onclick = () => handleModalClose()
+        paymentCloseButton.style.display = ''
+    }
+
+    const renderPaymentFailure = ({rejection = false}) => {
+        if (rejection) {
+            renderPaymentMessage('rejection')
+        } else {
+            renderPaymentMessage('error')
+        }
+
+        paymentCloseButton.onclick = () => handleModalClose()
+        paymentCloseButton.style.display = ''
+    }
+
+    const handlePaymentStatus = () => {
+        if (paymentStatus === null) {
+            return
+        }
+
+        if (paymentStatus === 'loading') {
+            return
+        }
+
+        if (paymentStatus === 'success') {
+            renderPaymentSuccess()
+            return
+        }
+
+        if (paymentStatus === 'rejection') {
+            renderPaymentFailure({rejection: true})
+            return
+        }
+
+        if (paymentStatus === 'error') {
+            renderPaymentFailure({})
+            return
+        }
+    }
+
+    const renderPaymentMessage = (type) => {
+        if (type === 'loading') {
+            toggle('#payment-message-loading', true)
+
+            toggle('#paymentLottieLoading', true)
+            toggle('#paymentLottieSuccess', false)
+
+            paymentLottieLoading.play()
+
+            return
+        }
+
+        if (type === 'success') {
+            toggle('#payment-message-loading', false)
+            toggle('#payment-message-success', true)
+
+            toggle('#paymentLottieLoading', false)
+            toggle('#paymentLottieSuccess', true)
+
+            paymentLottieLoading.stop()
+            paymentLottieSuccess.play()
+
+            return
+        }
+
+        if (type === 'rejection' || type === 'error') {
+            setTimeout(() => {
+                toggle('#paymentLottieLoading', false)
+                paymentLottieLoading.stop()
+            }, 500)
+            toggle('#paymentLottieFailure', true)
+
+            paymentLottieFailure.play()
+        }
+
+        if (type === 'rejection') {
+            toggle('#payment-message-loading', false)
+            toggle('#payment-message-rejection', true)
+
+            return
+        }
+
+        if (type === 'error') {
+            toggle('#payment-message-loading', false)
+            toggle('#payment-message-error', true)
+
+            return
+        }
+    }
+
     const renderSecondStep = () => {
+        updateBidModalPaymentData()
         isDomainFree(domainType)
             ? analyticService.sendEvent({type: 'place_an_initial_bid'})
             : analyticService.sendEvent({type: 'place_a_bid'})
 
+        $('.bid__modal').style.justifyContent = 'flex-start'
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
+
+        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
 
         setAddress($('#freeBuyAddress'), bidAddress)
 
@@ -777,11 +858,15 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 
     // update bid modal payemnt data
-    $('#domainName--bid__modal--payment').innerText = domain + '.ton'
-    $('#freeComment').innerText = domain
-    $('#freeComment').dataset.name = domain
+    const updateBidModalPaymentData = () => {
+        $('#domainName--bid__modal--payment').innerText = domain + '.ton'
+        $('#freeComment').innerText = domain
+        $('#freeComment').dataset.name = domain
 
-    $('#bidPrice').innerText = formatNumber(localPrice, false)
+        $('#bidPrice').innerText = formatNumber(localPrice, false)
+        $('#bidPrice-payment-loading').innerText = formatNumber(localPrice, false)
+    }
+    
     const isExtensionInstalled = !isMobile() && window.ton
     const buyUrl = 'ton://transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
 
@@ -798,11 +883,6 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
     $('#copyLinkbutton').setAttribute('address', buyUrl)
 
-    if (freeQrUrl !== buyUrl) {
-        freeQrUrl = buyUrl
-        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
-    }
-
     $(modalButton).addEventListener('click', toggleBidModal, false)
     showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
 
@@ -812,6 +892,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 }
 
+let otherPaymentsTimerId = null;
 function renderOtherPaymentsMethods() {
     const svgArrow = $('#otherPaymentsMethods svg')
     const otherPaymentsContainer = $('#otherPaymentsMethodsContainer')
@@ -824,8 +905,20 @@ function renderOtherPaymentsMethods() {
 
     if (otherPaymentsContainer.classList.contains('show')) {
         otherPaymentsContainer.classList.remove('show')
+
+
+        otherPaymentsTimerId && clearTimeout(otherPaymentsTimerId)
+        otherPaymentsTimerId = setTimeout(() => {
+            otherPaymentsMethodsContainer.style.display = 'none'
+        }, 300)
     } else {
-        otherPaymentsContainer.classList.add('show')
+        otherPaymentsMethodsContainer.style.display = ''
+
+        otherPaymentsTimerId && clearTimeout(otherPaymentsTimerId)
+        otherPaymentsTimerId = setTimeout(() => {
+            otherPaymentsContainer.classList.add('show')
+            otherPaymentsContainer.scrollIntoView({behavior: 'smooth', block: 'start'})
+        }, 100)
     }
 }
 
@@ -864,7 +957,7 @@ const createEditBtn = (containerName) => {
     const container = $(containerName)
     container.innerHTML = ''
     const btn = document.createElement('a')
-    btn.innerText = locale.save
+    btn.innerText = store.localeDict.save
     btn.classList.add('edit-btn')
     container.appendChild(btn)
     return btn
@@ -874,13 +967,13 @@ const connectExtension = async (domain, dnsItem) => {
     const provider = window.ton
 
     if (!provider) {
-        alert(locale.install_extension)
+        alert(store.localeDict.install_extension)
         return
     }
 
 
     if (!window.tonProtocolVersion || window.tonProtocolVersion < 1) {
-        alert(locale.update_extension)
+        alert(store.localeDict.update_extension)
         return
     }
 
@@ -892,8 +985,15 @@ const connectExtension = async (domain, dnsItem) => {
         IS_TESTNET
     )
 
-    if (account !== currentOwner) {
-        alert(locale.not_owner)
+    const tonConnectAccaunt = walletController.getAccountAddress()
+
+    if (tonConnectAccaunt !== currentOwner && account !== currentOwner) {
+        alert(store.localeDict.not_owner)
+        return
+    }
+
+    if (tonConnectAccaunt === currentOwner && account !== currentOwner ) {
+        alert(store.localeDict.login_extention)
         return
     }
 
@@ -952,7 +1052,7 @@ const connectExtension = async (domain, dnsItem) => {
                 ])
             }
 
-            $('#editWalletRow input').placeholder = locale.address
+            $('#editWalletRow input').placeholder = store.localeDict.address
 
             createEditBtn('#editWalletRow .edit__button').addEventListener(
                 'click',
@@ -968,14 +1068,14 @@ const connectExtension = async (domain, dnsItem) => {
                                 : null
                         )
                     } else {
-                        alert(locale.invalid_address)
+                        alert(store.localeDict.invalid_address)
                     }
 
                     hideKeyboard()
                 }
             )
 
-            $('#editAdnlRow input').placeholder = locale.adnl
+            $('#editAdnlRow input').placeholder = store.localeDict.adnl
 
 
             createEditBtn('#editAdnlRow .edit__button').addEventListener('click', () => {
@@ -992,7 +1092,7 @@ const connectExtension = async (domain, dnsItem) => {
                         }
                     } catch (e) {
                         console.error(e)
-                        alert(locale.invalid_address)
+                        alert(store.localeDict.invalid_address)
                         return
                     }
                 }
@@ -1010,7 +1110,7 @@ const connectExtension = async (domain, dnsItem) => {
                         record = TonWeb.dns.createStorageBagIdRecord(bagId);
                     } catch (e) {
                         console.error(e);
-                        alert(locale.invalid_address);
+                        alert(store.localeDict.invalid_address);
                         return;
                     }
                 }
@@ -1018,7 +1118,7 @@ const connectExtension = async (domain, dnsItem) => {
                 setTx(TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
             });
 
-            $('#editResolverRow input').placeholder = locale.address
+            $('#editResolverRow input').placeholder = store.localeDict.address
 
             createEditBtn('#editResolverRow .edit__button').addEventListener(
                 'click',
@@ -1032,7 +1132,7 @@ const connectExtension = async (domain, dnsItem) => {
                                 : null
                         )
                     } else {
-                        alert(locale.invalid_address)
+                        alert(store.localeDict.invalid_address)
                     }
                 }
             )
@@ -1207,7 +1307,7 @@ function renderBusyScreenSubmitButton() {
                 const invalidExtensionVersion = !window.tonProtocolVersion || window.tonProtocolVersion < 1
 
                 if (invalidExtensionVersion) {
-                    alert(locale.update_extension)
+                    alert(store.localeDict.update_extension)
                     return;
                 }
                 return;
