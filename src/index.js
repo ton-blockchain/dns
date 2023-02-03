@@ -212,7 +212,7 @@ const setDomain = (domain) => {
 
     const loadDomain = async (setShimmers) => {
         if (setShimmers) {
-            unmountTimer()
+            FlipTimer.unmountTimers()
             setScreen('domainLoadingScreen')
             renderDomainLoadingScreen()
         } else {
@@ -436,7 +436,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
     if (!isDateEqual){
         $('#auction-bid-flip-clock-container').dataset.endDate = endDate
-        initFlipTimer('#auction-bid-flip-clock-container', true)
+        FlipTimer.addTimer('#auction-bid-flip-clock-container', true)
     }
 
     getCoinPrice().then((price) => {
@@ -491,7 +491,7 @@ const renderFreeDomain = (domain) => {
         $('#bid-flip-clock-container').dataset.endDate = new Date(
             Date.now() + getAuctionDuration() * 1000
         ).toISOString()
-        initFlipTimer('#bid-flip-clock-container', false)
+        FlipTimer.addTimer('#bid-flip-clock-container', true)
 
         attachBidModalListeners(domain, salePrice, '#bidButton')
     })
@@ -512,7 +512,7 @@ const renderBusyDomain = (
 
     if (!isDateEqual) {
         $('#flip-clock-container').dataset.endDate = expiresDate
-        initFlipTimer('#flip-clock-container', true)
+        FlipTimer.addTimer('#flip-clock-container', true)
     }
 }
 
