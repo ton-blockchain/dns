@@ -387,6 +387,53 @@
 <script type="text/javascript" src="./src/lottie.js?5"></script>
 <script type="text/javascript" src="./src/mobile-menu.js?5"></script>
 <script type="text/javascript" src="./src/dynamic-header.js?5"></script>
-<script type="text/javascript" src="./src/about.js?5"></script>
+<script type="text/javascript" src="./src/controllers/localeController.js"></script>
+<script>
+    function handleScroll() {
+        const headerEl = document.querySelector('nav')
+        const borderOffset = 0
+
+        if (!headerEl) {
+            return
+        }
+
+        if (window.scrollY > borderOffset) {
+            if (!headerEl.classList.contains('fixed-header')) {
+                headerEl.classList.add('fixed-header')
+            }
+
+            return
+        }
+
+        if (headerEl.classList.contains('fixed-header')) {
+            headerEl.classList.remove('fixed-header')
+        }
+    }
+
+    makePageVisible()
+
+    handleScroll()
+
+    window.addEventListener('scroll', handleScroll)
+
+    document.addEventListener('DOMContentLoaded', function() {
+            new LocaleController({store, localeDict: 'about'}).init()
+            toggle('#about', true, 'flex')
+
+            const elements = document.getElementsByClassName('video-element')
+
+            for (var element of elements) {
+                element.muted = 'muted'
+                element.play()
+            }
+
+            if (window.location.hash) {
+                window.scroll({
+                    top: document.querySelector(window.location.hash).offsetTop,
+                })
+            }
+        }
+    )
+</script>
 </body>
 </html>

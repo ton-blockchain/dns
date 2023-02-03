@@ -13,93 +13,12 @@ TONSCAN_ENDPOINT = 'https://tonscan.org'
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
 
-const localeDict = {
-    ru: {
-        about: 'О сервисе',
-        dark_mode: 'Темная тема',
-        address: 'Адрес',
-        adnl: 'ADNL адрес',
-        testnet_badge_message: 'Внимание, это тестовая сеть! Не отправляйте настоящие TON. Тестовые домены могут быть удалены.',
-        open_auction: 'Купить домены .ton',
-        start_input_placeholder: 'Введите домен',
-        start_splash: 'Зарегистрируйте короткие читаемые имена для кошельков, смарт-контрактов и веб-сайтов.',
-        more_info: 'Подробнее<span class="icon arrow__right unbreak"></span>',
-        highest_bid: 'Текущая ставка',
-        from: 'От',
-        bid_step: 'Шаг ставки',
-        minimum_bid: 'Минимальная ставка',
-        auction_ends: 'Аукцион закончится через',
-        place_bid: 'Сделать ставку',
-        sale_price: 'Цена покупки',
-        owner: 'Владелец',
-        wallet_address: 'Адрес кошелька',
-        save: 'Сохранить',
-        ton_site: 'TON Site',
-        subdomains: 'Поддомены',
-        expires: 'Истекает <span id="expiresDate"></span>',
-        edit: 'Редактировать',
-        bet_price: 'Ставка',
-        start_bid: 'Домен можно приобрести на открытом аукционе. Сделайте первую ставку, чтобы начать аукцион.',
-        auction_duration: 'Длительность аукциона',
-        bid_to_start: 'Сделайте ставку и начните аукцион',
-        enter_amount: 'Введите вашу ставку',
-        small_bid_error: 'Ставка слишком маленькая.',
-        place_label: 'Поставить',
-        place_label_2: '',
-        scan_qr: 'Отсканируйте QR-код и отправьте',
-        pay_mobile: 'К оплате',
-        scan_qr_link: 'через Tonkeeper.',
-        pay_attention: 'Используйте только <a class="unbreak" href="https://ton.org/wallets?filterBy=wallets_non_custodial" target="_blank">некастодиальные</a> кошельки для&nbsp;оплаты.',
-        sent_to: 'Адрес',
-        message: 'Комментарий',
-        place_with_extension: 'Открыть кошелек',
-        copy_link: 'Скопировать ссылку для оплаты',
-        copy_link_copied: 'Ссылка скопирована!',
-        place_with_app: 'Сделать ставку через Tonkeeper',
-        error_length: 'Домен должен быть не менее 4 и не более 126 символов.',
-        subdomains_not_allowed: 'Поддомены запрещены.',
-        invalid_chars: 'В домене можно использовать английские символы (a-z), цифры (0-9) и дефис (-). Дефис не может находиться в начале и конце.',
-        not_owner: 'Вы не владелец домена',
-        invalid_address: 'Неправильный адрес',
-        install_extension: 'Установите расширение TON Wallet для управления доменом',
-        auction: 'Аукцион',
-        free: 'Свободен',
-        busy: 'Занят',
-        update_extension: 'Обновите расширение TON Wallet',
-        install_web_extension: 'Установить TON Wallet',
-        install_tonkeeper: 'Установить Tonkeeper',
-        claim_your_domain: 'Как настроить домен?',
-        manage_domain: 'Редактировать',
-        manage_domain_mobile: 'Редактировать в Tonkeeper',
-        use_other_payments: 'Другие способы оплаты <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
-            '                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
-            '                </svg>',
-        storage_checkbox: "Хостинг на TON Storage",
-        footer_support: "Помощь",
-    },
-    en: {
-        address: 'Address',
-        adnl: 'ADNL address',
-        save: 'Save',
-        start_input_placeholder: 'Type the domain you want',
-        start_splash: 'Give crypto wallets, smart contracts or websites short readable names.',
-        error_length: 'The domain name must be at least 4 characters and no more than 126 characters.',
-        subdomains_not_allowed: 'Subdomains are not allowed.',
-        invalid_chars: 'English letters (a-z), numbers (0-9), and hyphens (-) are allowed. A hyphen cannot be at the beginning or the end.',
-        not_owner: 'You are not the owner of this domain.',
-        invalid_address: 'The address is invalid.',
-        install_extension: 'Please install the TON Wallet extension to edit the domain',
-        auction: 'On auction',
-        free: 'Available',
-        busy: 'Taken',
-        update_extension: 'Please update your TON Wallet extension',
-        footer_support: 'Support',
-    },
-}
+let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
+const localeDict = store.localeDict
 
 const browserLang = navigator.language || navigator.userLanguage
 const lang = (browserLang === 'ru-RU') || (browserLang === 'ru') || (browserLang === 'be-BY') || (browserLang === 'be') || (browserLang === 'kk-KZ') || (browserLang === 'kk') ? 'ru' : 'en';
-const locale = localeDict[lang]
+const locale = localeDict
 
 if (lang !== 'en') {
     $('.start-input').placeholder = locale.start_input_placeholder
