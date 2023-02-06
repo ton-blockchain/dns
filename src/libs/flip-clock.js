@@ -236,8 +236,7 @@ renderTimer = function ($, start) {
     }
 
     function getDaysPostfix(days) {
-        const lang = (browserLang === 'ru-RU') || (browserLang === 'ru') || (browserLang === 'be-BY')
-        || (browserLang === 'be') || (browserLang === 'kk-KZ') || (browserLang === 'kk') ? 'ru' : 'en'
+        const lang = store.locale
 
         if (lang === 'ru') {
             let forms = [' день', ' дня', ' дней']

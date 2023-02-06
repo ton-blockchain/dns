@@ -1,4 +1,6 @@
 class FlipTimer {
+    static activeTimers = []
+
   constructor({ selector, start, store }) {
       this.selector = selector
       this.start = start
@@ -23,6 +25,8 @@ class FlipTimer {
 
           return `<li class="flip-item-${type}">${currentExpires}</li>`
       }).join('')
+
+      FlipTimer.activeTimers = [...FlipTimer.activeTimers, container];
 
       renderTimer(jQuery, start, store)
   }
@@ -78,10 +82,11 @@ class FlipTimer {
 }
 
 FlipTimer.unmountTimers = function () {
-  document.querySelectorAll('.flip-clock-container')
-      .forEach((container) => {
-          container.innerHTML = ''
-      })
+    FlipTimer.activeTimers.forEach((container) => {
+        container.innerHTML = ''
+        
+    })
+    FlipTimer.activeTimers = []
 }
 
 FlipTimer.addTimer = function (selector, start) {
