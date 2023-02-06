@@ -1,33 +1,7 @@
-TONCENTER_ENDPOINT_TESTNET = 'https://testnet.toncenter.com/api/v2/jsonRPC'
-TONCENTER_ENDPOINT = 'https://toncenter.com/api/v2/jsonRPC'
-
-TONCENTER_API_KEY_TESTNET = '3e9e1698b6eba0fef313e45648c3055d138195756c24523316fd8c5ff1abca17'
-TONCENTER_API_KEY = '438ba5a3cbaced01b8da5b9fabcd14cd2382d67a431125e2c5d4ace714519178'
-
-TON_ROOT_ADDRESS_TESTNET = 'EQDjPtM6QusgMgWfl9kMcG-EALslbTITnKcH8VZK1pnH3UZA'
-TON_ROOT_ADDRESS = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz'
-
-TONSCAN_ENDPOINT_TESTNET = 'https://testnet.tonscan.org'
-TONSCAN_ENDPOINT = 'https://tonscan.org'
-
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
 
 let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
-const localeDict = store.localeDict
-
-const browserLang = navigator.language || navigator.userLanguage
-const lang = (browserLang === 'ru-RU') || (browserLang === 'ru') || (browserLang === 'be-BY') || (browserLang === 'be') || (browserLang === 'kk-KZ') || (browserLang === 'kk') ? 'ru' : 'en';
-const locale = localeDict
-
-if (lang !== 'en') {
-    $('.start-input').placeholder = locale.start_input_placeholder
-    $('#navInput input').placeholder = locale.start_input_placeholder
-    document.querySelectorAll('[data-locale]').forEach((div) => {
-        const key = div.attributes['data-locale'].value
-        div.innerHTML = locale[key]
-    })
-}
 
 makePageVisible()
 
@@ -105,12 +79,12 @@ $('.badge__dns-mobile').addEventListener('click', () => {
 
 const validateDomain = (domain) => {
     if (domain.length < 4 || domain.length > 126) {
-        return locale.error_length
+        return store.localeDict.error_length
     }
 
     for (let i = 0; i < domain.length; i++) {
         if (domain.charAt(i) === '.') {
-            return locale.subdomains_not_allowed
+            return store.localeDict.subdomains_not_allowed
         }
         const char = domain.charCodeAt(i)
         const isHyphen = char === 45
@@ -120,7 +94,7 @@ const validateDomain = (domain) => {
             (char >= 97 && char <= 122) // '-' or 0-9 or a-z ;  abcdefghijklmnopqrstuvwxyz-0123456789
 
         if (!isValidChar) {
-            return locale.invalid_chars
+            return store.localeDict.invalid_chars
         }
     }
 }
@@ -758,7 +732,7 @@ const createEditBtn = (containerName) => {
     const container = $(containerName)
     container.innerHTML = ''
     const btn = document.createElement('a')
-    btn.innerText = locale.save
+    btn.innerText = store.localeDict.save
     btn.classList.add('edit-btn')
     container.appendChild(btn)
     return btn
@@ -768,13 +742,13 @@ const connectExtension = async (domain, dnsItem) => {
     const provider = window.ton
 
     if (!provider) {
-        alert(locale.install_extension)
+        alert(store.localeDict.install_extension)
         return
     }
 
 
     if (!window.tonProtocolVersion || window.tonProtocolVersion < 1) {
-        alert(locale.update_extension)
+        alert(store.localeDict.update_extension)
         return
     }
 
@@ -788,7 +762,7 @@ const connectExtension = async (domain, dnsItem) => {
     )
 
     if (account !== currentOwner) {
-        alert(locale.not_owner)
+        alert(store.localeDict.not_owner)
         return
     }
 
@@ -847,7 +821,7 @@ const connectExtension = async (domain, dnsItem) => {
                 ])
             }
 
-            $('#editWalletRow input').placeholder = locale.address
+            $('#editWalletRow input').placeholder = store.localeDict.address
 
             createEditBtn('#editWalletRow .edit__button').addEventListener(
                 'click',
@@ -863,14 +837,14 @@ const connectExtension = async (domain, dnsItem) => {
                                 : null
                         )
                     } else {
-                        alert(locale.invalid_address)
+                        alert(store.localeDict.invalid_address)
                     }
 
                     hideKeyboard()
                 }
             )
 
-            $('#editAdnlRow input').placeholder = locale.adnl
+            $('#editAdnlRow input').placeholder = store.localeDict.adnl
 
 
             createEditBtn('#editAdnlRow .edit__button').addEventListener('click', () => {
@@ -887,7 +861,7 @@ const connectExtension = async (domain, dnsItem) => {
                         }
                     } catch (e) {
                         console.error(e)
-                        alert(locale.invalid_address)
+                        alert(store.localeDict.invalid_address)
                         return
                     }
                 }
@@ -905,7 +879,7 @@ const connectExtension = async (domain, dnsItem) => {
                         record = TonWeb.dns.createStorageBagIdRecord(bagId);
                     } catch (e) {
                         console.error(e);
-                        alert(locale.invalid_address);
+                        alert(store.localeDict.invalid_address);
                         return;
                     }
                 }
@@ -913,7 +887,7 @@ const connectExtension = async (domain, dnsItem) => {
                 setTx(TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
             });
 
-            $('#editResolverRow input').placeholder = locale.address
+            $('#editResolverRow input').placeholder = store.localeDict.address
 
             createEditBtn('#editResolverRow .edit__button').addEventListener(
                 'click',
@@ -927,7 +901,7 @@ const connectExtension = async (domain, dnsItem) => {
                                 : null
                         )
                     } else {
-                        alert(locale.invalid_address)
+                        alert(store.localeDict.invalid_address)
                     }
                 }
             )
@@ -1100,7 +1074,7 @@ function renderBusyScreenSubmitButton() {
                 const invalidExtensionVersion = !window.tonProtocolVersion || window.tonProtocolVersion < 1
 
                 if (invalidExtensionVersion) {
-                    alert(locale.update_extension)
+                    alert(store.localeDict.update_extension)
                     return;
                 }
                 return;

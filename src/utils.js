@@ -160,15 +160,15 @@ const setScreen = (name) => {
     if (name === 'auctionDomainScreen') {
         $('#domainStatus').classList.remove('busy')
         $('#domainStatus').classList.add('free')
-        $('#domainStatus span').innerText = locale.auction
+        $('#domainStatus span').innerText = store.localeDict.auction
     } else if (name === 'freeDomainScreen') {
         $('#domainStatus').classList.remove('busy')
         $('#domainStatus').classList.add('free')
-        $('#domainStatus span').innerText = locale.free
+        $('#domainStatus span').innerText = store.localeDict.free
     } else if (name === 'busyDomainScreen') {
         $('#domainStatus').classList.add('busy')
         $('#domainStatus').classList.remove('free')
-        $('#domainStatus span').innerText = locale.busy
+        $('#domainStatus span').innerText = store.localeDict.busy
     }
 }
 
