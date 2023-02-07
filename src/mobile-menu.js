@@ -14,7 +14,7 @@
 
     function toggleThemeSwitcher() {
         const themeSwitcher = document.getElementById('mobile-theme-switch')
-        const currentTheme = getTheme()
+        const currentTheme = themeController.getTheme()
         if (currentTheme === 'light') {
             themeSwitcher.checked = false
             return
