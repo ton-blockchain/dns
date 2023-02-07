@@ -89,6 +89,7 @@
             <input enterkeyhint="search" type="text" placeholder="Enter a domain" class="suggestions__input"/>
         </div>
         <div class="nav__controls">
+            <button onclick="login()">Connect</button>
             <a id="aboutDnsLink" href="/about.html" target="_blank">
                 <button class="hover__button" id="aboutButton">
                     <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
@@ -115,6 +116,7 @@
 
 <div id="startScreen" class="start animate">
     <h1 data-locale="open_auction">Buy .ton domains</h1>
+    <div id="connect-wallet"></div>
     <p>
         <span data-locale="start_splash">Give crypto wallets, smart contracts or websites short readable names.</span>
         <a class="arrow__link" href="/about.html" target="_blank" data-locale="more_info">
@@ -560,12 +562,14 @@
 <script type="text/javascript" src="./src/libs/jquery.min-3.4.1.js"></script>
 <script type="text/javascript" src="./src/libs/lottie-player-1.6.2.js"></script>
 <script type="text/javascript" src="./src/libs/qr-code-styling-1.5.0.js"></script>
+<script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
 <script type="text/javascript" src="src/controllers/localeController.js"></script>
 <script type="text/javascript" src="./src/utils.js?5"></script>
 <script type="text/javascript" src="./src/libs/flip-clock.js?5"></script>
 <script type="text/javascript" src="./src/lottie.js?5"></script>
 <script type="text/javascript" src="./src/mobile-menu.js?5"></script>
 <script type="text/javascript" src="./src/libs/mask.js?5"></script>
+<script type="text/javascript" src="./src/controllers/tonConnectController.js"></script>
 <script type="text/javascript" src="./src/constants.js"></script>
 <script type="text/javascript" src="./src/index.js?5"></script>
 
