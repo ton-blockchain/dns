@@ -44,6 +44,7 @@ store.localeDict = null
 store.locale = null
 store.domainStatus = null
 store.isTestnet = window.location.href.indexOf('testnet=true') > -1
+store.wallet = null
 
 store.setStatus = function (status) {
 	this.domainStatus = status
@@ -67,4 +68,8 @@ store.setLocaleDict = function (dict) {
 
 store.setTheme = function (theme) {
 	this.theme = theme
+}
+
+store.setWallet = function (wallet) {
+	this.wallet = wallet
 }
