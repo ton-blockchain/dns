@@ -155,6 +155,15 @@ let currentDnsItem = null
 let previousBid = null
 const removeListeners = {}
 
+const FREE_DOMAIN_TYPE = 'free'
+const BUSY_DOMAIN_TYPE = 'busy'
+const AUCTION_DOMAIN_TYPE = 'auction'
+let domainType = null
+
+function isDomainFree(domainType){
+    return domainType === FREE_DOMAIN_TYPE
+}
+
 const clear = () => {
     clearInterval(updateIntervalId)
     clearInterval(auctionTimerIntervalId)
@@ -305,7 +314,7 @@ const setDomain = (domain) => {
 
     clearInterval(updateIntervalId)
     updateIntervalId = setInterval(() => loadDomain(), 10 * 1000)
-    loadDomain(true)
+    return loadDomain(true)
 }
 
 let currentDomainStatus = null
@@ -345,7 +354,9 @@ const onInput = (e) => {
             history.unshift(domain);
 
             setDomainToBrowserHistory(domain)
-            setDomain(domain)
+            setDomain(domain).then(() => {
+                analyticService.sendEvent({type: 'view_domain_info'})
+            })
             setHistoryToStorage(history.slice(0, 4))
             closeHistoryContainer(e.target)
         }
@@ -387,7 +398,9 @@ const processUrl = () => {
         if (error) {
             setScreen('startScreen')
         } else {
-            setDomain(domainFromUrl)
+            setDomain(domainFromUrl).then(() => {
+                analyticService.sendEvent({type: 'view_domain_info'})
+            })
         }
     } else {
         setScreen('startScreen')
@@ -421,6 +434,8 @@ function renderStatusLoading() {
 }
 
 const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
+    domainType = AUCTION_DOMAIN_TYPE
+
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
     const bestBidAmount = auctionInfo.maxBidAmount
     const bestBidAddress = auctionInfo.maxBidAddress.toString(
@@ -480,6 +495,8 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 }
 
 const renderFreeDomain = (domain) => {
+    domainType = FREE_DOMAIN_TYPE
+
     getCoinPrice().then((price) => {
         const salePrice = TonWeb.utils.fromNano(getMinPrice(domain))
 
@@ -503,6 +520,8 @@ const renderBusyDomain = (
     ownerAddress,
     lastFillUpTime
 ) => {
+    domainType = BUSY_DOMAIN_TYPE
+
     setAddress($('#busyOwnerAddress'), ownerAddress)
     const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
     const prevDate = $('#flip-clock-container').dataset.endDate
@@ -604,7 +623,9 @@ const renderSearchHistory = (node) => {
         }
 
         setDomainToBrowserHistory(domain)
-        setDomain(domain)
+        setDomain(domain).then(() => {
+            analyticService.sendEvent({type: 'view_domain_info'})
+        })
         closeHistoryContainer(node)
     }
 
@@ -742,6 +763,10 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 
     const renderSecondStep = () => {
+        isDomainFree(domainType)
+            ? analyticService.sendEvent({type: 'place_an_initial_bid'})
+            : analyticService.sendEvent({type: 'place_a_bid'})
+
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
 
@@ -858,7 +883,6 @@ const connectExtension = async (domain, dnsItem) => {
         alert(locale.update_extension)
         return
     }
-
 
     const accounts = await provider.send('ton_requestAccounts')
     const account = new TonWeb.Address(accounts[0]).toString(
@@ -1024,6 +1048,8 @@ const connectExtension = async (domain, dnsItem) => {
     $('#busyDomainScreen').classList.add('edit-expand')
     $('.main').classList.remove('edit-loading')
     $('.main').classList.add('edit-expand')
+
+    analyticService.sendEvent({type: 'edit_domain'})
 }
 
 $('#connectBtn').addEventListener('click', () => connectExtension(currentDomain, currentDnsItem))
