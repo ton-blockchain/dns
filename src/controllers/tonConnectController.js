@@ -1,20 +1,22 @@
+const connector = new TonConnectSDK.TonConnect();
+
+connector.restoreConnection();
+
+const button = document.getElementById('connect-wallet-button');
+
+const unsubscribe = connector.onStatusChange(((wallet) => {
+  console.log('wallet', wallet);
+  store.setWallet(wallet)
+  const content = store.wallet ? store.wallet.account.address : 'Connect wallet';
+  button.innerHTML = content;
+}), console.error)
+
 const login = async () => {
-  const connector = new TonConnectSDK.TonConnect();
-
-  connector.restoreConnection();
-
-  const unsubscribe = connector.onStatusChange(((wallet) => {
-    console.log('wallet', wallet);
-    store.setWallet(wallet)
-    const content = store.wallet ? store.wallet.account.address : 'Connect wallet';
-    button.innerHTML = content;
-  }), console.error)
 
   const walletsList = await connector.getWallets()
 
   console.log('connector', connector);
 
-  const button = document.getElementById('connect-wallet-button');
   const walletLogs = document.getElementById('wallet-logs');
 
   const wallet = walletsList[0];
@@ -42,6 +44,11 @@ const login = async () => {
   }
 
   console.log('store', store);
+}
+
+logout = async () => {
+  console.log('logout')
+  connector.disconnect();
 }
 
 const onWalletConnected = async () => {

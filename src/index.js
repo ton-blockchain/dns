@@ -1,6 +1,8 @@
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
 
+const walletController = new WalletController({store}) 
+
 let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
 
 makePageVisible()

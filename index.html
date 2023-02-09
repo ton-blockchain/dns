@@ -89,7 +89,7 @@
             <input enterkeyhint="search" type="text" placeholder="Enter a domain" class="suggestions__input"/>
         </div>
         <div class="nav__controls">
-            <button id="connect-wallet-button" onclick="login()">Connect</button>
+            <button id="connect-wallet-button"></button>
             <a id="aboutDnsLink" href="/about.html" target="_blank">
                 <button class="hover__button" id="aboutButton">
                     <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
@@ -103,7 +103,7 @@
             </button>
         </div>
         <div class="mobile">
-            <button id="connect-wallet-button" onclick="login()">Connect</button>
+            <button id="connect-wallet-button-mobile"></button>
             <button class="hover__button menu__controller" onclick="toggleMobileMenu()">
                 <svg class="icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.33281 8.13354C6.67007 8.13354 6.13281 8.6708 6.13281 9.33354C6.13281 9.99629 6.67007 10.5335 7.33281 10.5335H24.6657C25.3284 10.5335 25.8657 9.99629 25.8657 9.33354C25.8657 8.6708 25.3284 8.13354 24.6657 8.13354H7.33281Z" fill="currentColor" />
@@ -572,7 +572,8 @@
 <script type="text/javascript" src="./src/lottie.js?5"></script>
 <script type="text/javascript" src="./src/mobile-menu.js?5"></script>
 <script type="text/javascript" src="./src/libs/mask.js?5"></script>
-<script type="text/javascript" src="./src/controllers/tonConnectController.js"></script>
+<!-- <script type="text/javascript" src="./src/controllers/tonConnectController.js"></script> -->
+<script type="text/javascript" src="./src/controllers/walletController.js"></script>
 <script type="text/javascript" src="./src/constants.js"></script>
 <script type="text/javascript" src="./src/index.js?5"></script>
 </body>
