@@ -45,6 +45,7 @@ store.locale = null
 store.domainStatus = null
 store.isTestnet = window.location.href.indexOf('testnet=true') > -1
 store.wallet = null
+store.walletsList = null
 
 store.setStatus = function (status) {
 	this.domainStatus = status
@@ -72,4 +73,9 @@ store.setTheme = function (theme) {
 
 store.setWallet = function (wallet) {
 	this.wallet = wallet
+}
+
+store.setWalletsList = function ({walletsList, embeddedWallet}) {
+	this.walletsList = walletsList;
+	this.embeddedWallet = embeddedWallet;
 }
