@@ -1359,6 +1359,11 @@ p {
     background-size: contain;
 }
 
+.wallet__connect {
+    margin-right: 30px;
+    position: relative;
+}
+
 
 .wallet__modal {
     opacity: 0;
@@ -1424,8 +1429,14 @@ p {
     border: 1px solid var(--button-secondary-stroke);
 }
 
-.wallet__connect {
-    margin-right: 30px;
+.wallet__connect--secondary {
+    max-width: 161px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.wallet__connect--hidden {
+    display: none;
 }
 
 .wallet_modal--second__qr {
