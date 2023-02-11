@@ -12,6 +12,10 @@ class WalletController {
 			}
 		)
 
+		fetch('./src/config/wallets.json')
+			.then(response => response.json())
+			.then(data => this.walletConfig = data)
+
 		this.choosenWallet = null
 
 		this.connectButton = document.getElementById(CONNECT_WALLET_ID)
@@ -91,9 +95,24 @@ class WalletController {
 	renderLoginButton() {
 		const isConnected = !!this.store.wallet
 		const textContent = isMobile() ? 'Connect' : 'Connect wallet'
+		let truncasedAdress = null;
+		if (isConnected) { 
+			const rawAddress = this.store.wallet.account.address
+			const userFriendlyAddress = TonConnectSDK.toUserFriendlyAddress(rawAddress);
+			truncasedAdress = truncase(userFriendlyAddress, 4, 4)
+		}
 		const content = isConnected
-			? this.store.wallet.account.address
+			? truncasedAdress
 			: textContent
+
+		if (isConnected) {
+			this.connectButton.classList.add('wallet--secondary_button', 'wallet__connect--secondary')
+			this.connectButtonMobile.classList.add('wallet__connect--hidden')
+		} else {
+			this.connectButton.classList.remove('wallet--secondary_button', 'wallet__connect--secondary')
+			this.connectButtonMobile.classList.remove('wallet__connect--hidden')
+		}
+
 		const clickHandler = isConnected
 			? () => this.logout()
 			: (e) => this.toggleWalletModal(e)
@@ -134,12 +153,11 @@ class WalletController {
 	}
 
 	renderFirstStep = () => {
-		const modal = document.getElementById('wallet__modal--first__step')
 		const buttonContainer = document.getElementById(
 			'wallet__modal--buttons__container'
 		)
 
-		const wallets = WALLETS_CONFIG.map(this.renderWalletButton)
+		const wallets = this.walletConfig.map(this.renderWalletButton)
 
 		if (buttonContainer.children.length) {
 			return
@@ -181,8 +199,3 @@ class WalletController {
 const CONNECT_WALLET_ID = 'connect-wallet-button'
 const CONNECT_WALLET_MOBILE_ID = 'connect-wallet-button-mobile'
 
-const WALLETS_CONFIG = [
-	{
-		name: 'Tonkeeper',
-	},
-]

@@ -349,3 +349,7 @@ window.BROWSER = (function (agent) {
 function makePageVisible(){
     document.body.classList.remove('hidden')
 }
+
+function truncase(str, beginLength, endLength) {
+    return str.slice(0, beginLength) + '...' + str.slice(-endLength)
+}
