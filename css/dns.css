@@ -588,6 +588,10 @@ nav .container-inner.squizedPadding {
     gap: 4px;
 }
 
+#aboutDnsLink {
+    flex-shrink: 0;
+}
+
 .absolute-header {
     position: fixed;
     top: 0;
@@ -804,7 +808,7 @@ nav .container-inner {
     }
 
     .mobile {
-        display: block;
+        display: flex;
         margin-left: auto;
     }
 
@@ -1355,6 +1359,79 @@ p {
     background-size: contain;
 }
 
+
+.wallet__modal {
+    opacity: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    padding: 140px 0;
+    left: 50%;
+    box-sizing: border-box;
+    z-index: 4;
+    display: none;
+    height: 100%;
+}
+
+.wallet__modal--first__step, .wallet__modal--second__step {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 28px 32px;
+    background: var(--background-page);
+    border-radius: 24px;
+    transition: opacity var(--block--transition);
+    box-sizing: border-box;
+    width: 352px;
+}
+
+.wallet__modal--buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin: 24px 0;
+}
+
+.wallet__modal--footer {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    color: var(--text-tetriary);
+}
+
+.wallet__modal--link {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.wallet--secondary_button {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--button-secondary-stroke);
+}
+
+.wallet--secondary_button:hover {
+    background-color: transparent;
+    color: var(--accent-default);
+}
+
+.wallet--secondary_button:focus {
+    background-color: transparent;
+    color: var(--accent-default);
+    border: 1px solid var(--button-secondary-stroke);
+}
+
+.wallet__connect {
+    margin-right: 30px;
+}
+
+.wallet_modal--second__qr {
+    margin: 24px 0;
+}
+
 /* EDIT DOMAIN */
 #busyDomainScreen.edit-expand {
     max-width: 928px;
@@ -1447,6 +1524,35 @@ p {
         width: 100%;
         height: auto;
         z-index: 4;
+    }
+
+    .wallet__modal {
+        top: auto;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-height: 660px;
+        transform: none;
+        padding: 32px 24px 40px;
+        box-sizing: border-box;
+        background: var(--background-page);
+        border-radius: 24px 24px 0 0;
+        width: 100%;
+        height: auto;
+        z-index: 4;
+    }
+
+    .wallet__modal--first__step, .wallet__modal--second__step {
+        padding: 0;
+    }
+
+    .wallet__connect {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 24px;
+
+        padding: 6px 16px;
+        margin-right: 12px;
     }
 
     .bid__modal--backdrop {
