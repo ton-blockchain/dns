@@ -20,6 +20,7 @@ class WalletController {
 
 		this.connectButton = document.getElementById(CONNECT_WALLET_ID)
 		this.connectButtonMobile = document.getElementById(CONNECT_WALLET_MOBILE_ID)
+		this.menuConnectButton = document.getElementById(MENU_CONNECT_WALLET_ID)
 
 		this.renderLoginButton()
 		this.connector = new TonConnectSDK.TonConnect()
@@ -29,6 +30,7 @@ class WalletController {
 
 			if (wallet) {
 				this.handleWalletModalClose()
+				toggle('.mobile-menu__wallet-menu__container', true)
 			}
 		}, console.error)
 
@@ -39,6 +41,8 @@ class WalletController {
 		this.renderLoginButton()
 
 		await this.getWalletsList()
+
+		this.renderMenuButtons()
 
 		if (
 			isMobile() &&
@@ -88,9 +92,23 @@ class WalletController {
 		}
 	}
 
-	logout() {
+	logout(e) {
+		e.preventDefault()
+		e.stopPropagation()
+
 		this.connector.disconnect()
+		this.handleTooltipClose()
+
+		closeMenu()
+
+		toggle('.mobile-menu__wallet-menu__container', false)
+
+		document.getElementsByName('connect-wallet-tooltip-logout').forEach((el) => {
+			el.removeEventListener('click', this.boundLogout)
+		})
 	}
+
+	boundLogout = this.logout.bind(this)
 
 	renderLoginButton() {
 		const isConnected = !!this.store.wallet
@@ -105,23 +123,64 @@ class WalletController {
 			? truncasedAdress
 			: textContent
 
+		const mobileContent = isConnected
+			? truncasedAdress 
+			: 'Connect wallet'
+		
+
 		if (isConnected) {
 			this.connectButton.classList.add('wallet--secondary_button', 'wallet__connect--secondary')
 			this.connectButtonMobile.classList.add('wallet__connect--hidden')
+			this.menuConnectButton.classList.add('wallet--secondary_button', 'wallet__connect--menu')
 		} else {
 			this.connectButton.classList.remove('wallet--secondary_button', 'wallet__connect--secondary')
 			this.connectButtonMobile.classList.remove('wallet__connect--hidden')
+			this.menuConnectButton.classList.remove('wallet--secondary_button', 'wallet__connect--menu')
 		}
 
 		const clickHandler = isConnected
-			? () => this.logout()
+    ? (e) => this.renderTooltip(e)
+    : (e) => this.toggleWalletModal(e)
+
+		const mobileClickHandler = isConnected
+			? () => {}
 			: (e) => this.toggleWalletModal(e)
 
-		this.connectButton.innerHTML = content
+		const contentContainer = this.connectButton.querySelector('#connect-wallet-button-content')
+
+		contentContainer.innerHTML = content
 		this.connectButton.onclick = clickHandler
 
 		this.connectButtonMobile.innerHTML = content
 		this.connectButtonMobile.onclick = clickHandler
+
+		this.menuConnectButton.innerHTML = mobileContent
+		this.menuConnectButton.onclick = mobileClickHandler
+	}
+
+	renderMenuButtons() {
+		const menuButtons = document.getElementsByClassName('connect-wallet-tooltip-logout')
+		Array.from(menuButtons).forEach((el) => {
+			el.addEventListener('click', this.boundLogout)
+		})
+	}
+
+	renderTooltip = (e) => {
+		const backdrop = $('.tooltip--backdrop')
+
+		e.preventDefault()
+		e.stopPropagation()
+
+		toggle('#connect-wallet-tooltip', true)
+		toggle('.tooltip--backdrop', true)
+	
+		backdrop.addEventListener('click', this.handleTooltipClose)
+	}
+	
+	handleTooltipClose = (e) => {
+		toggle('#connect-wallet-tooltip', false)
+		toggle('.tooltip--backdrop', false, 'flex', true, 200)
+		
 	}
 
 	handleWalletButtonClick = (e) => {
@@ -146,10 +205,14 @@ class WalletController {
 			return
 		}
 
+		const backdrop = $('.bid__modal--backdrop')
+
 		toggle('.wallet__modal--first__step', false)
 		toggle('.wallet__modal--second__step', false)
 		toggle('.wallet__modal', false)
 		toggle('.bid__modal--backdrop', false, 'flex', true, 200)
+
+		backdrop.removeEventListener('click', this.handleWalletModalClose)
 	}
 
 	renderFirstStep = () => {
@@ -183,6 +246,7 @@ class WalletController {
 		e.preventDefault()
 		e.stopPropagation()
 		scrollToTop()
+		closeMenu()
 		backdrop.addEventListener('click', this.handleWalletModalClose)
 
 		toggle('.bid__modal--backdrop', true)
@@ -198,4 +262,6 @@ class WalletController {
 
 const CONNECT_WALLET_ID = 'connect-wallet-button'
 const CONNECT_WALLET_MOBILE_ID = 'connect-wallet-button-mobile'
+const MENU_CONNECT_WALLET_ID = 'mobile-menu-connect-wallet-button'
+
 
