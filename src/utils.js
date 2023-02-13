@@ -192,13 +192,14 @@ const pushModalInfoToBrowserHistory = (step) => {
     )
 }
 
-const renderQr = (name, url) => {
+const renderQr = (name, url, settings) => {
+    const {size = 288, margin = 10} = settings
     const qrCode = new QRCodeStyling({
-        width: 288,
-        height: 288,
+        width: size,
+        height: size,
         data: url,
         image: './assets/qr_logo.svg',
-        margin: 10,
+        margin: margin,
         qrOptions: { typeNumber: '0', mode: 'Byte', errorCorrectionLevel: 'Q' },
         imageOptions: { hideBackgroundDots: true, imageSize: 0.3, margin: 4 },
         dotsOptions: { type: 'rounded', color: '#000000' },
