@@ -237,7 +237,7 @@ class WalletController {
 		toggle('.wallet__modal--first__step', false)
 		toggle('.wallet__modal--second__step', true)
 
-		renderQr('#connect-wallet-qr-link', universalLink)
+		renderQr('#connect-wallet-qr-link', universalLink, {size: 320, margin: 0})
 
 		// const backButton = document.getElementById('back-to-wallets-list-button')
 		// backButton.onclick = (e) => this.toggleWalletModal(e)

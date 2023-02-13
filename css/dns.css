@@ -1505,7 +1505,7 @@ p {
 }
 
 .wallet_modal--second__qr {
-    margin: 24px 0;
+    margin-top: 24px;
 }
 
 /* EDIT DOMAIN */
