@@ -1,5 +1,6 @@
 const WALLETS_CONFIG = [
   {
-    "name": "Tonkeeper"
+    name: 'Tonkeeper',
+    icon: '../assets/tonkeeper.svg',
   }
 ]

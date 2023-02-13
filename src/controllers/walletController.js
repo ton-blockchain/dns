@@ -14,7 +14,7 @@ class WalletController {
 
 		this.walletConfig = WALLETS_CONFIG
 
-		this.choosenWallet = this.walletConfig[0].name
+		this.choosenWallet = this.walletConfig[0]
 
 		this.connectButton = document.getElementById(CONNECT_WALLET_ID)
 		this.connectButtonMobile = document.getElementById(CONNECT_WALLET_MOBILE_ID)
@@ -73,7 +73,7 @@ class WalletController {
 	async login() {
 		const walletsList = this.walletsList.walletsList
 		const currentWallet = walletsList.find(
-			(wallet) => wallet.name === this.choosenWallet
+			(wallet) => wallet.name === this.choosenWallet.name
 		)
 
 		const tonkeeperConnectionSource = {
@@ -112,17 +112,21 @@ class WalletController {
 		const isConnected = !!this.store.wallet
 		const textContent = isMobile() ? 'Connect' : 'Connect wallet'
 		let truncasedAdress = null;
+
 		if (isConnected) { 
 			const rawAddress = this.store.wallet.account.address
 			const userFriendlyAddress = TonConnectSDK.toUserFriendlyAddress(rawAddress);
 			truncasedAdress = truncase(userFriendlyAddress, 4, 4)
 		}
+
+		const addressWithIcon = `<span style="background-image: url(${this.choosenWallet.icon}); width: 24px; height: 24px"></span> ${truncasedAdress}`
+
 		const content = isConnected
-			? truncasedAdress
+			? addressWithIcon
 			: textContent
 
 		const mobileContent = isConnected
-			? truncasedAdress 
+			? addressWithIcon 
 			: 'Connect wallet'
 		
 
@@ -192,7 +196,7 @@ class WalletController {
 		const button = document.createElement('button')
 		button.classList.add('btn', 'wallet--secondary_button')
 		button.innerHTML = wallet.name
-		this.choosenWallet = wallet.name
+		this.choosenWallet = wallet
 		button.onclick = (e) => this.handleWalletButtonClick(e)
 
 		return button

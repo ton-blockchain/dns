@@ -1381,6 +1381,11 @@ p {
     position: relative;
 }
 
+#connect-wallet-button-content {
+    display: flex;
+    gap: 4px;
+}
+
 .wallet__connect:hover {
     background: var(--accent-hover);
     color: #fff;
@@ -1485,9 +1490,6 @@ p {
     border: 1px solid var(--button-secondary-stroke);
 }
 
-.wallet__connect--secondary {
-    max-width: 161px;
-}
 
 .wallet__connect--menu:hover {
     background-color: transparent;
