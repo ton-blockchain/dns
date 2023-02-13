@@ -1352,6 +1352,23 @@ p {
 
 }
 
+.tooltip--backdrop {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: transparent;
+    overflow-y: scroll;
+    z-index: 3;
+    transition: opacity var(--block--transition);
+}
+
 .webwallet__icon {
     width: 24px;
     height: 24px;
@@ -1364,6 +1381,45 @@ p {
     position: relative;
 }
 
+.wallet__connect:hover {
+    background: var(--accent-hover);
+    color: #fff;
+}
+
+.wallet__connect:has(.wallet__tooltip:hover) {
+    background-color: var(--button--background);
+}
+
+.wallet__tooltip {
+    display: none;
+    box-sizing: border-box;
+    width: 180px;
+    background: var(--background-page);
+    position: absolute;
+    z-index: 4;
+    top: 65px;
+    border-radius: 16px;
+    transition: opacity var(--block--transition);
+    filter: drop-shadow(0px 4px 24px rgba(0, 0, 0, 0.08)) drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.08));
+    padding: 24px;
+    cursor: default;
+  }
+  
+.wallet__tooltip__row {
+    color: var(--text-primary);
+
+    width: 100%;
+
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+
+    cursor: pointer;
+}
+
+.wallet__tooltip__row svg {
+    color: var(--accent-default);
+}
 
 .wallet__modal {
     opacity: 0;
@@ -1431,8 +1487,15 @@ p {
 
 .wallet__connect--secondary {
     max-width: 161px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+}
+
+.wallet__connect--menu:hover {
+    background-color: transparent;
+    color: var(--text-primary);
+}
+
+.wallet__connect--secondary:has(.wallet__tooltip:hover) {
+    background-color: transparent;
 }
 
 .wallet__connect--hidden {
@@ -1990,11 +2053,10 @@ p {
     color: var(--text-tetriary);
 }
 
-.footer .separator {
+.separator {
     width: 100%;
     height: 1px;
     background-color: var(--separator-alpha--footer);
-
 }
 
 .footer .copyrights {
@@ -2245,7 +2307,8 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     animation-name: open-menu;
     animation-duration: var(--menu-animation-duration);
     animation-fill-mode: forwards;
-    display: block;
+    display: flex;
+    flex-direction: column;
     opacity: 1;
 }
 
@@ -2278,9 +2341,60 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     justify-content: space-between;
 }
 
-.mobile-menu-navigation {
-    padding: 0 24px;
+.mobile-menu-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 58px;
+}
+
+.mobile-menu__top {
+    display: flex;
+    flex-direction: column;
+
+    padding: 0 16px;
     padding-top: 16px;
+}
+
+.mobile-menu__wallet-menu__container {
+    display: none;
+    margin-bottom: 16px;
+    
+    flex-direction: column;
+}
+
+.mobile-menu__wallet-menu__container .separator {
+    margin-top: 16px;
+}
+
+.mobile-menu__wallet-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    color: var(--text-primary);
+}
+
+.mobile-menu__wallet-menu__row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+}
+
+.mobile-menu__wallet-button__container {
+    padding: 0 16px;
+}
+
+.mobile-menu__wallet-button {
+
+}
+
+.mobile-menu-navigation {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -2364,12 +2478,6 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     transform: translate3d(22px, 2px, 0);
 }
 
-@media screen and (max-width: 414px) {
-    .mobile-menu-header, .mobile-menu-navigation {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-}
 
 /* COMMON */
 .hover__button {
