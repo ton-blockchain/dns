@@ -12,11 +12,9 @@ class WalletController {
 			}
 		)
 
-		fetch('./src/config/wallets.json')
-			.then(response => response.json())
-			.then(data => this.walletConfig = data)
+		this.walletConfig = WALLETS_CONFIG
 
-		this.choosenWallet = null
+		this.choosenWallet = this.walletConfig[0].name
 
 		this.connectButton = document.getElementById(CONNECT_WALLET_ID)
 		this.connectButtonMobile = document.getElementById(CONNECT_WALLET_MOBILE_ID)
@@ -140,11 +138,11 @@ class WalletController {
 
 		const clickHandler = isConnected
     ? (e) => this.renderTooltip(e)
-    : (e) => this.toggleWalletModal(e)
+    : (e) => this.handleConnectWalletButtonClick(e)
 
 		const mobileClickHandler = isConnected
 			? () => {}
-			: (e) => this.toggleWalletModal(e)
+			: (e) => this.handleConnectWalletButtonClick(e)
 
 		const contentContainer = this.connectButton.querySelector('#connect-wallet-button-content')
 
@@ -237,8 +235,19 @@ class WalletController {
 
 		renderQr('#connect-wallet-qr-link', universalLink)
 
-		const backButton = document.getElementById('back-to-wallets-list-button')
-		backButton.onclick = (e) => this.toggleWalletModal(e)
+		// const backButton = document.getElementById('back-to-wallets-list-button')
+		// backButton.onclick = (e) => this.toggleWalletModal(e)
+	}
+
+	handleConnectWalletButtonClick = (e) => {
+		e.preventDefault()
+		e.stopPropagation()
+
+		if (isMobile()) {
+			this.login()
+		} else {
+			this.toggleWalletModal(e)
+		}
 	}
 
 	toggleWalletModal = (e) => {
@@ -251,12 +260,13 @@ class WalletController {
 
 		toggle('.bid__modal--backdrop', true)
 		toggle('.wallet__modal', true)
-		toggle('.wallet__modal--first__step', true)
+		toggle('.wallet__modal--first__step', false)
 		toggle('.wallet__modal--second__step', false)
 
 		$('body').classList.add('scroll__disabled')
 
-		this.renderFirstStep()
+		// this.renderFirstStep()
+		this.login()
 	}
 }
 
