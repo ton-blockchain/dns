@@ -110,7 +110,9 @@ class WalletController {
 
 	renderLoginButton() {
 		const isConnected = !!this.store.wallet
-		const textContent = isMobile() ? 'Connect' : 'Connect wallet'
+		const textContent = isMobile() 
+			? this.store.localeDict.wallet_connect_button_mobile 
+			: this.store.localeDict.wallet_connect_button
 		let truncasedAdress = null;
 
 		if (isConnected) { 
@@ -127,7 +129,7 @@ class WalletController {
 
 		const mobileContent = isConnected
 			? addressWithIcon 
-			: 'Connect wallet'
+			: this.store.localeDict.wallet_connect_button
 		
 
 		if (isConnected) {
