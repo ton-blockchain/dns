@@ -33,6 +33,10 @@ class WalletController {
 		}, console.error)
 
 		this.connector.restoreConnection().then(() => this.init())
+
+		window.addEventListener('resize', () => {
+			this.renderLoginButton();
+		})
 	}
 
 	async init() {
@@ -279,5 +283,3 @@ class WalletController {
 const CONNECT_WALLET_ID = 'connect-wallet-button'
 const CONNECT_WALLET_MOBILE_ID = 'connect-wallet-button-mobile'
 const MENU_CONNECT_WALLET_ID = 'mobile-menu-connect-wallet-button'
-
-

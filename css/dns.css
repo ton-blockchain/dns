@@ -730,6 +730,10 @@ nav .container-inner {
     display: none;
 }
 
+#aboutButton {
+    gap: 4px;
+}
+
 @media screen and (max-width: 568px) {
     nav .container-inner {
         padding: 18px 24px;
@@ -738,6 +742,7 @@ nav .container-inner {
     nav .container-inner.squizedPadding {
         padding: 16px 24px;
         align-items: center;
+        justify-content: space-between;
     }
 
     .badge-icon {
@@ -1377,7 +1382,7 @@ p {
 }
 
 .wallet__connect {
-    margin-right: 30px;
+    margin-right: 16px;
     position: relative;
 }
 
@@ -1449,7 +1454,7 @@ p {
     border-radius: 24px;
     transition: opacity var(--block--transition);
     box-sizing: border-box;
-    width: 352px;
+    width: 382px;
 }
 
 .wallet__modal--buttons {
@@ -1506,6 +1511,12 @@ p {
 
 .wallet_modal--second__qr {
     margin-top: 24px;
+    border-radius: 16px;
+    height: 320px;
+    width: 320px;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--background-content);
 }
 
 /* EDIT DOMAIN */
@@ -2124,6 +2135,10 @@ p {
         font-weight: 500;
         font-size: 12px;
         line-height: 20px;
+    }
+
+    .nav-input {
+        display: none !important;
     }
 }
 
