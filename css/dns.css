@@ -43,6 +43,15 @@ body.hidden{
     opacity: 0;
 }
 
+.app__container {
+    min-height: 100vh;
+    min-height: var(--app-height);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .btn {
     display: inline-flex;
     background: var(--button--background);
@@ -585,7 +594,7 @@ nav .container-inner.squizedPadding {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    gap: 4px;
+    gap: 12px;
 }
 
 #aboutDnsLink {
@@ -616,7 +625,7 @@ nav .container-inner {
     width: 100%;
     max-width: 1120px;
     box-sizing: border-box;
-    padding: 22px 16px;
+    padding: 16px;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
@@ -732,11 +741,13 @@ nav .container-inner {
 
 #aboutButton {
     gap: 4px;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 @media screen and (max-width: 568px) {
     nav .container-inner {
-        padding: 18px 24px;
+        padding: 16px 24px;
     }
 
     nav .container-inner.squizedPadding {
@@ -842,7 +853,7 @@ nav .container-inner {
 
 @media screen and (max-width: 414px) {
     nav .container-inner {
-        padding: 18px 16px;
+        padding: 16px;
     }
 
     nav .container-inner.squizedPadding {
@@ -1382,7 +1393,6 @@ p {
 }
 
 .wallet__connect {
-    margin-right: 16px;
     position: relative;
 }
 
@@ -2403,13 +2413,10 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
 
 .mobile-menu__wallet-menu__container {
     display: none;
-    margin-bottom: 16px;
+    margin-top: 16px;
     
     flex-direction: column;
-}
-
-.mobile-menu__wallet-menu__container .separator {
-    margin-top: 16px;
+    gap: 16px;
 }
 
 .mobile-menu__wallet-menu {

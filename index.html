@@ -56,6 +56,7 @@
     themeController.init();
 </script>
 <body class="hidden">
+<div class="app__container">
 <nav>
     <div class="testnet-badge">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" class="icon testnet__icon">
@@ -89,6 +90,13 @@
             <input enterkeyhint="search" type="text" placeholder="Enter a domain" class="suggestions__input"/>
         </div>
         <div class="nav__controls">
+            <a id="aboutDnsLink" href="/about.html" target="_blank">
+                <button class="hover__button" id="aboutButton">
+                    <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                    <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                    <span class="bold" data-locale="about">About</span>
+                </button>
+            </a>
             <button id="connect-wallet-button" class="btn wallet__connect">
                 <span id="connect-wallet-button-content"></span>
                 <div id="connect-wallet-tooltip" class="wallet__tooltip">
@@ -105,13 +113,6 @@
                     </div>
                 </div>
             </button>
-            <a id="aboutDnsLink" href="/about.html" target="_blank">
-                <button class="hover__button" id="aboutButton">
-                    <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
-                    <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
-                    <span class="bold" data-locale="about">About</span>
-                </button>
-            </a>
             <button class="hover__button" id="lottie-button" onclick="themeController.toggle()">
                 <lottie-player id="sunLottie" src="./assets/lottie/sun_moon.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
                 <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
@@ -359,22 +360,6 @@
     </div>
     <div class="mobile-menu-body">
         <div class="mobile-menu__top">
-            <div class="mobile-menu__wallet-menu__container">
-                <div class="mobile-menu__wallet-menu">
-                    <div class="mobile-menu__wallet-menu__row connect-wallet-tooltip-logout" >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m9 9 3.678 3L9 15M12 12H4" stroke="currentColor" stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round" />
-                            <path
-                              d="M12 4h3.772c1.528 0 2.095.127 2.657.428.493.263.88.65 1.143 1.143.3.562.428 1.129.428 2.657v7.544c0 1.528-.127 2.095-.428 2.657-.263.493-.65.88-1.143 1.143-.562.3-1.129.428-2.657.428H12"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        </svg>
-                        <span data-locale="wallet_logout">Log out</span>
-                    </div>
-                </div>
-                <div class="separator"></div>
-            </div>
             <div class="mobile-menu-navigation">
                 <a class="mobile-menu-row" href="/about.html" target="_blank">
                     <div class="mobile-menu-left">
@@ -398,6 +383,22 @@
                             <input type="checkbox" id="mobile-theme-switch" onclick="themeController.toggle()" checked="">
                             <i></i>
                         </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-menu__wallet-menu__container">
+                <div class="separator"></div>
+                <div class="mobile-menu__wallet-menu">
+                    <div class="mobile-menu__wallet-menu__row connect-wallet-tooltip-logout" >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m9 9 3.678 3L9 15M12 12H4" stroke="currentColor" stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round" />
+                            <path
+                              d="M12 4h3.772c1.528 0 2.095.127 2.657.428.493.263.88.65 1.143 1.143.3.562.428 1.129.428 2.657v7.544c0 1.528-.127 2.095-.428 2.657-.263.493-.65.88-1.143 1.143-.562.3-1.129.428-2.657.428H12"
+                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                        <span data-locale="wallet_logout">Log out</span>
                     </div>
                 </div>
             </div>
@@ -636,6 +637,7 @@
         </div>
     </div>
 </footer>
+</div>
 <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
 <script type="text/javascript" src="./src/libs/tonweb-0.0.59.js"></script>
 <script type="text/javascript" src="./src/libs/jquery.min-3.4.1.js"></script>
