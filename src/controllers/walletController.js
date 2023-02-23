@@ -88,7 +88,7 @@ class WalletController {
 		const unversalLink = await this.connector.connect(tonkeeperConnectionSource)
 
 		if (isMobile()) {
-			window.open(unversalLink, '_self', 'noreferrer noopener')
+			window.open(unversalLink, '_blank')
 		} else {
 			this.renderSecondStep(unversalLink)
 		}
@@ -243,7 +243,7 @@ class WalletController {
 		toggle('.wallet__modal--first__step', false)
 		toggle('.wallet__modal--second__step', true)
 
-		renderQr('#connect-wallet-qr-link', universalLink, {size: 320, margin: 0})
+		renderQr('#connect-wallet-qr-link', universalLink, {size: 288, margin: 0})
 
 		// const backButton = document.getElementById('back-to-wallets-list-button')
 		// backButton.onclick = (e) => this.toggleWalletModal(e)

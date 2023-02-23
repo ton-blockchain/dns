@@ -1403,19 +1403,41 @@ p {
 .wallet__tooltip {
     display: none;
     box-sizing: border-box;
-    width: 180px;
-    background: var(--background-page);
+    background: var(--background-suggestions);
     position: absolute;
     z-index: 4;
     top: 65px;
     border-radius: 16px;
     transition: opacity var(--block--transition);
     filter: drop-shadow(0px 4px 24px rgba(0, 0, 0, 0.08)) drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.08));
-    padding: 24px;
+    padding: 18px 24px 18px 20px;
     cursor: default;
-  }
+}
+
+.wallet__tooltip::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0px;
+    height: 0px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--background-suggestions);
+}
   
 .wallet__tooltip__row {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: stretch;
+    font-size: 16px;
+    gap: 0 8px;
+    padding: 6px;
+
     color: var(--text-primary);
 
     width: 100%;
@@ -1425,6 +1447,10 @@ p {
     line-height: 24px;
 
     cursor: pointer;
+}
+
+.wallet__tooltip__row:hover {
+    color: var(--accent-default);  
 }
 
 .wallet__tooltip__row svg {
@@ -1454,7 +1480,7 @@ p {
     border-radius: 24px;
     transition: opacity var(--block--transition);
     box-sizing: border-box;
-    width: 382px;
+    width: 352px;
 }
 
 .wallet__modal--buttons {
@@ -1485,13 +1511,13 @@ p {
 }
 
 .wallet--secondary_button:hover {
-    background-color: transparent;
-    color: var(--accent-default);
+    background-color: var(--wallet-button-secondary-stroke);
+    color: var(--text-primary);
 }
 
 .wallet--secondary_button:focus {
-    background-color: transparent;
-    color: var(--accent-default);
+    background-color: var(--wallet-button-secondary-stroke);
+    color: var(--text-primary);
     border: 1px solid var(--button-secondary-stroke);
 }
 
@@ -1502,7 +1528,8 @@ p {
 }
 
 .wallet__connect--secondary:has(.wallet__tooltip:hover) {
-    background-color: transparent;
+    background-color: var(--wallet-button-secondary-stroke);
+    color: var(--text-primary);
 }
 
 .wallet__connect--hidden {
@@ -1512,8 +1539,8 @@ p {
 .wallet_modal--second__qr {
     margin-top: 24px;
     border-radius: 16px;
-    height: 320px;
-    width: 320px;
+    height: 288px;
+    width: 288px;
     position: relative;
     overflow: hidden;
     background-color: var(--background-content);
@@ -2363,7 +2390,7 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-bottom: 58px;
+    margin-bottom: 24px;
 }
 
 .mobile-menu__top {
