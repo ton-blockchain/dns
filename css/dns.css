@@ -2441,10 +2441,6 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     padding: 0 16px;
 }
 
-.mobile-menu__wallet-button {
-
-}
-
 .mobile-menu-navigation {
     display: flex;
     flex-direction: column;
@@ -2474,6 +2470,12 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
 
 .mobile-lottie-container {
     width: 24px;
+}
+
+@media screen and (max-width: 414px) {
+    .mobile-menu-header {
+        padding: 16px;
+    }
 }
 
 .form-switch {
