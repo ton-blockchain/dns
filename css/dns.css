@@ -624,6 +624,7 @@ nav .container-inner {
     align-items: center;
     width: 100%;
     max-width: 1120px;
+    min-height: 68px;
     box-sizing: border-box;
     padding: 16px;
     margin: 0 auto;
