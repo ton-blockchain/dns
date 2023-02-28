@@ -360,7 +360,27 @@
     </div>
     <div class="mobile-menu-body">
         <div class="mobile-menu__top">
+            <div class="mobile-menu-left mobile-menu__wallet-button" id="mobile-menu-connect-wallet-button">Connect wallet</div>
+
+            <div class="mobile-menu__wallet-menu__container">
+                <div class="separator"></div>
+                <div class="mobile-menu__wallet-menu">
+                    <div class="mobile-menu__wallet-menu__row connect-wallet-tooltip-logout" >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m9 9 3.678 3L9 15M12 12H4" stroke="currentColor" stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round" />
+                            <path
+                              d="M12 4h3.772c1.528 0 2.095.127 2.657.428.493.263.88.65 1.143 1.143.3.562.428 1.129.428 2.657v7.544c0 1.528-.127 2.095-.428 2.657-.263.493-.65.88-1.143 1.143-.562.3-1.129.428-2.657.428H12"
+                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                        <span data-locale="wallet_logout">Log out</span>
+                    </div>
+                </div>
+            </div>
+            
             <div class="mobile-menu-navigation">
+                <div class="separator"></div>
                 <a class="mobile-menu-row" href="/about.html" target="_blank">
                     <div class="mobile-menu-left">
                     <span class="mobile-lottie-container">
@@ -386,26 +406,6 @@
                     </div>
                 </div>
             </div>
-            <div class="mobile-menu__wallet-menu__container">
-                <div class="separator"></div>
-                <div class="mobile-menu__wallet-menu">
-                    <div class="mobile-menu__wallet-menu__row connect-wallet-tooltip-logout" >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m9 9 3.678 3L9 15M12 12H4" stroke="currentColor" stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round" />
-                            <path
-                              d="M12 4h3.772c1.528 0 2.095.127 2.657.428.493.263.88.65 1.143 1.143.3.562.428 1.129.428 2.657v7.544c0 1.528-.127 2.095-.428 2.657-.263.493-.65.88-1.143 1.143-.562.3-1.129.428-2.657.428H12"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        </svg>
-                        <span data-locale="wallet_logout">Log out</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mobile-menu__wallet-button__container">
-            <button class="btn mobile-menu__wallet-button" id="mobile-menu-connect-wallet-button">Connect wallet</button>
         </div>
     </div>
 </div>

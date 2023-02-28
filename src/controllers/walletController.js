@@ -96,6 +96,8 @@ class WalletController {
 		} else {
 			this.renderSecondStep(unversalLink)
 		}
+
+		this.connectButton.blur()
 	}
 
 	logout(e) {
@@ -122,7 +124,6 @@ class WalletController {
 		if (this.loading) {
 			this.connectButton.classList.add('wallet--secondary_button', 'wallet__connect--secondary')
 			this.connectButtonMobile.classList.add('wallet__connect--hidden')
-			this.menuConnectButton.classList.add('wallet--secondary_button', 'wallet__connect--menu')
 
 			contentContainer.classList.add('loading--animation')
 			this.connectButtonMobile.classList.add('loading--animation')
@@ -149,36 +150,37 @@ class WalletController {
 			this.toggleLoadingButton()
 		}
 
-		const textContent = isMobile() 
-			? `${WALLET_ICON} <span id="connect-wallet-button-mobile-content">${this.store.localeDict.wallet_connect_button_mobile}</span>` 
-			: this.store.localeDict.wallet_connect_button
+		const desktopText = this.store.localeDict.wallet_connect_button
+		const mobileText = this.store.localeDict.wallet_connect_button_mobile
 		let truncasedAdress = null;
 
 		if (isConnected) { 
 			const rawAddress = this.store.wallet.account.address
 			const userFriendlyAddress = TonConnectSDK.toUserFriendlyAddress(rawAddress);
-			truncasedAdress = truncase(userFriendlyAddress, 4, 4)
+
+			truncasedAdress = isMobile() ? truncase(userFriendlyAddress, 10, 10) : truncase(userFriendlyAddress, 4, 4)
 		}
 
 		const addressWithIcon = `<span style="background-image: url(${this.choosenWallet.icon}); width: 24px; height: 24px"></span> ${truncasedAdress}`
 
 		const content = isConnected
 			? addressWithIcon
-			: textContent
+			: desktopText
 
 		const mobileContent = isConnected
 			? addressWithIcon 
-			: this.store.localeDict.wallet_connect_button
-		
+			: `<span style="width: 20px; height: 20px">${WALLET_ICON}</span <span id="connect-wallet-button-mobile-content">${mobileText}</span>` 
+
+		const mobileMenuContent = isConnected
+			? addressWithIcon 
+			: `<span style="width: 24px; height: 24px">${WALLET_ICON}</span <span id="connect-wallet-button-mobile-content">${desktopText}</span>` 
 
 		if (isConnected) {
 			this.connectButton.classList.add('wallet--secondary_button', 'wallet__connect--secondary')
 			this.connectButtonMobile.classList.add('wallet__connect--hidden')
-			this.menuConnectButton.classList.add('wallet--secondary_button', 'wallet__connect--menu')
 		} else {
 			this.connectButton.classList.remove('wallet--secondary_button', 'wallet__connect--secondary')
 			this.connectButtonMobile.classList.remove('wallet__connect--hidden')
-			this.menuConnectButton.classList.remove('wallet--secondary_button', 'wallet__connect--menu')
 		}
 
 		const clickHandler = isConnected
@@ -194,10 +196,10 @@ class WalletController {
 		contentContainer.innerHTML = content
 		this.connectButton.onclick = clickHandler
 
-		this.connectButtonMobile.innerHTML = content
+		this.connectButtonMobile.innerHTML = mobileContent
 		this.connectButtonMobile.onclick = clickHandler
 
-		this.menuConnectButton.innerHTML = mobileContent
+		this.menuConnectButton.innerHTML = mobileMenuContent
 		this.menuConnectButton.onclick = mobileClickHandler
 	}
 
@@ -330,7 +332,7 @@ const LOADING_ICON = `
 </svg>
 `
 const WALLET_ICON = `
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path clip-rule="evenodd"
     d="M13.977 4.167H6.023c-1.273 0-1.746.106-2.214.356a2.29 2.29 0 0 0-.952.953c-.25.468-.357.94-.357 2.214v4.62c0 1.274.106 1.746.357 2.214.22.411.541.733.952.953.468.25.94.356 2.214.356h7.954c1.273 0 1.746-.106 2.214-.356.41-.22.733-.542.952-.953.25-.468.357-.94.357-2.214V7.69c0-1.274-.106-1.746-.357-2.214a2.29 2.29 0 0 0-.952-.953c-.468-.25-.94-.356-2.214-.356Z"
     stroke="currentColor" stroke-width="1.5" />

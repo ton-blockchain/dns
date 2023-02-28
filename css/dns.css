@@ -1404,6 +1404,7 @@ p {
     display: flex;
     gap: 4px;
     padding-right: 4px;
+    align-items: center;
 }
 
 #connect-wallet-button-mobile-content {
@@ -2409,21 +2410,27 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    margin-bottom: 24px;
 }
 
 .mobile-menu__top {
     display: flex;
     flex-direction: column;
+    gap: 16px;
 
     padding: 0 16px;
     padding-top: 16px;
 }
 
+.mobile-menu__wallet-button {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+
+    color: var(--accent-default)
+}
+
 .mobile-menu__wallet-menu__container {
     display: none;
-    margin-top: 16px;
     
     flex-direction: column;
     gap: 16px;
@@ -2445,10 +2452,6 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     justify-content: flex-start;
     align-items: center;
     gap: 12px;
-}
-
-.mobile-menu__wallet-button__container {
-    padding: 0 16px;
 }
 
 .mobile-menu-navigation {
