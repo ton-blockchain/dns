@@ -1396,11 +1396,18 @@ p {
 .wallet__connect {
     position: relative;
     min-width: 160px;
+    gap: 4px;
+    padding: 12px 20px;
 }
 
 #connect-wallet-button-content {
     display: flex;
     gap: 4px;
+    padding-right: 4px;
+}
+
+#connect-wallet-button-mobile-content {
+    padding-right: 2px;
 }
 
 .wallet__connect:hover {
@@ -1677,7 +1684,7 @@ p {
         font-size: 14px;
         line-height: 24px;
 
-        padding: 6px 16px;
+        padding: 6px 14px;
         margin-right: 12px;
         min-width: 112px;
     }

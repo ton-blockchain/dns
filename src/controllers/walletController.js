@@ -145,10 +145,12 @@ class WalletController {
 		if (this.loading) {
 			this.toggleLoadingButton()
 			return
+		} else {
+			this.toggleLoadingButton()
 		}
 
 		const textContent = isMobile() 
-			? this.store.localeDict.wallet_connect_button_mobile 
+			? `${WALLET_ICON} <span id="connect-wallet-button-mobile-content">${this.store.localeDict.wallet_connect_button_mobile}</span>` 
 			: this.store.localeDict.wallet_connect_button
 		let truncasedAdress = null;
 
@@ -325,5 +327,15 @@ const LOADING_ICON = `
 	<path
 		d="M10 2.5c0-.46.374-.837.832-.791a8.334 8.334 0 0 1 7.46 7.46c.046.457-.331.831-.792.831-.46 0-.828-.374-.885-.83a6.665 6.665 0 0 0-5.783-5.784C10.374 3.328 10 2.96 10 2.5Z"
 		fill="var(--accent-default)" />
+</svg>
+`
+const WALLET_ICON = `
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path clip-rule="evenodd"
+    d="M13.977 4.167H6.023c-1.273 0-1.746.106-2.214.356a2.29 2.29 0 0 0-.952.953c-.25.468-.357.94-.357 2.214v4.62c0 1.274.106 1.746.357 2.214.22.411.541.733.952.953.468.25.94.356 2.214.356h7.954c1.273 0 1.746-.106 2.214-.356.41-.22.733-.542.952-.953.25-.468.357-.94.357-2.214V7.69c0-1.274-.106-1.746-.357-2.214a2.29 2.29 0 0 0-.952-.953c-.468-.25-.94-.356-2.214-.356Z"
+    stroke="currentColor" stroke-width="1.5" />
+  <path
+    d="M15.359 10H17.5v2.5H15.36c-.316 0-.62-.132-.843-.366a1.281 1.281 0 0 1-.349-.884v0c0-.332.126-.65.349-.884.223-.234.527-.366.843-.366v0ZM5 6.667h2.342"
+    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
 `
