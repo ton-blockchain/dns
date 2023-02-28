@@ -1395,6 +1395,7 @@ p {
 
 .wallet__connect {
     position: relative;
+    min-width: 160px;
 }
 
 #connect-wallet-button-content {
@@ -1678,6 +1679,7 @@ p {
 
         padding: 6px 16px;
         margin-right: 12px;
+        min-width: 112px;
     }
 
     .bid__modal--backdrop {
@@ -2724,5 +2726,34 @@ a.edit-btn:hover {
     to {
         opacity: 1;
         transform: scale3d(1, 1, 1);
+    }
+}
+
+
+.loading--animation {
+    /* background-image: url("assets/loading_icon.svg"); */
+}
+
+.loading--animation svg {
+    width: 24px;
+    height: 24px;
+
+    animation: rotating 1s linear infinite;
+}
+
+@media screen and (max-width: 568px) { 
+    .loading--animation svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
+@keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
     }
 }

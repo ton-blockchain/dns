@@ -12,6 +12,8 @@ class WalletController {
 			}
 		)
 
+		this.loading = true;
+
 		this.walletConfig = WALLETS_CONFIG
 
 		this.choosenWallet = this.walletConfig[0]
@@ -32,7 +34,9 @@ class WalletController {
 			}
 		}, console.error)
 
-		this.connector.restoreConnection().then(() => this.init())
+		this.connector.restoreConnection()
+			.then(() => this.loading = false)
+			.then(() => this.init())
 
 		window.addEventListener('resize', () => {
 			this.renderLoginButton();
@@ -112,8 +116,37 @@ class WalletController {
 
 	boundLogout = this.logout.bind(this)
 
+	toggleLoadingButton() {
+		const contentContainer = this.connectButton.querySelector('#connect-wallet-button-content')
+
+		if (this.loading) {
+			this.connectButton.classList.add('wallet--secondary_button', 'wallet__connect--secondary')
+			this.connectButtonMobile.classList.add('wallet__connect--hidden')
+			this.menuConnectButton.classList.add('wallet--secondary_button', 'wallet__connect--menu')
+
+			contentContainer.classList.add('loading--animation')
+			this.connectButtonMobile.classList.add('loading--animation')
+			this.menuConnectButton.classList.add('loading--animation')
+
+			contentContainer.innerHTML = LOADING_ICON
+			this.connectButtonMobile.innerHTML = LOADING_ICON
+			this.menuConnectButton.innerHTML = LOADING_ICON
+
+		} else {
+			contentContainer.classList.remove('loading--animation')
+			this.connectButtonMobile.classList.remove('loading--animation')
+			this.menuConnectButton.classList.remove('loading--animation')
+		}
+	}
+
 	renderLoginButton() {
 		const isConnected = !!this.store.wallet
+
+		if (this.loading) {
+			this.toggleLoadingButton()
+			return
+		}
+
 		const textContent = isMobile() 
 			? this.store.localeDict.wallet_connect_button_mobile 
 			: this.store.localeDict.wallet_connect_button
@@ -283,3 +316,14 @@ class WalletController {
 const CONNECT_WALLET_ID = 'connect-wallet-button'
 const CONNECT_WALLET_MOBILE_ID = 'connect-wallet-button-mobile'
 const MENU_CONNECT_WALLET_ID = 'mobile-menu-connect-wallet-button'
+
+const LOADING_ICON = `
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path
+		d="M18.334 10a8.333 8.333 0 1 1-16.667 0 8.333 8.333 0 0 1 16.667 0Zm-15 0a6.667 6.667 0 1 0 13.333 0 6.667 6.667 0 0 0-13.333 0Z"
+		fill="var(--separator-alpha)" />
+	<path
+		d="M10 2.5c0-.46.374-.837.832-.791a8.334 8.334 0 0 1 7.46 7.46c.046.457-.331.831-.792.831-.46 0-.828-.374-.885-.83a6.665 6.665 0 0 0-5.783-5.784C10.374 3.328 10 2.96 10 2.5Z"
+		fill="var(--accent-default)" />
+</svg>
+`
