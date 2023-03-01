@@ -27,7 +27,7 @@ html[data-theme='light'] {
 
     --background-content-hover: rgba(118, 152, 187, 0.06);
     --background-suggestions: #FFFFFF;
-    --background-segment: #F2F5F8;
+    --background-segment: rgba(192, 209, 217, 0.48);
     --background-fixed-header: rgba(255, 255, 255, 0.56);
 
     --card-border-default: #DDE3E6;

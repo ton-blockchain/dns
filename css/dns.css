@@ -2101,7 +2101,7 @@ p {
 
     padding-left: 40px;
     padding-right: 40px;
-    padding-bottom: 40px;
+    padding-bottom: 24px;
 
     display: flex;
     flex-direction: column;
