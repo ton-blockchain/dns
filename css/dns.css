@@ -43,6 +43,15 @@ body.hidden{
     opacity: 0;
 }
 
+.app__container {
+    min-height: 100vh;
+    min-height: var(--app-height);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .btn {
     display: inline-flex;
     background: var(--button--background);
