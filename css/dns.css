@@ -1411,6 +1411,16 @@ p {
     padding-right: 2px;
 }
 
+#back-to-wallets-list-button {
+    margin-top: 24px;
+}
+
+.wallet--wallet_button img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
 .wallet__connect:hover {
     background: var(--accent-hover);
     color: #fff;

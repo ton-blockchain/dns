@@ -16,7 +16,8 @@ class WalletController {
 
 		this.walletConfig = WALLETS_CONFIG
 
-		this.choosenWallet = this.walletConfig[0]
+		this.choosenWallet = null
+		this.currentWallet = null
 
 		this.connectButton = document.getElementById(CONNECT_WALLET_ID)
 		this.connectButtonMobile = document.getElementById(CONNECT_WALLET_MOBILE_ID)
@@ -24,13 +25,23 @@ class WalletController {
 
 		this.renderLoginButton()
 		this.connector = new TonConnectSDK.TonConnect()
-		this.unsubscribe = this.connector.onStatusChange((wallet) => {
-			this.store.dispatch('setWallet', wallet)
+		this.unsubscribe = this.connector.onStatusChange(async(walletInfo) => {
+			this.store.dispatch('setWallet', walletInfo)
 			this.renderLoginButton()
 
-			if (wallet) {
+			if (walletInfo) {
 				this.handleWalletModalClose()
 				toggle('.mobile-menu__wallet-menu__container', true)
+			}
+
+			if (walletInfo && !this.currentWallet) {
+				await this.getWalletsList()
+
+				const walletName = walletInfo.device.appName
+				const currentWallet = this.walletConfig.find((wallet) => wallet.name === walletName)
+				this.currentWallet = currentWallet
+
+				this.renderLoginButton()
 			}
 		}, console.error)
 
@@ -52,11 +63,11 @@ class WalletController {
 
 		if (
 			isMobile() &&
-			this.walletsList.embeddedWallet &&
+			this.wallets.embeddedWallet &&
 			!this.connector.connected
 		) {
 			this.connector.connect({
-				jsBridgeKey: this.walletsList.embeddedWallet.jsBridgeKey,
+				jsBridgeKey: this.wallets.embeddedWallet.jsBridgeKey,
 			})
 			return
 		}
@@ -70,7 +81,12 @@ class WalletController {
 			.find((wallet) => wallet.embedded)
 
 		this.store.dispatch('setWalletsList', { walletsList, embeddedWallet })
-		this.walletsList = { walletsList, embeddedWallet }
+
+		const supportedWallets = walletsList.filter((wallet) => 
+			wallet.universalLink !== undefined 
+			&& this.walletConfig.find((config) => config.name === wallet.name)
+		)
+		this.wallets = { walletsList: supportedWallets, embeddedWallet }
 
 		return {
 			walletsList,
@@ -79,14 +95,9 @@ class WalletController {
 	}
 
 	async login() {
-		const walletsList = this.walletsList.walletsList
-		const currentWallet = walletsList.find(
-			(wallet) => wallet.name === this.choosenWallet.name
-		)
-
 		const tonkeeperConnectionSource = {
-			universalLink: currentWallet.universalLink,
-			bridgeUrl: currentWallet.bridgeUrl,
+			universalLink: this.choosenWallet.universalLink,
+			bridgeUrl: this.choosenWallet.bridgeUrl,
 		}
 
 		const unversalLink = await this.connector.connect(tonkeeperConnectionSource)
@@ -161,7 +172,8 @@ class WalletController {
 			truncasedAdress = isMobile() ? truncase(userFriendlyAddress, 10, 10) : truncase(userFriendlyAddress, 4, 4)
 		}
 
-		const addressWithIcon = `<span style="background-image: url(${this.choosenWallet.icon}); width: 24px; height: 24px"></span> ${truncasedAdress}`
+		const addressWithIcon = `
+			<span style="background-image: url(${this.currentWallet?.icon}); width: 24px; height: 24px; background-size: cover;"></span> ${truncasedAdress}`
 
 		const content = isConnected
 			? addressWithIcon
@@ -228,19 +240,20 @@ class WalletController {
 		
 	}
 
-	handleWalletButtonClick = (e) => {
+	handleWalletButtonClick = (e, wallet) => {
 		e.preventDefault()
 		e.stopPropagation()
 
+		this.choosenWallet = wallet
 		this.login()
 	}
 
 	renderWalletButton = (wallet) => {
 		const button = document.createElement('button')
-		button.classList.add('btn', 'wallet--secondary_button')
-		button.innerHTML = wallet.name
-		this.choosenWallet = wallet
-		button.onclick = (e) => this.handleWalletButtonClick(e)
+		const icon = this.walletConfig.find((w) => w.name === wallet.name).icon
+		button.classList.add('btn', 'wallet--secondary_button', 'wallet--wallet_button')
+		button.innerHTML = `<img src="${icon}" />${wallet.name}`
+		button.onclick = (e) => this.handleWalletButtonClick(e, wallet)
 
 		return button
 	}
@@ -258,14 +271,19 @@ class WalletController {
 		toggle('.bid__modal--backdrop', false, 'flex', true, 200)
 
 		backdrop.removeEventListener('click', this.handleWalletModalClose)
+
+		this.choosenWallet = null
 	}
 
 	renderFirstStep = () => {
+		toggle('.wallet__modal--first__step', true)
+		toggle('.wallet__modal--second__step', false)
+
 		const buttonContainer = document.getElementById(
 			'wallet__modal--buttons__container'
 		)
 
-		const wallets = this.walletConfig.map(this.renderWalletButton)
+		const wallets = this.wallets.walletsList.map(this.renderWalletButton)
 
 		if (buttonContainer.children.length) {
 			return
@@ -282,22 +300,19 @@ class WalletController {
 
 		renderQr('#connect-wallet-qr-link', universalLink, {size: 288, margin: 0})
 
-		// const backButton = document.getElementById('back-to-wallets-list-button')
-		// backButton.onclick = (e) => this.toggleWalletModal(e)
+		const backButton = document.getElementById('back-to-wallets-list-button')
+		backButton.onclick = (e) => this.toggleWalletModal(e)
 	}
 
 	handleConnectWalletButtonClick = (e) => {
 		e.preventDefault()
 		e.stopPropagation()
 
-		if (isMobile()) {
-			this.login()
-		} else {
-			this.toggleWalletModal(e)
-		}
+		this.toggleWalletModal(e)
 	}
 
 	toggleWalletModal = (e) => {
+		this.choosenWallet = null
 		const backdrop = $('.bid__modal--backdrop')
 		e.preventDefault()
 		e.stopPropagation()
@@ -312,7 +327,12 @@ class WalletController {
 
 		$('body').classList.add('scroll__disabled')
 
-		// this.renderFirstStep()
+		if (this.wallets.walletsList.length > 1) { 
+			this.renderFirstStep()
+			return 
+		} 
+
+		this.choosenWallet = this.wallets.walletsList[0]
 		this.login()
 	}
 }
