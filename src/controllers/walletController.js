@@ -122,9 +122,25 @@ class WalletController {
 
 		toggle('.mobile-menu__wallet-menu__container', false)
 
+		this.currentWallet = null
+		this.choosenWallet = null
+
 		document.getElementsByName('connect-wallet-tooltip-logout').forEach((el) => {
 			el.removeEventListener('click', this.boundLogout)
 		})
+	}
+
+	async isLoggedIn() {
+		let isLoggedIn = null
+
+		await until(() => this.loading !== true)
+			.then(() => isLoggedIn = !!this.currentWallet)
+
+		return isLoggedIn
+	}
+
+	getCurrentWallet() {
+		return this.currentWallet
 	}
 
 	boundLogout = this.logout.bind(this)
@@ -271,6 +287,8 @@ class WalletController {
 		toggle('.bid__modal--backdrop', false, 'flex', true, 200)
 
 		backdrop.removeEventListener('click', this.handleWalletModalClose)
+
+		$('body').classList.remove('scroll__disabled')
 
 		this.choosenWallet = null
 	}

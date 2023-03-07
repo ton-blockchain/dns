@@ -86,6 +86,7 @@ const INDEX_LOCALES = {
 		sent_to: 'Адрес',
 		message: 'Комментарий',
 		place_with_extension: 'Открыть кошелек',
+		place_bid: 'Сделать ставку',
 		copy_link: 'Скопировать ссылку для оплаты',
 		copy_link_copied: 'Ссылка скопирована!',
 		place_with_app: 'Сделать ставку через Tonkeeper',

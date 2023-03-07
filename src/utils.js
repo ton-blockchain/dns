@@ -357,3 +357,12 @@ function makePageVisible(){
 function truncase(str, beginLength, endLength) {
     return str.slice(0, beginLength) + '...' + str.slice(-endLength)
 }
+
+function until(conditionFunction) {
+    const poll = resolve => {
+      if(conditionFunction()) resolve();
+      else setTimeout(_ => poll(resolve), 400);
+    }
+  
+    return new Promise(poll);
+  }

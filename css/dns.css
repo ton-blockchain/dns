@@ -1132,11 +1132,11 @@ p {
     text-align: center;
     word-break: break-all;
 }
-.bid__modal--first__step, .bid__modal--second__step {
+.bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation {
     z-index: 4;
 }
 
-.bid__modal--first__step, .bid__modal--second__step, #otherPaymentsMethodsContainer {
+.bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation, #otherPaymentsMethodsContainer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -1632,7 +1632,7 @@ p {
     }
 
 
-    .bid__modal--first__step, .bid__modal--second__step, #otherPaymentsMethodsContainer {
+    .bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation, #otherPaymentsMethodsContainer {
         padding: 0;
     }
 
@@ -1778,7 +1778,7 @@ p {
         max-width: 148px;
     }
 
-    .bid__modal--first__step, .bid__modal--second__step, #otherPaymentsMethodsContainer {
+    .bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation, #otherPaymentsMethodsContainer {
         width: 100%;
     }
 }

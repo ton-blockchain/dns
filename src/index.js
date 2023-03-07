@@ -556,6 +556,8 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const error = $(".bid__input--error")
     const backdrop = $('.bid__modal--backdrop')
     const showOtherPaymentMethods = $('#otherPaymentsMethods')
+    const currentWalletLabel = $('#bidPrice--current__wallet')
+    const paymentConfirmationButton = $('#payment__confirmation--button')
 
     const mask = IMask(bidModalInput, {
         mask: Number,
@@ -605,6 +607,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', false)
+        toggle('.bid__modal--payment__confirmation', false)
         toggle('.bid__modal', false)
         toggle('.bid__modal--backdrop', false, 'flex', true, 200)
         $('#otherPaymentsMethodsContainer').classList.remove('show')
@@ -612,8 +615,9 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         bidModalInput.removeEventListener('input', handleBidInput)
         backdrop.removeEventListener('click', handleModalClose)
-        submitStepButton.removeEventListener('click', renderSecondStep)
-        submitStepButton.removeEventListener('click', renderSecondStep)
+        submitStepButton.removeEventListener('click', checkIfLoggedIn)
+        submitStepButton.removeEventListener('click', checkIfLoggedIn)
+        paymentConfirmationButton.removeEventListener('click', handlePaymentConfirmation)
         $('body').classList.remove('scroll__disabled')
     }
 
@@ -627,6 +631,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal', true)
         toggle('.bid__modal--first__step', true)
         toggle('.bid__modal--second__step', false)
+        toggle('.bid__modal--payment__confirmation', false)
         $('body').classList.add('scroll__disabled')
         pushModalInfoToBrowserHistory('bid__modal')
         renderFirstStep()
@@ -646,18 +651,47 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         bidModalInput.addEventListener('keypress', (e) => {
             if (e.key === "Enter" && !submitStepButton.getAttribute('disabled')) {
-                renderSecondStep()
+                checkIfLoggedIn()
                 hideKeyboard();
             }
         })
-        submitStepButton.addEventListener('click', renderSecondStep)
+
+        submitStepButton.addEventListener('click', checkIfLoggedIn)
         submitPriceLabel.innerText = formatNumber(localPrice)
         renderConvertedTonPrice(convertedPriceSlot, localPrice);
 
         bidModalInput.addEventListener('input', handleBidInput)
     }
 
+    const checkIfLoggedIn = async () => {
+        const isLoggedIn = await walletController.isLoggedIn()
+
+        if (isLoggedIn) {
+            renderPaymentConfirmation()
+        } else {
+            renderSecondStep()
+        }
+
+    }
+
+    const renderPaymentConfirmation = () => {
+        updateBidModalPaymentData()
+        toggle('.bid__modal--payment__confirmation', true)
+        toggle('.bid__modal--first__step', false)
+
+        currentWalletLabel.innerText = walletController.getCurrentWallet().name
+
+        setAddress($('#freeBuyAddress'), bidAddress)
+
+        paymentConfirmationButton.addEventListener('click', handlePaymentConfirmation)
+    }
+
+    const handlePaymentConfirmation = () => {
+        alert('Payment confirmation')
+    }
+
     const renderSecondStep = () => {
+        updateBidModalPaymentData()
         isDomainFree(domainType)
             ? analyticService.sendEvent({type: 'place_an_initial_bid'})
             : analyticService.sendEvent({type: 'place_a_bid'})
@@ -672,11 +706,15 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 
     // update bid modal payemnt data
-    $('#domainName--bid__modal--payment').innerText = domain + '.ton'
-    $('#freeComment').innerText = domain
-    $('#freeComment').dataset.name = domain
+    const updateBidModalPaymentData = () => {
+        $('#domainName--bid__modal--payment').innerText = domain + '.ton'
+        $('#freeComment').innerText = domain
+        $('#freeComment').dataset.name = domain
 
-    $('#bidPrice').innerText = formatNumber(localPrice, false)
+        $('#bidPrice').innerText = formatNumber(localPrice, false)
+        $('#bidPrice-confirmation').innerText = formatNumber(localPrice, false)
+    }
+    
     const isExtensionInstalled = !isMobile() && window.ton
     const buyUrl = 'ton://transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
 
