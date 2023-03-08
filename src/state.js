@@ -71,11 +71,3 @@ store.setTheme = function (theme) {
 	this.theme = theme
 }
 
-store.setWallet = function (wallet) {
-	this.wallet = wallet
-}
-
-store.setWalletsList = function ({walletsList, embeddedWallet}) {
-	this.walletsList = walletsList;
-	this.embeddedWallet = embeddedWallet;
-}

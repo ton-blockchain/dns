@@ -1,16 +1,6 @@
 class WalletController {
 	constructor(props) {
 		this.store = props.store
-		this.store.subscribe(this, 'setWallet', (wallet) =>
-			this.store.setWallet(wallet)
-		)
-		this.store.subscribe(
-			this,
-			'setWalletsList',
-			({ walletsList, embeddedWallet }) => {
-				this.store.setWalletsList({ walletsList, embeddedWallet })
-			}
-		)
 
 		this.loading = true;
 
@@ -26,7 +16,6 @@ class WalletController {
 		this.renderLoginButton()
 		this.connector = new TonConnectSDK.TonConnect()
 		this.unsubscribe = this.connector.onStatusChange(async(walletInfo) => {
-			this.store.dispatch('setWallet', walletInfo)
 			this.renderLoginButton()
 
 			if (walletInfo) {
@@ -39,7 +28,7 @@ class WalletController {
 
 				const walletName = walletInfo.device.appName
 				const currentWallet = this.walletConfig.find((wallet) => wallet.name === walletName)
-				this.currentWallet = currentWallet
+				this.currentWallet = { ...currentWallet, ...walletInfo }
 
 				this.renderLoginButton()
 			}
@@ -79,8 +68,6 @@ class WalletController {
 		const embeddedWallet = walletsList
 			.filter(TonConnectSDK.isWalletInfoInjected)
 			.find((wallet) => wallet.embedded)
-
-		this.store.dispatch('setWalletsList', { walletsList, embeddedWallet })
 
 		const supportedWallets = walletsList.filter((wallet) => 
 			wallet.universalLink !== undefined 
@@ -168,7 +155,7 @@ class WalletController {
 	}
 
 	renderLoginButton() {
-		const isConnected = !!this.store.wallet
+		const isConnected = !!this.currentWallet
 
 		if (this.loading) {
 			this.toggleLoadingButton()
@@ -182,7 +169,7 @@ class WalletController {
 		let truncasedAdress = null;
 
 		if (isConnected) { 
-			const rawAddress = this.store.wallet.account.address
+			const rawAddress = this.currentWallet.account.address
 			const userFriendlyAddress = TonConnectSDK.toUserFriendlyAddress(rawAddress);
 
 			truncasedAdress = isMobile() ? truncase(userFriendlyAddress, 10, 10) : truncase(userFriendlyAddress, 4, 4)
