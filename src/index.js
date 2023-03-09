@@ -3,7 +3,8 @@ SEC_IN_ONE_MONTH = 2592000
 
 let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
 
-const walletController = new WalletController({store}) 
+const walletController = new WalletController({store})
+const testnetController = new TestnetController() 
 
 makePageVisible()
 

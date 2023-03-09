@@ -21,12 +21,14 @@ class WalletController {
 		this.unsubscribe = this.connector.onStatusChange(async(walletInfo) => {
 			this.renderLoginButton()
 
-			if (walletInfo) {
-				this.handleWalletModalClose()
-				toggle('.mobile-menu__wallet-menu__container', true)
+			if (!walletInfo) {
+				return
 			}
 
-			if (walletInfo && !this.currentWallet) {
+			this.handleWalletModalClose()
+			toggle('.mobile-menu__wallet-menu__container', true)
+
+			if (!this.currentWallet) {
 				await this.getWalletsList()
 
 				const walletName = walletInfo.device.appName
@@ -41,6 +43,8 @@ class WalletController {
 				const currentWallet = this.wallets.walletsList.find((wallet) => wallet.name === walletName)
 				this.currentWallet = { ...this.currentWallet, ...currentWallet}
 			}
+
+			testnetController.update()
 		}, console.error)
 
 		this.connector.restoreConnection()
@@ -133,6 +137,10 @@ class WalletController {
 			.then(() => isLoggedIn = !!this.connector.connected)
 
 		return isLoggedIn
+	}
+
+	async isTestnet() {
+		return this.currentWallet.walletInfo.account.chain === CHAIN.TESTNET
 	}
 
 	async createTransaction(address, amount, message) {
@@ -299,7 +307,6 @@ class WalletController {
 		e.preventDefault()
 		e.stopPropagation()
 
-		console.log('wallet', wallet)
 		this.choosenWallet = wallet
 		this.login()
 	}
