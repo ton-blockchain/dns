@@ -1,3 +1,6 @@
+const UserRejectsError = TonConnectSDK.UserRejectsError;
+const WalletInfoInjected = TonConnectSDK.WalletInfoInjected;
+
 class WalletController {
 	constructor(props) {
 		this.store = props.store
@@ -28,9 +31,15 @@ class WalletController {
 
 				const walletName = walletInfo.device.appName
 				const currentWallet = this.walletConfig.find((wallet) => wallet.name === walletName)
-				this.currentWallet = { ...currentWallet, ...walletInfo }
+				this.currentWallet = { ...currentWallet, walletInfo: { ...walletInfo } }
 
 				this.renderLoginButton()
+			}
+
+			if (this.wallets) {
+				const walletName = walletInfo.device.appName
+				const currentWallet = this.wallets.walletsList.find((wallet) => wallet.name === walletName)
+				this.currentWallet = { ...this.currentWallet, ...currentWallet}
 			}
 		}, console.error)
 
@@ -87,12 +96,12 @@ class WalletController {
 			bridgeUrl: this.choosenWallet.bridgeUrl,
 		}
 
-		const unversalLink = await this.connector.connect(tonkeeperConnectionSource)
+		const universalLink = await this.connector.connect(tonkeeperConnectionSource)
 
 		if (isMobile()) {
-			window.open(unversalLink, '_blank')
+			openLink(addReturnStrategy(universalLink, 'back'), '_blank')
 		} else {
-			this.renderSecondStep(unversalLink)
+			this.renderSecondStep(universalLink)
 		}
 
 		this.connectButton.blur()
@@ -121,9 +130,44 @@ class WalletController {
 		let isLoggedIn = null
 
 		await until(() => this.loading !== true)
-			.then(() => isLoggedIn = !!this.currentWallet)
+			.then(() => isLoggedIn = !!this.connector.connected)
 
 		return isLoggedIn
+	}
+
+	async createTransaction(address, amount, message) {
+		const rawAddress = getRawAddress(address)
+		const encodedMessage = await getPayload(message)
+
+		const transaction = {
+			validUntil: Date.now() + 1000000,
+			messages: [
+				{
+					address: rawAddress,
+					amount: String(Number(amount) * 1000000000),
+					payload: encodedMessage,
+				},
+			],
+		}
+
+		return transaction
+	}
+
+	async sendTransaction(transaction) {
+		try {
+			this.transactionLoading = true
+
+			const result = await this.connector.sendTransaction(transaction)
+				.then(() => this.transactionLoading = false);
+
+			alert('Transaction was sent successfully');
+		} catch (e) {
+			if (e instanceof UserRejectsError) {
+					alert('You rejected the transaction. Please confirm it to send to the blockchain');
+			} else {
+					alert(e);
+			}
+		}
 	}
 
 	getCurrentWallet() {
@@ -154,7 +198,7 @@ class WalletController {
 		}
 	}
 
-	renderLoginButton() {
+	async renderLoginButton() {
 		const isConnected = !!this.currentWallet
 
 		if (this.loading) {
@@ -169,8 +213,8 @@ class WalletController {
 		let truncasedAdress = null;
 
 		if (isConnected) { 
-			const rawAddress = this.currentWallet.account.address
-			const userFriendlyAddress = TonConnectSDK.toUserFriendlyAddress(rawAddress);
+			const { address, chain} = this.currentWallet.walletInfo.account
+			const userFriendlyAddress = this.getUserFriendlyAddress(address, chain);
 
 			truncasedAdress = isMobile() ? truncase(userFriendlyAddress, 10, 10) : truncase(userFriendlyAddress, 4, 4)
 		}
@@ -218,6 +262,14 @@ class WalletController {
 		this.menuConnectButton.onclick = mobileClickHandler
 	}
 
+	getUserFriendlyAddress(address, chain) {
+		if (!address) {
+			return '';
+		}
+
+		return TonConnectSDK.toUserFriendlyAddress(address, chain === CHAIN.TESTNET);
+	}
+
 	renderMenuButtons() {
 		const menuButtons = document.getElementsByClassName('connect-wallet-tooltip-logout')
 		Array.from(menuButtons).forEach((el) => {
@@ -247,6 +299,7 @@ class WalletController {
 		e.preventDefault()
 		e.stopPropagation()
 
+		console.log('wallet', wallet)
 		this.choosenWallet = wallet
 		this.login()
 	}

@@ -598,7 +598,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const handleModalClose = (e) => {
         localPrice = price;
 
-        if (!e.target.classList.contains('bid__modal--backdrop')) {
+        if (e && !e.target.classList.contains('bid__modal--backdrop')) {
             return;
         }
 
@@ -686,8 +686,14 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         paymentConfirmationButton.addEventListener('click', handlePaymentConfirmation)
     }
 
-    const handlePaymentConfirmation = () => {
-        alert('Payment confirmation')
+    const handlePaymentConfirmation = async () => {
+        if ('universalLink' in walletController.currentWallet && !walletController.currentWallet.embedded && isMobile()) {
+            openLink(addReturnStrategy(walletController.currentWallet.universalLink, 'back'), '_blank');
+        }
+        
+        const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
+
+        await walletController.sendTransaction(transaction).then(() => handleModalClose())
     }
 
     const renderSecondStep = () => {

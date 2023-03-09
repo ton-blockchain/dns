@@ -366,3 +366,26 @@ function until(conditionFunction) {
   
     return new Promise(poll);
   }
+
+function getRawAddress(address) {
+    return new TonWeb.Address(address).toString(false, true, true, true)
+}
+
+async function getPayload(string) {
+    let a = new TonWeb.boc.Cell();
+    a.bits.writeUint(0, 32);
+    a.bits.writeString(string);
+    let payload = TonWeb.utils.bytesToBase64(await a.toBoc());
+
+    return payload
+}
+
+function openLink(href, target = '_self') {
+	window.open(href, target, 'noreferrer noopener');
+}
+
+function addReturnStrategy(url, returnStrategy) {
+	const link = new URL(url);
+	link.searchParams.append('ret', returnStrategy);
+	return link.toString();
+}

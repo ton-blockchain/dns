@@ -2749,11 +2749,6 @@ a.edit-btn:hover {
     }
 }
 
-
-.loading--animation {
-    /* background-image: url("assets/loading_icon.svg"); */
-}
-
 .loading--animation svg {
     width: 24px;
     height: 24px;
