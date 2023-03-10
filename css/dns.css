@@ -1132,11 +1132,18 @@ p {
     text-align: center;
     word-break: break-all;
 }
-.bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation {
+.bid__modal--first__step, 
+.bid__modal--second__step, 
+.bid__modal--payment__confirmation, 
+.bid__modal--payment__confirmation--qr {
     z-index: 4;
 }
 
-.bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation, #otherPaymentsMethodsContainer {
+.bid__modal--first__step, 
+.bid__modal--second__step,
+.bid__modal--payment__confirmation, 
+.bid__modal--payment__confirmation--qr, 
+#otherPaymentsMethodsContainer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -1632,7 +1639,11 @@ p {
     }
 
 
-    .bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation, #otherPaymentsMethodsContainer {
+    .bid__modal--first__step, 
+    .bid__modal--second__step, 
+    .bid__modal--payment__confirmation, 
+    .bid__modal--payment__confirmation--qr, 
+    #otherPaymentsMethodsContainer {
         padding: 0;
     }
 
@@ -1778,7 +1789,11 @@ p {
         max-width: 148px;
     }
 
-    .bid__modal--first__step, .bid__modal--second__step, .bid__modal--payment__confirmation, #otherPaymentsMethodsContainer {
+    .bid__modal--first__step, 
+    .bid__modal--second__step, 
+    .bid__modal--payment__confirmation, 
+    .bid__modal--payment__confirmation--qr,
+    #otherPaymentsMethodsContainer {
         width: 100%;
     }
 }

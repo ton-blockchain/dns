@@ -557,7 +557,8 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const error = $(".bid__input--error")
     const backdrop = $('.bid__modal--backdrop')
     const showOtherPaymentMethods = $('#otherPaymentsMethods')
-    const currentWalletLabel = $('#bidPrice--current__wallet')
+    const currentWalletLinkLabel = $('#bidPrice--link--current__wallet')
+    const currentWalletQrLabel = $('#bidPrice--qr--current__wallet')
     const paymentConfirmationButton = $('#payment__confirmation--button')
 
     const mask = IMask(bidModalInput, {
@@ -618,7 +619,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         backdrop.removeEventListener('click', handleModalClose)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
-        paymentConfirmationButton.removeEventListener('click', handlePaymentConfirmation)
+        paymentConfirmationButton.removeEventListener('click', handlePaymentConfirmationWithLink)
         $('body').classList.remove('scroll__disabled')
     }
 
@@ -633,6 +634,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal--first__step', true)
         toggle('.bid__modal--second__step', false)
         toggle('.bid__modal--payment__confirmation', false)
+        toggle('.bid__modal--payment__confirmation--qr', false)
         $('body').classList.add('scroll__disabled')
         pushModalInfoToBrowserHistory('bid__modal')
         renderFirstStep()
@@ -668,26 +670,57 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         const isLoggedIn = await walletController.isLoggedIn()
 
         if (isLoggedIn) {
-            renderPaymentConfirmation()
+            choosePaymentConfirmation()
         } else {
             renderSecondStep()
         }
-
     }
 
-    const renderPaymentConfirmation = () => {
+    const choosePaymentConfirmation = () => {
+        if (isMobile()) {
+            renderPaymentConfirmationWithLink()
+        } else {
+            renderPaymentConfirmationWithQr()
+        }
+    }
+
+    const renderPaymentConfirmationWithQr = () => {
+        updateBidModalPaymentData()
+        toggle('.bid__modal--payment__confirmation--qr', true)
+        toggle('.bid__modal--first__step', false)
+
+        currentWalletQrLabel.innerText = walletController.getCurrentWallet().name
+
+        const walletUrl = walletController.currentWallet.universalLink
+
+        if (!walletUrl) {
+            alert('Unexpected error. Please try again.')
+            handleModalClose()
+            return
+        }
+
+        renderQr('#walletQr', walletUrl)
+        handlePaymentConfirmationWithQr()
+    }
+
+    const handlePaymentConfirmationWithQr = async () => {    
+        const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
+        await walletController.sendTransaction(transaction).then(() => handleModalClose())
+    }
+
+    const renderPaymentConfirmationWithLink = () => {
         updateBidModalPaymentData()
         toggle('.bid__modal--payment__confirmation', true)
         toggle('.bid__modal--first__step', false)
 
-        currentWalletLabel.innerText = walletController.getCurrentWallet().name
+        currentWalletLinkLabel.innerText = walletController.getCurrentWallet().name
 
         setAddress($('#freeBuyAddress'), bidAddress)
 
-        paymentConfirmationButton.addEventListener('click', handlePaymentConfirmation)
+        paymentConfirmationButton.addEventListener('click', handlePaymentConfirmationWithLink)
     }
 
-    const handlePaymentConfirmation = async () => {
+    const handlePaymentConfirmationWithLink = async () => {
         if ('universalLink' in walletController.currentWallet && !walletController.currentWallet.embedded && isMobile()) {
             openLink(addReturnStrategy(walletController.currentWallet.universalLink, 'back'), '_blank');
         }
@@ -706,6 +739,11 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
 
+        if (freeQrUrl !== buyUrl) {
+            freeQrUrl = buyUrl
+            renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
+        }
+
         setAddress($('#freeBuyAddress'), bidAddress)
 
         showOtherPaymentMethods.removeEventListener('click', renderOtherPaymentsMethods)
@@ -720,6 +758,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         $('#bidPrice').innerText = formatNumber(localPrice, false)
         $('#bidPrice-confirmation').innerText = formatNumber(localPrice, false)
+        $('#bidPrice-confirmation-qr').innerText = formatNumber(localPrice, false)
     }
     
     const isExtensionInstalled = !isMobile() && window.ton
@@ -737,11 +776,6 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
     $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
     $('#copyLinkbutton').setAttribute('address', buyUrl)
-
-    if (freeQrUrl !== buyUrl) {
-        freeQrUrl = buyUrl
-        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
-    }
 
     $(modalButton).addEventListener('click', toggleBidModal, false)
     showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
