@@ -178,7 +178,9 @@ class WalletController {
 			const result = await this.connector.sendTransaction(transaction)
 				.then(() => this.transactionLoading = false);
 
-			alert(store.localeDict.wallet_transaction_success);
+			if (!walletController.currentWallet.embedded) {
+				alert(store.localeDict.wallet_transaction_success);
+			}
 		} catch (e) {
 			if (e instanceof UserRejectsError) {
 					alert(store.localeDict.wallet_transaction_rejected);
