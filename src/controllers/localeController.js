@@ -94,6 +94,7 @@ const INDEX_LOCALES = {
 		subdomains_not_allowed: 'Поддомены запрещены.',
 		invalid_chars: 'В домене можно использовать английские символы (a-z), цифры (0-9) и дефис (-). Дефис не может находиться в начале и конце.',
 		not_owner: 'Вы не владелец домена',
+		login_extention: 'Войдите и авторизуйтесь в расширении TON Wallet для редактирования домена',
 		invalid_address: 'Неправильный адрес',
 		install_extension: 'Установите расширение TON Wallet для управления доменом',
 		auction: 'Аукцион',
@@ -120,6 +121,8 @@ const INDEX_LOCALES = {
 		wallet_modal_second_description: 'Отсканируйте QR-код с помощью мобильного телефона или Tonkeeper app.',
 		wallet_modal_second_back_button: 'Назад',
 		wallet_logout: 'Выйти', 
+		wallet_transaction_success: 'Транзакция успешно отправлена',
+		wallet_transaction_rejected: 'Вы отклонили транзакцию. Пожалуйста, подтвердите ее для отправки в блокчейн',
 	},
 	en: {
 		address: 'Address',
@@ -131,6 +134,7 @@ const INDEX_LOCALES = {
 		subdomains_not_allowed: 'Subdomains are not allowed.',
 		invalid_chars: 'English letters (a-z), numbers (0-9), and hyphens (-) are allowed. A hyphen cannot be at the beginning or the end.',
 		not_owner: 'You are not the owner of this domain.',
+		login_extention: 'Open and log in to the TON Wallet extension for domain management.',
 		invalid_address: 'The address is invalid.',
 		install_extension: 'Please install the TON Wallet extension to edit the domain',
 		auction: 'On auction',
@@ -148,6 +152,8 @@ const INDEX_LOCALES = {
 		wallet_modal_second_description: 'Scan QR code with your mobile phone or Tonkeeper app.',
 		wallet_modal_second_back_button: 'Back',
 		wallet_logout: 'Log out',
+		wallet_transaction_success: 'Transaction was sent successfully',
+		wallet_transaction_rejected: 'You rejected the transaction. Please confirm it to send to the blockchain',
 	},
 }
 

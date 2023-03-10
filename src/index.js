@@ -866,8 +866,15 @@ const connectExtension = async (domain, dnsItem) => {
         IS_TESTNET
     )
 
-    if (account !== currentOwner) {
+    const tonConnectAccaunt = walletController.getAccountAddress()
+
+    if (tonConnectAccaunt !== currentOwner && account !== currentOwner) {
         alert(store.localeDict.not_owner)
+        return
+    }
+
+    if (tonConnectAccaunt === currentOwner && account !== currentOwner ) {
+        alert(store.localeDict.login_extention)
         return
     }
 

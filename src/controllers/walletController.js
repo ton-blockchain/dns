@@ -143,6 +143,16 @@ class WalletController {
 		return this.currentWallet.walletInfo.account.chain === CHAIN.TESTNET
 	}
 
+	getAccountAddress() {
+		const { address, chain} = this.currentWallet?.walletInfo?.account || {}
+
+		if (!address || !chain) {
+			return null
+		}
+
+		return this.getUserFriendlyAddress(address, chain)
+	}
+
 	async createTransaction(address, amount, message) {
 		const rawAddress = getRawAddress(address)
 		const encodedMessage = await getPayload(message)
@@ -168,10 +178,10 @@ class WalletController {
 			const result = await this.connector.sendTransaction(transaction)
 				.then(() => this.transactionLoading = false);
 
-			alert('Transaction was sent successfully');
+			alert(store.localeDict.wallet_transaction_success);
 		} catch (e) {
 			if (e instanceof UserRejectsError) {
-					alert('You rejected the transaction. Please confirm it to send to the blockchain');
+					alert(store.localeDict.wallet_transaction_rejected);
 			} else {
 					alert(e);
 			}
