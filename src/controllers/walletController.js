@@ -373,6 +373,13 @@ class WalletController {
 		toggle('.wallet__modal--first__step', false)
 		toggle('.wallet__modal--second__step', true)
 
+		const walletName = this.choosenWallet.name
+
+		const walletTitle = $('#wallet__modal--second__step--wallet__title')
+		const walletDescription = $('#wallet__modal--second__step--wallet__description')
+		walletTitle.innerHTML = walletName
+		walletDescription.innerHTML = walletName
+
 		renderQr('#connect-wallet-qr-link', universalLink, {size: 288, margin: 0})
 
 		const backButton = document.getElementById('back-to-wallets-list-button')
