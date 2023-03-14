@@ -1134,15 +1134,17 @@ p {
 }
 .bid__modal--first__step, 
 .bid__modal--second__step, 
-.bid__modal--payment__confirmation, 
-.bid__modal--payment__confirmation--qr {
+.bid__modal--payment__loading,
+.bid__modal--payment__success, 
+.bid__modal--payment__failure {
     z-index: 4;
 }
 
 .bid__modal--first__step, 
 .bid__modal--second__step,
-.bid__modal--payment__confirmation, 
-.bid__modal--payment__confirmation--qr, 
+.bid__modal--payment__loading,
+.bid__modal--payment__success, 
+.bid__modal--payment__failure,
 #otherPaymentsMethodsContainer {
     flex-direction: column;
     justify-content: center;
@@ -1153,6 +1155,64 @@ p {
     transition: opacity var(--block--transition);
     box-sizing: border-box;
     width: 352px;
+}
+
+.bid__modal--payment__loading .payment__textline,
+.bid__modal--payment__success .payment__textline,
+.bid__modal--payment__failure .payment__textline {
+    display: flex;
+}
+
+.bid__modal--payment__loading .payment__message,
+.bid__modal--payment__success .payment__message,
+.bid__modal--payment__failure .payment__message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    margin-top: 24px;
+}
+
+.bid__modal--payment__loading .payment__icon,
+.bid__modal--payment__success .payment__icon,
+.bid__modal--payment__failure .payment__icon {
+    width: 56px;
+    height: 56px;
+}
+
+.bid__modal--payment__loading .payment__message--text,
+.bid__modal--payment__success .payment__message--text,
+.bid__modal--payment__failure .payment__message--text {
+    display: flex; 
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
+}
+
+.bid__modal--payment__loading .payment__message--title,
+.bid__modal--payment__success .payment__message--title,
+.bid__modal--payment__failure .payment__message--title {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: var(--text-primary);
+}
+
+.bid__modal--payment__loading .payment__message--description,
+.bid__modal--payment__success .payment__message--description,
+.bid__modal--payment__failure .payment__message--description {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: var(--text-tetriary);
+}
+
+#paymentFailureButton, 
+#paymentSuccessButton {
+    margin-top: 24px;
 }
 
 #otherPaymentsMethodsContainer {
@@ -1445,6 +1505,11 @@ p {
     padding: 12px 20px;
 }
 
+.wallet__connect svg {
+    width: 24px;
+    height: 24px;
+}
+
 #connect-wallet-button-content {
     display: flex;
     gap: 4px;
@@ -1679,8 +1744,9 @@ p {
 
     .bid__modal--first__step, 
     .bid__modal--second__step, 
-    .bid__modal--payment__confirmation, 
-    .bid__modal--payment__confirmation--qr, 
+    .bid__modal--payment__loading, 
+    .bid__modal--payment__success,
+    .bid__modal--payment__failure, 
     #otherPaymentsMethodsContainer {
         padding: 0;
     }
@@ -1829,8 +1895,9 @@ p {
 
     .bid__modal--first__step, 
     .bid__modal--second__step, 
-    .bid__modal--payment__confirmation, 
-    .bid__modal--payment__confirmation--qr,
+    .bid__modal--payment__loading,
+    .bid__modal--payment__success, 
+    .bid__modal--payment__failure,
     #otherPaymentsMethodsContainer {
         width: 100%;
     }
@@ -2150,6 +2217,20 @@ p {
 
     #otherPaymentsMethodsContainer.show {
         display: block;
+    }
+
+    .bid__modal--payment__loading .payment__message--title,
+    .bid__modal--payment__success .payment__message--title,
+    .bid__modal--payment__failure .payment__message--title {
+        font-size: 14px;
+        line-height: 20px;
+    }
+    
+    .bid__modal--payment__loading .payment__message--description,
+    .bid__modal--payment__success .payment__message--description,
+    .bid__modal--payment__failure .payment__message--description {
+        font-size: 14px;
+        line-height: 20px;
     }
 }
 
@@ -2803,16 +2884,13 @@ a.edit-btn:hover {
 }
 
 .loading--animation svg {
-    width: 24px;
-    height: 24px;
-
     animation: rotating 1s linear infinite;
 }
 
 @media screen and (max-width: 568px) { 
-    .loading--animation svg {
-        width: 20px;
-        height: 20px;
+    .wallet__connect svg {
+        width: 24px;
+        height: 24px;
     }
 }
 

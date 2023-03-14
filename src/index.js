@@ -558,8 +558,9 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const backdrop = $('.bid__modal--backdrop')
     const showOtherPaymentMethods = $('#otherPaymentsMethods')
     const currentWalletLinkLabel = $('#bidPrice--link--current__wallet')
-    const currentWalletQrLabel = $('#bidPrice--qr--current__wallet')
-    const paymentConfirmationButton = $('#payment__confirmation--button')
+    const paymentLoadingWallet = $('#payment-loading-wallet')
+    const paymentSuccessWallet = $('#payment-success-wallet')
+    const paymentFailureWallet = $('#payment-failure-wallet')
 
     const mask = IMask(bidModalInput, {
         mask: Number,
@@ -609,7 +610,9 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', false)
-        toggle('.bid__modal--payment__confirmation', false)
+        toggle('.bid__modal--payment__loading', false)
+        toggle('.bid__modal--payment__success', false)
+        toggle('.bid__modal--payment__failure', false)
         toggle('.bid__modal', false)
         toggle('.bid__modal--backdrop', false, 'flex', true, 200)
         $('#otherPaymentsMethodsContainer').classList.remove('show')
@@ -619,7 +622,6 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         backdrop.removeEventListener('click', handleModalClose)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
-        paymentConfirmationButton.removeEventListener('click', handlePaymentConfirmationWithLink)
         $('body').classList.remove('scroll__disabled')
     }
 
@@ -633,8 +635,9 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal', true)
         toggle('.bid__modal--first__step', true)
         toggle('.bid__modal--second__step', false)
-        toggle('.bid__modal--payment__confirmation', false)
-        toggle('.bid__modal--payment__confirmation--qr', false)
+        toggle('.bid__modal--payment__loading', false)
+        toggle('.bid__modal--payment__success', false)
+        toggle('.bid__modal--payment__failure', false)
         $('body').classList.add('scroll__disabled')
         pushModalInfoToBrowserHistory('bid__modal')
         renderFirstStep()
@@ -670,64 +673,76 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         const isLoggedIn = await walletController.isLoggedIn()
 
         if (isLoggedIn) {
-            choosePaymentConfirmation()
+            handlePaymentConfirmation()
         } else {
             renderSecondStep()
         }
     }
 
-    const choosePaymentConfirmation = () => {
-        if (isMobile()) {
-            renderPaymentConfirmationWithLink()
-        } else {
-            renderPaymentConfirmationWithQr()
-        }
-    }
+    const handlePaymentConfirmation = async () => {
+        renderPaymentLoading()
 
-    const renderPaymentConfirmationWithQr = () => {
-        updateBidModalPaymentData()
-        toggle('.bid__modal--payment__confirmation--qr', true)
-        toggle('.bid__modal--first__step', false)
-
-        currentWalletQrLabel.innerText = walletController.getCurrentWallet().name
-
-        const walletUrl = walletController.currentWallet.universalLink
-
-        if (!walletUrl) {
-            alert('Unexpected error. Please try again.')
-            handleModalClose()
-            return
-        }
-
-        renderQr('#walletQr', walletUrl)
-        handlePaymentConfirmationWithQr()
-    }
-
-    const handlePaymentConfirmationWithQr = async () => {    
-        const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
-        await walletController.sendTransaction(transaction).then(() => handleModalClose())
-    }
-
-    const renderPaymentConfirmationWithLink = () => {
-        updateBidModalPaymentData()
-        toggle('.bid__modal--payment__confirmation', true)
-        toggle('.bid__modal--first__step', false)
-
-        currentWalletLinkLabel.innerText = walletController.getCurrentWallet().name
-
-        setAddress($('#freeBuyAddress'), bidAddress)
-
-        paymentConfirmationButton.addEventListener('click', handlePaymentConfirmationWithLink)
-    }
-
-    const handlePaymentConfirmationWithLink = async () => {
         if ('universalLink' in walletController.currentWallet && !walletController.currentWallet.embedded && isMobile()) {
             openLink(addReturnStrategy(walletController.currentWallet.universalLink, 'back'), '_blank');
         }
-        
-        const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
 
-        await walletController.sendTransaction(transaction).then(() => handleModalClose())
+        const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
+        await walletController.sendTransaction(
+            transaction, 
+            () => renderPaymentSuccess(),
+            () => renderPaymentFailure({rejection: true}),
+            () => renderPaymentFailure({})
+        )
+        
+    }
+
+    const renderPaymentLoading = () => {
+        updateBidModalPaymentData()
+        toggle('.bid__modal--payment__loading', true)
+        toggle('.bid__modal--first__step', false)
+
+        paymentLoadingWallet.innerText = walletController.getCurrentWallet().name
+    }
+
+    const renderPaymentSuccess = () => {
+        updateBidModalPaymentData()
+        toggle('.bid__modal--payment__success', true)
+        toggle('.bid__modal--payment__loading', false)
+        toggle('.bid__modal--first__step', false)
+
+        const paymentSuccessButton = $('#paymentSuccessButton')
+        paymentSuccessButton.onclick = () => handleModalClose()
+
+        paymentSuccessWallet.innerText = walletController.getCurrentWallet().name
+
+    }
+
+    const renderPaymentFailure = ({rejection = false}) => {
+        updateBidModalPaymentData()
+        toggle('.bid__modal--payment__failure', true)
+        toggle('.bid__modal--payment__loading', false)
+        toggle('.bid__modal--first__step', false)
+
+        paymentFailureWallet.innerText = walletController.getCurrentWallet().name
+
+        const paymentErrorMessageTitle = $('#paymentErrorMessageTitle')
+        const paymentErrorMessageDescription = $('#paymentErrorMessageDescription')
+
+        const paymentFailureButton = $('#paymentFailureButton')
+        paymentFailureButton.onclick = () => handleModalClose()
+        
+
+        if (rejection) {
+            paymentErrorMessageTitle.innerText = 'Payment rejected'
+            paymentErrorMessageDescription.innerText = 'You have rejected the payment. Please try again.'
+            paymentErrorMessageTitle.setAttribute('data-locale', 'payment_failure_rejection_header')
+            paymentErrorMessageDescription.setAttribute('data-locale', 'payment_failure_rejection_description')
+        } else {
+            paymentErrorMessageTitle.innerText = 'Something went wrong'
+            paymentErrorMessageDescription.innerText = 'Please reload the page or try again later.'
+            paymentErrorMessageTitle.setAttribute('data-locale', 'payment_failure_error_header')
+            paymentErrorMessageDescription.setAttribute('data-locale', 'payment_failure_error_description')
+        }
     }
 
     const renderSecondStep = () => {
@@ -757,8 +772,9 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         $('#freeComment').dataset.name = domain
 
         $('#bidPrice').innerText = formatNumber(localPrice, false)
-        $('#bidPrice-confirmation').innerText = formatNumber(localPrice, false)
-        $('#bidPrice-confirmation-qr').innerText = formatNumber(localPrice, false)
+        $('#bidPrice-payment-loading').innerText = formatNumber(localPrice, false)
+        $('#bidPrice-payment-success').innerText = formatNumber(localPrice, false)
+        $('#bidPrice-payment-failure').innerText = formatNumber(localPrice, false)
     }
     
     const isExtensionInstalled = !isMobile() && window.ton

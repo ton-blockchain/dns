@@ -171,21 +171,23 @@ class WalletController {
 		return transaction
 	}
 
-	async sendTransaction(transaction) {
+	async sendTransaction(
+		transaction, 
+		onPaymentSuccess = () => {},
+		onPaymentRejection = () => {}, 
+		onPaymentError = () => {}
+	) {
 		try {
 			this.transactionLoading = true
 
 			const result = await this.connector.sendTransaction(transaction)
-				.then(() => this.transactionLoading = false);
+				.then(() => onPaymentSuccess());
 
-			if (!walletController.currentWallet.embedded) {
-				alert(store.localeDict.wallet_transaction_success);
-			}
 		} catch (e) {
 			if (e instanceof UserRejectsError) {
-					alert(store.localeDict.wallet_transaction_rejected);
+					onPaymentRejection()
 			} else {
-					alert(e);
+					onPaymentError()
 			}
 		}
 	}
