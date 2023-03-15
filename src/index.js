@@ -557,10 +557,10 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const error = $(".bid__input--error")
     const backdrop = $('.bid__modal--backdrop')
     const showOtherPaymentMethods = $('#otherPaymentsMethods')
-    const currentWalletLinkLabel = $('#bidPrice--link--current__wallet')
     const paymentLoadingWallet = $('#payment-loading-wallet')
     const paymentSuccessWallet = $('#payment-success-wallet')
     const paymentFailureWallet = $('#payment-failure-wallet')
+    const qrContainer = $('#freeQr')
 
     const mask = IMask(bidModalInput, {
         mask: Number,
@@ -617,6 +617,8 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal--backdrop', false, 'flex', true, 200)
         $('#otherPaymentsMethodsContainer').classList.remove('show')
         $('#otherPaymentsMethods svg').classList.remove('rotate')
+
+        qrContainer.innerHTML = ''
 
         bidModalInput.removeEventListener('input', handleBidInput)
         backdrop.removeEventListener('click', handleModalClose)
@@ -754,10 +756,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
 
-        if (freeQrUrl !== buyUrl) {
-            freeQrUrl = buyUrl
-            renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
-        }
+        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
 
         setAddress($('#freeBuyAddress'), bidAddress)
 

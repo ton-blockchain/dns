@@ -8,7 +8,6 @@ class WalletController {
 		this.loading = true;
 
 		this.walletConfig = WALLETS_CONFIG
-
 		this.choosenWallet = null
 		this.currentWallet = null
 
@@ -16,6 +15,7 @@ class WalletController {
 		this.connectButtonMobile = document.getElementById(CONNECT_WALLET_MOBILE_ID)
 		this.menuConnectButton = document.getElementById(MENU_CONNECT_WALLET_ID)
 
+		this.qrContainer = $('#connect-wallet-qr-link')
 		this.renderLoginButton()
 		this.connector = new TonConnectSDK.TonConnect()
 		this.unsubscribe = this.connector.onStatusChange(async(walletInfo) => {
@@ -362,6 +362,8 @@ class WalletController {
 		toggle('.wallet__modal--second__step', false)
 		toggle('.wallet__modal', false)
 		toggle('.bid__modal--backdrop', false, 'flex', true, 200)
+
+		this.qrContainer.innerHTML = ''
 
 		backdrop.removeEventListener('click', this.handleWalletModalClose)
 
