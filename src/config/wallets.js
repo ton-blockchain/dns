@@ -1,12 +1,20 @@
 const WALLETS_CONFIG = [
   {
     name: 'Tonkeeper',
-    icon: '../assets/tonkeeper.svg',
+    icon: '../assets/wallet_icons/tonkeeper.svg',
   },
   {
-    name: 'TonSafe',
-    icon: 'https://app.tonsafe.net/images/tonsafe-prime-300x300.png'
-  }
+    name: 'OpenMask',
+    icon: '../assets/wallet_icons/openmask.svg',
+  },
+  {
+    name: 'MyTonWallet',
+    icon: '../assets/wallet_icons/mytonwallet.svg',
+  },
+  // {
+  //   name: 'TonSafe',
+  //   icon: '../assets/wallet_icons/tonsafe.svg',
+  // },
 ]
 
 const CHAIN = {

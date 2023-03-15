@@ -83,8 +83,7 @@ class WalletController {
 			.find((wallet) => wallet.embedded)
 
 		const supportedWallets = walletsList.filter((wallet) => 
-			wallet.universalLink !== undefined 
-			&& this.walletConfig.find((config) => config.name === wallet.name)
+			this.walletConfig.find((config) => config.name === wallet.name)
 		)
 		this.wallets = { walletsList: supportedWallets, embeddedWallet }
 
@@ -95,6 +94,11 @@ class WalletController {
 	}
 
 	async login() {
+		if (!this.choosenWallet.universalLink) {
+			this.loginInjectedWallet()
+			return
+		}
+
 		const tonkeeperConnectionSource = {
 			universalLink: this.choosenWallet.universalLink,
 			bridgeUrl: this.choosenWallet.bridgeUrl,
@@ -109,6 +113,18 @@ class WalletController {
 		}
 
 		this.connectButton.blur()
+	}
+
+	loginInjectedWallet() {
+		if (!this.choosenWallet.jsBridgeKey || !this.choosenWallet.injected) {
+			const aboutUrl = this.choosenWallet.aboutUrl
+			openLink(addReturnStrategy(aboutUrl, 'back'), '_blank')
+			return
+		}
+
+		this.connector.connect({
+			jsBridgeKey: this.choosenWallet.jsBridgeKey,
+		})
 	}
 
 	logout(e) {
@@ -386,8 +402,11 @@ class WalletController {
 
 		renderQr('#connect-wallet-qr-link', universalLink, {size: 288, margin: 0})
 
-		const backButton = document.getElementById('back-to-wallets-list-button')
-		backButton.onclick = (e) => this.toggleWalletModal(e)
+		if (this.wallets.walletsList.length > 1) {
+			const backButton = document.getElementById('back-to-wallets-list-button')
+			backButton.style.display = ''
+			backButton.onclick = (e) => this.toggleWalletModal(e)
+		}
 	}
 
 	handleConnectWalletButtonClick = (e) => {
