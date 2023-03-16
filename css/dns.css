@@ -1210,14 +1210,12 @@ p {
 }
 
 #otherPaymentsMethodsContainer {
-    opacity: 0;
     transform: translateY(-100%);
     transition: transform 0.2s var(--bizier--transition--slow), opacity 0.1s var(--bizier--transition--fast);
 }
 
 #otherPaymentsMethodsContainer.show {
     transform: translateY(0);
-    opacity: 1;
 }
 
 .bid__modal--first__step {
@@ -2881,8 +2879,8 @@ a.edit-btn:hover {
 
 @media screen and (max-width: 568px) { 
     .wallet__connect svg {
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
     }
 }
 

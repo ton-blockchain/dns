@@ -905,16 +905,18 @@ function renderOtherPaymentsMethods() {
     if (otherPaymentsContainer.classList.contains('show')) {
         otherPaymentsContainer.classList.remove('show')
 
+
         otherPaymentsTimerId && clearTimeout(otherPaymentsTimerId)
         otherPaymentsTimerId = setTimeout(() => {
             otherPaymentsMethodsContainer.style.display = 'none'
-        }, 100)
+        }, 300)
     } else {
         otherPaymentsMethodsContainer.style.display = ''
 
         otherPaymentsTimerId && clearTimeout(otherPaymentsTimerId)
         otherPaymentsTimerId = setTimeout(() => {
             otherPaymentsContainer.classList.add('show')
+            otherPaymentsContainer.scrollIntoView({behavior: 'smooth', block: 'start'})
         }, 100)
     }
 }
