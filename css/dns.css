@@ -1134,17 +1134,13 @@ p {
 }
 .bid__modal--first__step, 
 .bid__modal--second__step, 
-.bid__modal--payment__loading,
-.bid__modal--payment__success, 
-.bid__modal--payment__failure {
+.bid__modal--payment {
     z-index: 4;
 }
 
 .bid__modal--first__step, 
 .bid__modal--second__step,
-.bid__modal--payment__loading,
-.bid__modal--payment__success, 
-.bid__modal--payment__failure,
+.bid__modal--payment,
 #otherPaymentsMethodsContainer {
     flex-direction: column;
     justify-content: center;
@@ -1157,15 +1153,11 @@ p {
     width: 352px;
 }
 
-.bid__modal--payment__loading .payment__textline,
-.bid__modal--payment__success .payment__textline,
-.bid__modal--payment__failure .payment__textline {
+.bid__modal--payment .payment__textline {
     display: flex;
 }
 
-.bid__modal--payment__loading .payment__message,
-.bid__modal--payment__success .payment__message,
-.bid__modal--payment__failure .payment__message {
+.bid__modal--payment .payment__message {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1174,25 +1166,19 @@ p {
     margin-top: 24px;
 }
 
-.bid__modal--payment__loading .payment__icon,
-.bid__modal--payment__success .payment__icon,
-.bid__modal--payment__failure .payment__icon {
+.bid__modal--payment .payment__icon {
     width: 56px;
     height: 56px;
 }
 
-.bid__modal--payment__loading .payment__message--text,
-.bid__modal--payment__success .payment__message--text,
-.bid__modal--payment__failure .payment__message--text {
+.bid__modal--payment .payment__message--text {
     display: flex; 
     flex-direction: column;
     gap: 4px;
     text-align: center;
 }
 
-.bid__modal--payment__loading .payment__message--title,
-.bid__modal--payment__success .payment__message--title,
-.bid__modal--payment__failure .payment__message--title {
+.bid__modal--payment .payment__message--title {
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
@@ -1200,9 +1186,7 @@ p {
     color: var(--text-primary);
 }
 
-.bid__modal--payment__loading .payment__message--description,
-.bid__modal--payment__success .payment__message--description,
-.bid__modal--payment__failure .payment__message--description {
+.bid__modal--payment .payment__message--description {
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
@@ -1211,7 +1195,8 @@ p {
 }
 
 #paymentFailureButton, 
-#paymentSuccessButton {
+#paymentSuccessButton,
+#paymentCloseButton {
     margin-top: 24px;
 }
 
@@ -1744,9 +1729,7 @@ p {
 
     .bid__modal--first__step, 
     .bid__modal--second__step, 
-    .bid__modal--payment__loading, 
-    .bid__modal--payment__success,
-    .bid__modal--payment__failure, 
+    .bid__modal--payment, 
     #otherPaymentsMethodsContainer {
         padding: 0;
     }
@@ -1895,9 +1878,7 @@ p {
 
     .bid__modal--first__step, 
     .bid__modal--second__step, 
-    .bid__modal--payment__loading,
-    .bid__modal--payment__success, 
-    .bid__modal--payment__failure,
+    .bid__modal--payment,
     #otherPaymentsMethodsContainer {
         width: 100%;
     }
@@ -2219,16 +2200,12 @@ p {
         display: block;
     }
 
-    .bid__modal--payment__loading .payment__message--title,
-    .bid__modal--payment__success .payment__message--title,
-    .bid__modal--payment__failure .payment__message--title {
+    .bid__modal--payment .payment__message--title {
         font-size: 14px;
         line-height: 20px;
     }
     
-    .bid__modal--payment__loading .payment__message--description,
-    .bid__modal--payment__success .payment__message--description,
-    .bid__modal--payment__failure .payment__message--description {
+    .bid__modal--payment .payment__message--description {
         font-size: 14px;
         line-height: 20px;
     }
