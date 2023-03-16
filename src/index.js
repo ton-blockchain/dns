@@ -549,6 +549,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 
     let localPrice = price;
+    let paymentStatus = null;
     const bidAddress = address || tonRootAddress;
     const bidModalInput = $("#bid__modal--bid__input")
     const submitStepButton = $("#bid__modal--submit__step")
@@ -560,6 +561,10 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const paymentLoadingWallet = $('#payment-loading-wallet')
     const paymentCloseButton = $('#paymentCloseButton')
     const qrContainer = $('#freeQr')
+    const paymentLottieLoading = $('#paymentLottieLoading')
+    const paymentLottieSuccess = $('#paymentLottieSuccess')
+    const paymentLottieFailure = $('#paymentLottieFailure')
+
 
     const mask = IMask(bidModalInput, {
         mask: Number,
@@ -615,7 +620,18 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         $('#otherPaymentsMethodsContainer').classList.remove('show')
         $('#otherPaymentsMethods svg').classList.remove('rotate')
 
+
+        toggle('#paymentLottieLoading', false)
+        toggle('#paymentLottieSuccess', false)
+        toggle('#paymentLottieFailure', false)
+        paymentLottieLoading.stop()
+        paymentLottieSuccess.stop()
+        paymentLottieFailure.stop()
+        paymentLottieLoading.removeEventListener('loop', handlePaymentStatus)
+
         qrContainer.innerHTML = ''
+
+        paymentStatus = null
 
         bidModalInput.removeEventListener('input', handleBidInput)
         backdrop.removeEventListener('click', handleModalClose)
@@ -629,6 +645,12 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         e.stopPropagation()
         scrollToTop()
         backdrop.addEventListener('click', handleModalClose)
+
+        paymentStatus = null
+
+        toggle('#paymentLottieLoading', false)
+        toggle('#paymentLottieSuccess', false)
+        toggle('#paymentLottieFailure', false)
 
         toggle('.bid__modal--backdrop', true)
         toggle('.bid__modal', true)
@@ -686,22 +708,25 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
         await walletController.sendTransaction(
             transaction, 
-            () => renderPaymentSuccess(),
-            () => renderPaymentFailure({rejection: true}),
-            () => renderPaymentFailure({})
+            () => paymentStatus = 'success',
+            () => paymentStatus = 'rejection',
+            () => paymentStatus = 'error'
         )
         
     }
 
     const renderPaymentLoading = () => {
+        paymentStatus = 'loading'
         updateBidModalPaymentData()
         renderPaymentMessage('loading')
         toggle('.bid__modal--payment', true)
         toggle('.bid__modal--first__step', false)
 
-        paymentCloseButton.style.display = 'none'
-
         paymentLoadingWallet.innerText = walletController.getCurrentWallet().name
+
+        paymentLottieLoading.addEventListener('loop', handlePaymentStatus)
+
+        paymentCloseButton.style.display = 'none'
     }
 
     const renderPaymentSuccess = () => {
@@ -722,23 +747,40 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         paymentCloseButton.style.display = ''
     }
 
+    const handlePaymentStatus = () => {
+        if (paymentStatus === null) {
+            return
+        }
+
+        if (paymentStatus === 'loading') {
+            return
+        }
+
+        if (paymentStatus === 'success') {
+            renderPaymentSuccess()
+            return
+        }
+
+        if (paymentStatus === 'rejection') {
+            renderPaymentFailure({rejection: true})
+            return
+        }
+
+        if (paymentStatus === 'error') {
+            renderPaymentFailure({})
+            return
+        }
+    }
+
     const renderPaymentMessage = (type) => {
-        const icon = $('#payment-message-icon')
         const title = $('#payment-message-title')
         const description = $('#payment-message-description')
 
         if (type === 'loading') {
-            icon.classList.add('loading--animation')
-            icon.innerHTML = `
-                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M18.334 10a8.333 8.333 0 1 1-16.667 0 8.333 8.333 0 0 1 16.667 0Zm-15 0a6.667 6.667 0 1 0 13.333 0 6.667 6.667 0 0 0-13.333 0Z"
-                        fill="var(--separator-alpha)" />
-                    <path
-                        d="M10 2.5c0-.46.374-.837.832-.791a8.334 8.334 0 0 1 7.46 7.46c.046.457-.331.831-.792.831-.46 0-.828-.374-.885-.83a6.665 6.665 0 0 0-5.783-5.784C10.374 3.328 10 2.96 10 2.5Z"
-                        fill="var(--accent-default)" />
-                </svg>
-            `
+            toggle('#paymentLottieLoading', true)
+            toggle('#paymentLottieSuccess', false)
+
+            paymentLottieLoading.play()
 
             title.innerText = 'Checking Payment'
             title.setAttribute('data-locale', 'payment_loading_header')
@@ -749,13 +791,11 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         }
 
         if (type === 'success') {
-            icon.classList.remove('loading--animation')
-            icon.innerHTML = `
-                <svg  viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="5" width="46" height="46" rx="23" fill="#47C58A"/>
-                    <path d="m18.2 29.925 6.563 6.562 13.125-13.125" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            `
+            toggle('#paymentLottieLoading', false)
+            toggle('#paymentLottieSuccess', true)
+
+            paymentLottieLoading.stop()
+            paymentLottieSuccess.play()
 
             title.innerText = 'Placed bid successfully'
             title.setAttribute('data-locale', 'payment_success_header')
@@ -765,34 +805,32 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
             return
         }
 
-        if (type === 'rejection') {
-            icon.classList.remove('loading--animation')
-            icon.innerHTML = `
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="5" width="46" height="46" rx="23" fill="#ED6767"/>
-                    <path d="m21 35 14.142-14.142M21 21l14.142 14.142" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-                </svg>
-            `
+        if (type === 'rejection' || type === 'error') {
+            setTimeout(() => {
+                toggle('#paymentLottieLoading', false)
+                paymentLottieLoading.stop()
+            }, 500)
+            toggle('#paymentLottieFailure', true)
 
+            paymentLottieFailure.play()
+        }
+
+        if (type === 'rejection') {
             title.innerText = 'Payment rejected'
             title.setAttribute('data-locale', 'payment_failure_rejection_header')
             description.innerText = 'You have rejected the payment. Please try again.'
             description.setAttribute('data-locale', 'payment_failure_rejection_description')
+
+            return
         }
 
         if (type === 'error') {
-            icon.classList.remove('loading--animation')
-            icon.innerHTML = `
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="5" width="46" height="46" rx="23" fill="#ED6767"/>
-                    <path d="m21 35 14.142-14.142M21 21l14.142 14.142" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-                </svg>
-            `
-
             title.innerText = 'Something went wrong'
             title.setAttribute('data-locale', 'payment_failure_error_header')
             description.innerText = 'Please reload the page or try again later.'
             description.setAttribute('data-locale', 'payment_failure_error_description')
+
+            return
         }
     }
 

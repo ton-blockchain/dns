@@ -1166,9 +1166,18 @@ p {
     margin-top: 24px;
 }
 
-.bid__modal--payment .payment__icon {
+.bid__modal--payment .payment__lottie--container {
     width: 56px;
     height: 56px;
+
+    position: relative;
+}
+
+.bid__modal--payment .payment__lottie {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
 }
 
 .bid__modal--payment .payment__message--text {
