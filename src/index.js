@@ -229,8 +229,10 @@ function closeBidModal() {
     toggle('.bid__modal--first__step', false)
     toggle('.bid__modal--second__step', false)
 
+    $('.bid__modal').style.justifyContent = 'center'
     $('#otherPaymentsMethods svg').classList.remove('rotate')
     $('#otherPaymentsMethodsContainer').classList.remove('show')
+    $('#otherPaymentsMethodsContainer').style.display = 'none'
     $('body').classList.remove('scroll__disabled')
     $('#otherPaymentsMethods').removeEventListener('click', renderOtherPaymentsMethods)
 }
@@ -617,7 +619,9 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal--payment', false)
         toggle('.bid__modal', false)
         toggle('.bid__modal--backdrop', false, 'flex', true, 200)
+        $('.bid__modal').style.justifyContent = 'center'
         $('#otherPaymentsMethodsContainer').classList.remove('show')
+        $('#otherPaymentsMethodsContainer').style.display = 'none'
         $('#otherPaymentsMethods svg').classList.remove('rotate')
 
 
@@ -840,6 +844,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
             ? analyticService.sendEvent({type: 'place_an_initial_bid'})
             : analyticService.sendEvent({type: 'place_a_bid'})
 
+        $('.bid__modal').style.justifyContent = 'flex-start'
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
 
@@ -886,6 +891,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 }
 
+let otherPaymentsTimerId = null;
 function renderOtherPaymentsMethods() {
     const svgArrow = $('#otherPaymentsMethods svg')
     const otherPaymentsContainer = $('#otherPaymentsMethodsContainer')
@@ -898,8 +904,18 @@ function renderOtherPaymentsMethods() {
 
     if (otherPaymentsContainer.classList.contains('show')) {
         otherPaymentsContainer.classList.remove('show')
+
+        otherPaymentsTimerId && clearTimeout(otherPaymentsTimerId)
+        otherPaymentsTimerId = setTimeout(() => {
+            otherPaymentsMethodsContainer.style.display = 'none'
+        }, 100)
     } else {
-        otherPaymentsContainer.classList.add('show')
+        otherPaymentsMethodsContainer.style.display = ''
+
+        otherPaymentsTimerId && clearTimeout(otherPaymentsTimerId)
+        otherPaymentsTimerId = setTimeout(() => {
+            otherPaymentsContainer.classList.add('show')
+        }, 100)
     }
 }
 

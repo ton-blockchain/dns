@@ -1089,7 +1089,7 @@ p {
 .bid__modal {
     opacity: 0;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 4px;
     padding: 140px 0;
@@ -2213,10 +2213,16 @@ p {
         font-size: 14px;
         line-height: 20px;
     }
+
+    .bid__modal--payment .bid__modal--subheader {
+        max-width: 260px;
+    }
     
     .bid__modal--payment .payment__message--description {
         font-size: 14px;
         line-height: 20px;
+
+        max-width: 240px;
     }
 }
 
