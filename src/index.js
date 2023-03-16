@@ -153,7 +153,10 @@ let currentDomain = null
 let currentOwner = null
 let currentDnsItem = null
 let previousBid = null
+
 const removeListeners = {}
+const DEFAULT_CARETE_HELPER_TEXT = '.ton'
+const OFFSET_BETWEEN_TEXT_AND_CARRETE = 1
 
 const FREE_DOMAIN_TYPE = 'free'
 const BUSY_DOMAIN_TYPE = 'busy'
@@ -1067,18 +1070,33 @@ var oldStartInputValue = '';
 function setCareeteHelperValue(value) {
     const helper = $('.careete__helper');
     const windowWidth = window.innerWidth;
-
     const resetInputIcon = $('.icon.reset__input--icon')
     const careeteHelper = $('.start-input-container__domain--container')
     const careeteHelperText = $('.start-input-container__domain')
 
+    function getSubStrAfterSubStr(str, substring) {
+        let lastIndex = str.lastIndexOf(substring);
+        if (lastIndex === -1) {
+            return 0;
+        }
+
+        return str.slice(lastIndex)
+    }
+
+    const cuttedHintText = getSubStrAfterSubStr(value, DEFAULT_CARETE_HELPER_TEXT[0])
+
+    $('.start-input-container__domain').innerText = cuttedHintText && DEFAULT_CARETE_HELPER_TEXT.includes(cuttedHintText)
+        ? DEFAULT_CARETE_HELPER_TEXT.slice(cuttedHintText.length)
+        : DEFAULT_CARETE_HELPER_TEXT
+
     if (value !== oldStartInputValue) {
         oldStartInputValue = value;
-        helper.innerText = value;
+        helper.innerText = value.replaceAll(' ', `${'\u00A0'}`);
+
         const {width} = helper.getBoundingClientRect();
 
         if (careeteHelper) {
-            careeteHelper.style.left = `${(windowWidth > 568 ? 72 : 56) + width}px`
+            careeteHelper.style.left = `${(windowWidth > 568 ? 72 : 56) + width + OFFSET_BETWEEN_TEXT_AND_CARRETE}px`
 
             const iconDimensions = resetInputIcon.getBoundingClientRect();
             const careeteHelperDimensions = careeteHelperText.getBoundingClientRect();

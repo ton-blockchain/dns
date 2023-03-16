@@ -470,6 +470,7 @@ body.hidden{
     font-size: 18px;
     bottom: 50%;
     transform: translateY(50%);
+    line-height: 28px;
 }
 
 .icon.reset__input--icon {
@@ -519,6 +520,9 @@ body.hidden{
     .start-input {
         padding: 16px 56px;
         font-size: 16px;
+        line-height: 24px;
+    }
+    .start-input-container__domain{
         line-height: 24px;
     }
 
