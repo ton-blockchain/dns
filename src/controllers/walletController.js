@@ -82,7 +82,8 @@ class WalletController {
 			.filter(TonConnectSDK.isWalletInfoInjected)
 			.find((wallet) => wallet.embedded)
 
-		const supportedWallets = walletsList.filter((wallet) => 
+		const supportedWallets = walletsList.filter((wallet) =>
+			(wallet.universalLink !== undefined || wallet.injected) && 
 			this.walletConfig.find((config) => config.name === wallet.name)
 		)
 		this.wallets = { walletsList: supportedWallets, embeddedWallet }
@@ -414,6 +415,12 @@ class WalletController {
 	handleConnectWalletButtonClick = (e) => {
 		e.preventDefault()
 		e.stopPropagation()
+
+		if (this.wallets.walletsList.length === 1 && isMobile()) { 
+			this.choosenWallet = this.wallets.walletsList[0]
+			this.login()
+			return 
+		} 
 
 		this.toggleWalletModal(e)
 	}
