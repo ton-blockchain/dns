@@ -1,19 +1,19 @@
 const WALLETS_CONFIG = [
   {
     name: 'Tonkeeper',
-    icon: '../assets/wallet_icons/tonkeeper.svg',
+    icon: '../assets/ton-connect/wallet_icons/tonkeeper.svg',
   },
   {
     name: 'OpenMask',
-    icon: '../assets/wallet_icons/openmask.svg',
+    icon: '../assets/ton-connect/wallet_icons/openmask.svg',
   },
   {
     name: 'MyTonWallet',
-    icon: '../assets/wallet_icons/mytonwallet.svg',
+    icon: '../assets/ton-connect/wallet_icons/mytonwallet.svg',
   },
   // {
   //   name: 'TonSafe',
-  //   icon: '../assets/wallet_icons/tonsafe.svg',
+  //   icon: '../assets/ton-connect/wallet_icons/tonsafe.svg',
   // },
 ]
 
