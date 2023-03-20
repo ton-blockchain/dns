@@ -638,7 +638,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         toggle('#payment-message-loading', false)
         toggle('#payment-message-success', false)
-        toggle('#payment-message-failure', false)
+        toggle('#payment-message-rejection', false)
         toggle('#payment-message-error', false)
 
         qrContainer.innerHTML = ''
@@ -666,7 +666,7 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
 
         toggle('#payment-message-loading', false)
         toggle('#payment-message-success', false)
-        toggle('#payment-message-failure', false)
+        toggle('#payment-message-rejection', false)
         toggle('#payment-message-error', false)
 
         toggle('.bid__modal--backdrop', true)
