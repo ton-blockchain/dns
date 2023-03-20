@@ -409,7 +409,7 @@ const renderFreeDomain = (domain) => {
         $('#bid-flip-clock-container').dataset.endDate = new Date(
             Date.now() + getAuctionDuration() * 1000
         ).toISOString()
-        FlipTimer.addTimer('#bid-flip-clock-container', true)
+        FlipTimer.addTimer('#bid-flip-clock-container', false)
 
         attachBidModalListeners(domain, salePrice, '#bidButton')
     })
