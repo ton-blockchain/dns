@@ -87,7 +87,7 @@
                 <path d="M13.0666 17.8667C16.8958 17.8667 20 14.7625 20 10.9333C20 7.10416 16.8958 4 13.0666 4C9.23746 4 6.1333 7.10416 6.1333 10.9333C6.1333 14.7625 9.23746 17.8667 13.0666 17.8667Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 <path d="M8 16L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
-            <input enterkeyhint="search" type="text" placeholder="Enter a domain" class="suggestions__input"/>
+            <input id="navInputElement" enterkeyhint="search" type="text" data-locale="start_input_placeholder" placeholder="[data-locale]" class="suggestions__input"/>
         </div>
         <div class="nav__controls">
             <a id="aboutDnsLink" href="/about.html" target="_blank">
@@ -144,7 +144,7 @@
             <path d="M13.0666 17.8667C16.8958 17.8667 20 14.7625 20 10.9333C20 7.10416 16.8958 4 13.0666 4C9.23746 4 6.1333 7.10416 6.1333 10.9333C6.1333 14.7625 9.23746 17.8667 13.0666 17.8667Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             <path d="M8 16L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <input enterkeyhint="search" class="start-input suggestions__input" type="text" placeholder="Enter a domain..." />
+        <input id="startInputElement" enterkeyhint="search" class="start-input suggestions__input" type="text" placeholder="Enter a domain..." />
         <svg class="icon reset__input--icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6.00012 18L18.0001 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
             <path d="M6.00012 6L17.9986 18.0015" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -566,9 +566,21 @@
                     >
                     </lottie-player>
                 </div>
-                <div class="payment__message--text">
-                    <div class="payment__message--title" id="payment-message-title" data-locale="payment_loading_header">Checking Payment</div>
-                    <div class="payment__message--description" id="payment-message-description" data-locale="payment_loading_description">We are checking your payment. It may take some time.</div>
+                <div id="payment-message-loading" class="payment__message--text">
+                    <div class="payment__message--title" data-locale="payment_loading_header">Checking Payment</div>
+                    <div class="payment__message--description" data-locale="payment_loading_description">We are checking your payment. It may take some time.</div>
+                </div>
+                <div id="payment-message-success" class="payment__message--text">
+                    <div class="payment__message--title" data-locale="payment_success_header">Placed bid successfully</div>
+                    <div class="payment__message--description" data-locale="payment_success_description">If your bid is outbid, the money will be returned to the wallet.</div>
+                </div>
+                <div id="payment-message-rejection" class="payment__message--text">
+                    <div class="payment__message--title" data-locale="payment_failure_rejection_header">Payment rejected</div>
+                    <div class="payment__message--description" data-locale="payment_failure_rejection_description">You have rejected the payment. Please try again.</div>
+                </div>
+                <div id="payment-message-error" class="payment__message--text">
+                    <div class="payment__message--title" data-locale="payment_failure_error_header">Something went wrong</div>
+                    <div class="payment__message--description" data-locale="payment_failure_error_description">Please reload the page or try again later.</div>
                 </div>
             </div>
             <button id="paymentCloseButton" style="display: none;" class="btn">

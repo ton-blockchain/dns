@@ -1181,7 +1181,7 @@ p {
 }
 
 .bid__modal--payment .payment__message--text {
-    display: flex; 
+    display: none; 
     flex-direction: column;
     gap: 4px;
     text-align: center;

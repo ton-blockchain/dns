@@ -3,6 +3,9 @@ SEC_IN_ONE_MONTH = 2592000
 
 let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
 
+$('#navInputElement').placeholder = store.localeDict.start_input_placeholder
+$('#startInputElement').placeholder = store.localeDict.start_input_placeholder
+
 const walletController = new WalletController({store})
 const testnetController = new TestnetController() 
 
@@ -633,6 +636,11 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         paymentLottieFailure.stop()
         paymentLottieLoading.removeEventListener('loop', handlePaymentStatus)
 
+        toggle('#payment-message-loading', false)
+        toggle('#payment-message-success', false)
+        toggle('#payment-message-failure', false)
+        toggle('#payment-message-error', false)
+
         qrContainer.innerHTML = ''
 
         paymentStatus = null
@@ -655,6 +663,11 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('#paymentLottieLoading', false)
         toggle('#paymentLottieSuccess', false)
         toggle('#paymentLottieFailure', false)
+
+        toggle('#payment-message-loading', false)
+        toggle('#payment-message-success', false)
+        toggle('#payment-message-failure', false)
+        toggle('#payment-message-error', false)
 
         toggle('.bid__modal--backdrop', true)
         toggle('.bid__modal', true)
@@ -777,34 +790,26 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
 
     const renderPaymentMessage = (type) => {
-        const title = $('#payment-message-title')
-        const description = $('#payment-message-description')
-
         if (type === 'loading') {
+            toggle('#payment-message-loading', true)
+
             toggle('#paymentLottieLoading', true)
             toggle('#paymentLottieSuccess', false)
 
             paymentLottieLoading.play()
 
-            title.innerText = 'Checking Payment'
-            title.setAttribute('data-locale', 'payment_loading_header')
-            description.innerText = 'We are checking your payment. It may take some time.'
-            description.setAttribute('data-locale', 'payment_loading_description')
-
             return
         }
 
         if (type === 'success') {
+            toggle('#payment-message-loading', false)
+            toggle('#payment-message-success', true)
+
             toggle('#paymentLottieLoading', false)
             toggle('#paymentLottieSuccess', true)
 
             paymentLottieLoading.stop()
             paymentLottieSuccess.play()
-
-            title.innerText = 'Placed bid successfully'
-            title.setAttribute('data-locale', 'payment_success_header')
-            description.innerText = 'If your bid is outbid, the money will be returned to the wallet.'
-            description.setAttribute('data-locale', 'payment_success_description')
 
             return
         }
@@ -820,19 +825,15 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         }
 
         if (type === 'rejection') {
-            title.innerText = 'Payment rejected'
-            title.setAttribute('data-locale', 'payment_failure_rejection_header')
-            description.innerText = 'You have rejected the payment. Please try again.'
-            description.setAttribute('data-locale', 'payment_failure_rejection_description')
+            toggle('#payment-message-loading', false)
+            toggle('#payment-message-rejection', true)
 
             return
         }
 
         if (type === 'error') {
-            title.innerText = 'Something went wrong'
-            title.setAttribute('data-locale', 'payment_failure_error_header')
-            description.innerText = 'Please reload the page or try again later.'
-            description.setAttribute('data-locale', 'payment_failure_error_description')
+            toggle('#payment-message-loading', false)
+            toggle('#payment-message-error', true)
 
             return
         }
