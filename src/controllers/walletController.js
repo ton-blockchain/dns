@@ -1,5 +1,6 @@
 const UserRejectsError = TonConnectSDK.UserRejectsError;
 const WalletInfoInjected = TonConnectSDK.WalletInfoInjected;
+const UnknownError = TonConnectSDK.UnknownError;
 
 class WalletController {
 	constructor(props) {
@@ -84,6 +85,13 @@ class WalletController {
 	errorHandler(error) {
 		if (error instanceof UserRejectsError) {
 			this.renderAllWalletButtons()
+			return
+		}
+		
+		if (error instanceof UnknownError && this.choosenWallet.name === 'MyTonWallet') {
+			alert(store.localeDict.wallet_connect_mytonwallet_unknown_error)
+			this.handleWalletModalClose()
+			return 
 		}
 	}
 

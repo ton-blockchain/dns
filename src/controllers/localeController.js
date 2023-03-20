@@ -135,6 +135,7 @@ const INDEX_LOCALES = {
 		payment_failure_error_header: 'Произошла ошибка',
 		payment_failure_error_description: 'Пожалуйста перезагрузите страницу и попробуйте еще раз',
 		payment_done_button: 'Готово',
+		wallet_connect_mytonwallet_unknown_error: 'Пожалуйста проверьте свой кошелек. Попробуйте сменить сеть в настройках кошелька.',
 	},
 	en: {
 		address: 'Address',
@@ -175,6 +176,7 @@ const INDEX_LOCALES = {
 		payment_failure_error_header: 'Something went wrong',
 		payment_failure_error_description: 'Please reload the page or try again later.',
 		payment_done_button: 'Done',
+		wallet_connect_mytonwallet_unknown_error: 'Please check your wallet. Try to switch network in the wallet settings.',
 	},
 }
 
