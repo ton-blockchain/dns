@@ -18,34 +18,11 @@ class WalletController {
 		this.qrContainer = $('#connect-wallet-qr-link')
 		this.renderLoginButton()
 		this.connector = new TonConnectSDK.TonConnect()
-		this.unsubscribe = this.connector.onStatusChange(async(walletInfo) => {
-			this.renderLoginButton()
 
-			if (!walletInfo) {
-				return
-			}
-
-			this.handleWalletModalClose()
-			toggle('.mobile-menu__wallet-menu__container', true)
-
-			if (!this.currentWallet) {
-				await this.getWalletsList()
-
-				const walletName = walletInfo.device.appName
-				const currentWallet = this.walletConfig.find((wallet) => wallet.name === walletName)
-				this.currentWallet = { ...currentWallet, walletInfo: { ...walletInfo } }
-
-				this.renderLoginButton()
-			}
-
-			if (this.wallets) {
-				const walletName = walletInfo.device.appName
-				const currentWallet = this.wallets.walletsList.find((wallet) => wallet.name === walletName)
-				this.currentWallet = { ...this.currentWallet, ...currentWallet}
-			}
-
-			testnetController.update()
-		}, console.error)
+		this.unsubscribe = this.connector.onStatusChange(
+			(walletInfo) => this.statusChangeHandler(walletInfo), 
+			(error) => this.errorHandler(error)
+		)
 
 		this.connector.restoreConnection()
 			.then(() => this.loading = false)
@@ -72,6 +49,41 @@ class WalletController {
 				jsBridgeKey: this.wallets.embeddedWallet.jsBridgeKey,
 			})
 			return
+		}
+	}
+
+	async statusChangeHandler(walletInfo) {
+		this.renderLoginButton()
+
+		if (!walletInfo) {
+			return
+		}
+
+		this.handleWalletModalClose()
+		toggle('.mobile-menu__wallet-menu__container', true)
+
+		if (!this.currentWallet) {
+			await this.getWalletsList()
+
+			const walletName = walletInfo.device.appName
+			const currentWallet = this.walletConfig.find((wallet) => wallet.name === walletName)
+			this.currentWallet = { ...currentWallet, walletInfo: { ...walletInfo } }
+
+			this.renderLoginButton()
+		}
+
+		if (this.wallets) {
+			const walletName = walletInfo.device.appName
+			const currentWallet = this.wallets.walletsList.find((wallet) => wallet.name === walletName)
+			this.currentWallet = { ...this.currentWallet, ...currentWallet}
+		}
+
+		testnetController.update()
+	}
+
+	errorHandler(error) {
+		if (error instanceof UserRejectsError) {
+			this.renderAllWalletButtons()
 		}
 	}
 
@@ -335,21 +347,36 @@ class WalletController {
 	}
 
 	handleWalletButtonClick = (e, wallet) => {
-		e.preventDefault()
-		e.stopPropagation()
-
 		this.choosenWallet = wallet
+		e.target.style.pointerEvents = 'none'
 		this.login()
 	}
 
 	renderWalletButton = (wallet) => {
 		const button = document.createElement('button')
+		button.style.pointerEvents = 'all'
+
 		const icon = this.walletConfig.find((w) => w.name === wallet.name).icon
 		button.classList.add('btn', 'wallet--secondary_button', 'wallet--wallet_button')
+
 		button.innerHTML = `<img src="${icon}" />${wallet.name}`
 		button.onclick = (e) => this.handleWalletButtonClick(e, wallet)
 
 		return button
+	}
+
+	renderAllWalletButtons = () => {
+		const buttonContainer = document.getElementById(
+			'wallet__modal--buttons__container'
+		)
+
+		const wallets = this.wallets.walletsList.map(this.renderWalletButton)
+
+		buttonContainer.innerHTML = ''
+
+		wallets.forEach((wallet) => {
+			buttonContainer.appendChild(wallet)
+		})
 	}
 
 	handleWalletModalClose = (e) => {
@@ -377,19 +404,7 @@ class WalletController {
 		toggle('.wallet__modal--first__step', true)
 		toggle('.wallet__modal--second__step', false)
 
-		const buttonContainer = document.getElementById(
-			'wallet__modal--buttons__container'
-		)
-
-		const wallets = this.wallets.walletsList.map(this.renderWalletButton)
-
-		if (buttonContainer.children.length) {
-			return
-		}
-
-		wallets.forEach((wallet) => {
-			buttonContainer.appendChild(wallet)
-		})
+		this.renderAllWalletButtons()
 	}
 
 	renderSecondStep = (universalLink) => {
