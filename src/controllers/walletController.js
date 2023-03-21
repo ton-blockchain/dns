@@ -1,6 +1,7 @@
 const UserRejectsError = TonConnectSDK.UserRejectsError;
 const WalletInfoInjected = TonConnectSDK.WalletInfoInjected;
 const UnknownError = TonConnectSDK.UnknownError;
+const WalletNotInjectedError = TonConnectSDK.WalletNotInjectedError;
 
 class WalletController {
 	constructor(props) {
@@ -28,6 +29,9 @@ class WalletController {
 		this.connector.restoreConnection()
 			.then(() => this.loading = false)
 			.then(() => this.init())
+			.catch((error) => {
+				this.errorHandler(new WalletNotInjectedError(error))
+			})
 
 		window.addEventListener('resize', () => {
 			this.renderLoginButton();
@@ -92,6 +96,16 @@ class WalletController {
 			alert(store.localeDict.wallet_connect_mytonwallet_unknown_error)
 			this.handleWalletModalClose()
 			return 
+		}
+
+		if (error instanceof WalletNotInjectedError) {
+			this.handleWalletModalClose()
+			window.localStorage.removeItem('ton-connect-storage_bridge-connection')
+
+			this.loading = false
+			this.init()
+
+			return
 		}
 	}
 
