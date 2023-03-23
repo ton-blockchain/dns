@@ -289,7 +289,7 @@ class WalletController {
 			const { address, chain} = this.currentWallet.walletInfo.account
 			const userFriendlyAddress = this.getUserFriendlyAddress(address, chain);
 
-			truncasedAdress = isMobile() ? truncase(userFriendlyAddress, 10, 10) : truncase(userFriendlyAddress, 4, 4)
+			truncasedAdress = window.innerWidth < 569 ? truncase(userFriendlyAddress, 10, 10) : truncase(userFriendlyAddress, 4, 4)
 		}
 
 		const addressWithIcon = `
