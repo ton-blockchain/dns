@@ -107,6 +107,12 @@ class WalletController {
 
 			return
 		}
+
+		if (error instanceof UnknownError) {
+			this.renderAllWalletButtons()
+
+			return
+		}
 	}
 
 	async getWalletsList() {
