@@ -558,22 +558,25 @@ const renderSearchHistory = (node) => {
 
     try {
         const historyMarkup = getHistoryFromStorage().map(
-            (historyRecord) =>
-                `<button class="hover__button" data-record="${historyRecord}">
+            (historyRecord) => {
+                const sanitizedValue = encodeHTML(historyRecord)
+                
+                return `<button class="hover__button" data-record="${sanitizedValue}">
                     <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.99939 12C2.99939 7.02944 7.02883 3 11.9994 3C16.97 3 20.9994 7.02944 20.9994 12C20.9994 16.9706 16.97 21 11.9994 21C9.44416 21 7.13764 19.9351 5.49939 18.225" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M0.999981 10.9999L2.98998 13.4399L4.97998 10.9999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M12.0273 7.15381V12.3461H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <div class="text--overflow__hidden" data-record="${historyRecord}">
-                    	<span>${historyRecord}</span>
+                    <div class="text--overflow__hidden" data-record="${sanitizedValue}">
+                    	<span>${sanitizedValue}</span>
                     </div>
-                    <svg data-record="${historyRecord}" class="icon history__record remove" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg data-record="${sanitizedValue}" class="icon history__record remove" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6.00012 18L18.0001 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                         <path d="M6.00012 6L17.9986 18.0015" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                     </svg>
                 </button>
             `
+            }
         )
 
         historyContainer.innerHTML = historyMarkup.join('')
