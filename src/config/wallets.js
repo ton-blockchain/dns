@@ -11,6 +11,10 @@ const WALLETS_CONFIG = [
     name: 'MyTonWallet',
     icon: '../assets/ton-connect/wallet_icons/mytonwallet.svg',
   },
+  {
+    name: 'Tonhub',
+    icon: '../assets/ton-connect/wallet_icons/tonhub.svg',
+  },
   // {
   //   name: 'TonSafe',
   //   icon: '../assets/ton-connect/wallet_icons/tonsafe.svg',
