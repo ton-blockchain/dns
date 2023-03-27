@@ -354,6 +354,12 @@ function makePageVisible(){
     document.body.classList.remove('hidden')
 }
 
+function encodeHTML(str){
+    return String(str).replace(/[^\w. ]/gi, function(c){
+        return '&#'+c.charCodeAt(0)+';';
+    });
+}
+
 function truncase(str, beginLength, endLength) {
     return str.slice(0, beginLength) + '...' + str.slice(-endLength)
 }
@@ -400,4 +406,4 @@ function makeid(length) {
       counter += 1;
     }
     return result;
-  }
+}
