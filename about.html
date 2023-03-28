@@ -35,7 +35,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="./libs/preloadImages.js?5">
+    <script type="text/javascript" src="./src/state.js"></script>
+    <script type="text/javascript" src="src/controllers/themeController.js"></script>
+    <script type="text/javascript" src="./src/libs/preloadImages.js?5">
         preloadImages([
             '/assets/logo.svg',
             '/assets/dns_logo.svg',
@@ -44,11 +46,12 @@
             '/assets/dns_logo_dark_hover.svg',
         ]);
     </script>
-    <script type="text/javascript" src="./src/theme.js?5">
-        initTheme();
-    </script>
     <script defer data-domain="dns.ton.org" src="https://plausible.io/js/script.js"></script>
 </head>
+<script>
+    const themeController = new ThemeController({store})
+    themeController.init();
+</script>
 <body class="about--body hidden">
 <nav class="absolute-header">
     <div class="container-inner">
@@ -83,7 +86,7 @@
                     <span class="bold" data-locale="about">About</span>
                 </button>
             </a>
-            <button class="hover__button" id="lottie-button" onclick="toggleTheme()">
+            <button class="hover__button" id="lottie-button" onclick="themeController.toggle()">
                 <lottie-player id="sunLottie" src="./assets/lottie/sun_moon.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
                 <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
             </button>
@@ -330,7 +333,7 @@
             </div>
             <div class="mobile-menu-right">
                 <label class="form-switch">
-                    <input type="checkbox" id="mobile-theme-switch" onclick="toggleTheme()" checked="">
+                    <input type="checkbox" id="mobile-theme-switch" onclick="themeController.toggle()" checked="">
                     <i></i>
                 </label>
             </div>
@@ -377,13 +380,59 @@
     </div>
 </footer>
 
-<script type="text/javascript" src="./libs/jquery.min-3.4.1.js"></script>
-<script type="text/javascript" src="./libs/lottie-player-1.6.2.js"></script>
+<script type="text/javascript" src="./src/libs/jquery.min-3.4.1.js"></script>
+<script type="text/javascript" src="./src/libs/lottie-player-1.6.2.js"></script>
 <script type="text/javascript" src="./src/analytics.js?5"></script>
 <script type="text/javascript" src="./src/utils.js?5"></script>
 <script type="text/javascript" src="./src/lottie.js?5"></script>
 <script type="text/javascript" src="./src/mobile-menu.js?5"></script>
-<script type="text/javascript" src="./src/dynamic-header.js?5"></script>
-<script type="text/javascript" src="./src/about.js?5"></script>
+<script type="text/javascript" src="./src/controllers/localeController.js"></script>
+<script>
+    function handleScroll() {
+        const headerEl = document.querySelector('nav')
+        const borderOffset = 0
+
+        if (!headerEl) {
+            return
+        }
+
+        if (window.scrollY > borderOffset) {
+            if (!headerEl.classList.contains('fixed-header')) {
+                headerEl.classList.add('fixed-header')
+            }
+
+            return
+        }
+
+        if (headerEl.classList.contains('fixed-header')) {
+            headerEl.classList.remove('fixed-header')
+        }
+    }
+
+    makePageVisible()
+
+    handleScroll()
+
+    window.addEventListener('scroll', handleScroll)
+
+    document.addEventListener('DOMContentLoaded', function() {
+            new LocaleController({store, localeDict: 'about'}).init()
+            toggle('#about', true, 'flex')
+
+            const elements = document.getElementsByClassName('video-element')
+
+            for (var element of elements) {
+                element.muted = 'muted'
+                element.play()
+            }
+
+            if (window.location.hash) {
+                window.scroll({
+                    top: document.querySelector(window.location.hash).offsetTop,
+                })
+            }
+        }
+    )
+</script>
 </body>
 </html>

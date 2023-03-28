@@ -27,7 +27,7 @@ html[data-theme='light'] {
 
     --background-content-hover: rgba(118, 152, 187, 0.06);
     --background-suggestions: #FFFFFF;
-    --background-segment: #F2F5F8;
+    --background-segment: rgba(192, 209, 217, 0.48);
     --background-fixed-header: rgba(255, 255, 255, 0.56);
 
     --card-border-default: #DDE3E6;
@@ -35,6 +35,8 @@ html[data-theme='light'] {
     --card-shadow: rgba(114, 138, 150, 0.12);
 
     --button-secondary-stroke: #E9EEF1;
+    --wallet-button-secondary-stroke: #F7F9FB;
+
 
     --accent-default: #0088CC;
     --accent-default--border-pressed: rgba(0, 136, 204, 0.8);
@@ -108,7 +110,8 @@ html[data-theme='dark'] {
     --card-shadow: rgba(0, 0, 0, 0.16);
 
     --button-secondary-stroke: #303035;
-
+    --wallet-button-secondary-stroke: #2D2D32;
+    
 
     --accent-default: #01A4F5;
     --accent-default--border-pressed: rgba(0, 153, 229, 0.8);
