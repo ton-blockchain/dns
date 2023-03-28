@@ -1771,6 +1771,7 @@ p {
         max-height: 660px;
         transform: none;
         padding: 24px 16px 16px 16px;
+        padding-bottom: max(env(safe-area-inset-bottom, 16px), 16px);
         box-sizing: border-box;
         background: var(--background-page);
         border-radius: 24px 24px 0 0;
