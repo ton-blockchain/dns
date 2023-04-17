@@ -358,63 +358,70 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         FlipTimer.addTimer('#auction-bid-flip-clock-container', true)
     }
 
+    const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
+
+    if (previousBid !== auctionAmount) {
+        closeBidModal()
+    }
+
+    previousBid = auctionAmount
+
+
+    $('#auctionAmount').innerText = formatNumber(auctionAmount, false)
+
+    setAddress($('#auctionOwnerAddress'), bestBidAddress)
+
+    const minBet = TonWeb.utils.fromNano(
+        bestBidAmount.mul(new TonWeb.utils.BN(105)).div(new TonWeb.utils.BN(100))
+    )
+
+    $('#auctionMinBet').innerText = formatNumber(minBet, false)
+
+    const bidStep = TonWeb.utils.fromNano(
+        bestBidAmount
+            .mul(new TonWeb.utils.BN(105))
+            .div(new TonWeb.utils.BN(100))
+            .sub(bestBidAmount)
+    )
+    const bidStepToPercent = (bidStep / auctionAmount) * 100
+
+    $('#auctionBidStep').innerText = formatNumber(bidStep, false)
+    $('#auctionBidStepConverted').innerText = formatNumber(bidStepToPercent.toFixed(2))
+
+    attachBidModalListeners(domain, minBet, '#auctionBtn', domainItemAddress)
+
     getCoinPrice().then((price) => {
-        const auctionAmount = TonWeb.utils.fromNano(bestBidAmount)
-
-        if (previousBid !== auctionAmount) {
-            closeBidModal()
-        }
-
-        previousBid = auctionAmount
-
-
-        $('#auctionAmount').innerText = formatNumber(auctionAmount, false)
         if (price) {
             $('#auctionAmountConverted').innerText = formatNumber(auctionAmount * price, 2)
         }
-        setAddress($('#auctionOwnerAddress'), bestBidAddress)
-
-        const minBet = TonWeb.utils.fromNano(
-            bestBidAmount.mul(new TonWeb.utils.BN(105)).div(new TonWeb.utils.BN(100))
-        )
-
-        $('#auctionMinBet').innerText = formatNumber(minBet, false)
+       
         if (price) {
             $('#auctionMinBetConverted').innerText = formatNumber(minBet * price, 2)
         }
 
-        const bidStep = TonWeb.utils.fromNano(
-            bestBidAmount
-                .mul(new TonWeb.utils.BN(105))
-                .div(new TonWeb.utils.BN(100))
-                .sub(bestBidAmount)
-        )
-        const bidStepToPercent = (bidStep / auctionAmount) * 100
-
-        $('#auctionBidStep').innerText = formatNumber(bidStep, false)
-        $('#auctionBidStepConverted').innerText = formatNumber(bidStepToPercent.toFixed(2))
-
-        attachBidModalListeners(domain, minBet, '#auctionBtn', domainItemAddress)
     })
 }
 
-const renderFreeDomain = (domain) => {
+const renderFreeDomain = async (domain) => {
     domainType = FREE_DOMAIN_TYPE
 
-    getCoinPrice().then((price) => {
-        const salePrice = TonWeb.utils.fromNano(getMinPrice(domain))
+    const salePrice = TonWeb.utils.fromNano(getMinPrice(domain))
 
-        $('#freeMinBet').innerText = formatNumber(salePrice, false)
+    $('#freeMinBet').innerText = formatNumber(salePrice, false)
+
+    $('#bid-flip-clock-container').dataset.endDate = new Date(
+        Date.now() + getAuctionDuration() * 1000
+    ).toISOString()
+    FlipTimer.addTimer('#bid-flip-clock-container', false)
+
+    attachBidModalListeners(domain, salePrice, '#bidButton')
+
+    getCoinPrice().then((price) => {
         if (price) {
             $('#freeMinBetConverted').innerText = formatNumber(salePrice * price, 2)
         }
-
-        $('#bid-flip-clock-container').dataset.endDate = new Date(
-            Date.now() + getAuctionDuration() * 1000
-        ).toISOString()
-        FlipTimer.addTimer('#bid-flip-clock-container', false)
-
-        attachBidModalListeners(domain, salePrice, '#bidButton')
+    }).catch((e) => {
+        console.error(e)
     })
 }
 

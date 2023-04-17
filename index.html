@@ -40,6 +40,7 @@
     <script type="text/javascript" src="src/state.js?6"></script>
     <script type="text/javascript" src="src/controllers/themeController.js?6"></script>
     <script type="text/javascript" src="src/controllers/flipTimerController.js?6"></script>
+    <script type="text/javascript" src="./src/utils.js?6"></script>
     <script type="text/javascript" src="./src/libs/preloadImages.js?6">
         preloadImages([
             '/assets/logo.svg',
@@ -54,6 +55,9 @@
 <script>
     const themeController = new ThemeController({store})
     themeController.init();
+</script>
+<script>
+    getCoinPrice();
 </script>
 <body class="hidden">
 <div class="app__container">
@@ -728,7 +732,6 @@
 <script type="text/javascript" src='./src/libs/bignumbers.js?6'></script>
 <script type="text/javascript" src="./src/analytics.js?6"></script>
 <script type="text/javascript" src="./src/controllers/localeController.js?6"></script>
-<script type="text/javascript" src="./src/utils.js?6"></script>
 <script type="text/javascript" src="./src/libs/flip-clock.js?6"></script>
 <script type="text/javascript" src="./src/lottie.js?6"></script>
 <script type="text/javascript" src="./src/mobile-menu.js?6"></script>
