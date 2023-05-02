@@ -2686,7 +2686,7 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
 /* TON CONNECT UI */
 
 tc-root * {
-    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-family: Inter, Helvetica, Arial, sans-serif !important;
 }
 
 [data-tc-dropdown-button="true"] {
