@@ -2689,22 +2689,28 @@ tc-root * {
     font-family: Inter, Helvetica, Arial, sans-serif !important;
 }
 
+
+[data-tc-connect-button="true"] {
+    box-shadow: none !important;
+}
+
 [data-tc-dropdown-button="true"] {
     box-shadow: none !important;
-    border: 1px solid #E9EEF1 !important;
+    border: 1px solid var(--button-secondary-stroke) !important;
 }
 
 [data-tc-dropdown="true"] {
     box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08) !important; 
+    border: 1px solid var(--button-secondary-stroke) !important;
 }
 
 [data-tc-connect-button-loading="true"] {
     box-shadow: none !important;
-    border: 1px solid #E9EEF1 !important;
+    border: 1px solid var(--button-secondary-stroke) !important;
 }
 
 [data-tc-dropdown-button="true"]:hover {
-    background: #F7F9FB !important;
+    background: var(--wallet-button-secondary-stroke) !important;
 }
 
 /* COMMON */
