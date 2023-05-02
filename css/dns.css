@@ -34,7 +34,7 @@ body.scroll__disabled {
     overflow: hidden;
     position: fixed;
     left: 0;
-    top: 0;
+    top: 0 !important;
     bottom: 0;
     right: 0;
 }
@@ -825,16 +825,16 @@ nav .container-inner {
     }
 
     .nav__controls {
-        display: none;
+        gap: 4px;
+    }
+
+    .nav-item__desktop {
+        display: none !important;
     }
 
     .mobile {
         display: flex;
         margin-left: auto;
-    }
-
-    .squizedPadding .mobile {
-        margin-left: 16px;
     }
 
     .hover__button.menu__controller {
@@ -1263,7 +1263,7 @@ p {
     top: 0;
     bottom: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
     overflow-y: scroll;
     z-index: 3;
     transition: opacity var(--block--transition);
@@ -2683,6 +2683,29 @@ html[data-theme='dark'] .mobile-menu #moonLottieBlack {
     transform: translate3d(22px, 2px, 0);
 }
 
+/* TON CONNECT UI */
+
+tc-root * {
+    font-family: Inter, Helvetica, Arial, sans-serif;
+}
+
+[data-tc-dropdown-button="true"] {
+    box-shadow: none !important;
+    border: 1px solid #E9EEF1 !important;
+}
+
+[data-tc-dropdown="true"] {
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.08), 0px 0px 1px rgba(0, 0, 0, 0.08) !important; 
+}
+
+[data-tc-connect-button-loading="true"] {
+    box-shadow: none !important;
+    border: 1px solid #E9EEF1 !important;
+}
+
+[data-tc-dropdown-button="true"]:hover {
+    background: #F7F9FB !important;
+}
 
 /* COMMON */
 .hover__button {

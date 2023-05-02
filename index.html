@@ -89,44 +89,29 @@
             </svg>
             <input id="navInputElement" enterkeyhint="search" type="text" data-locale="start_input_placeholder" placeholder="[data-locale]" class="suggestions__input"/>
         </div>
+
         <div class="nav__controls">
-            <a id="aboutDnsLink" href="/about.html" target="_blank">
+            <a id="aboutDnsLink" class="nav-item__desktop" href="/about.html" target="_blank">
                 <button class="hover__button" id="aboutButton">
                     <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
                     <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
                     <span class="bold" data-locale="about">About</span>
                 </button>
             </a>
-            <button id="connect-wallet-button" class="btn wallet__connect">
-                <span id="connect-wallet-button-content"></span>
-                <div id="connect-wallet-tooltip" class="wallet__tooltip">
-                    <div class="wallet__tooltip__row connect-wallet-tooltip-logout" >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m9 9 3.678 3L9 15M12 12H4" stroke="currentColor" stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round" />
-                            <path
-                              d="M12 4h3.772c1.528 0 2.095.127 2.657.428.493.263.88.65 1.143 1.143.3.562.428 1.129.428 2.657v7.544c0 1.528-.127 2.095-.428 2.657-.263.493-.65.88-1.143 1.143-.562.3-1.129.428-2.657.428H12"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        </svg>
-                        <span data-locale="wallet_logout">Log out</span>
-                    </div>
-                </div>
-            </button>
-            <button class="hover__button" id="lottie-button" onclick="themeController.toggle()">
+            <div id="connect-wallet-button"></div>
+            <button class="nav-item__desktop hover__button" id="lottie-button" onclick="themeController.toggle()">
                 <lottie-player id="sunLottie" src="./assets/lottie/sun_moon.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
                 <lottie-player id="moonLottie" src="./assets/lottie/moon_sun_light.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
             </button>
-        </div>
-        <div class="mobile">
-            <button id="connect-wallet-button-mobile" class="btn wallet__connect"></button>
-            <button class="hover__button menu__controller" onclick="toggleMobileMenu()">
-                <svg class="icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.33281 8.13354C6.67007 8.13354 6.13281 8.6708 6.13281 9.33354C6.13281 9.99629 6.67007 10.5335 7.33281 10.5335H24.6657C25.3284 10.5335 25.8657 9.99629 25.8657 9.33354C25.8657 8.6708 25.3284 8.13354 24.6657 8.13354H7.33281Z" fill="currentColor" />
-                    <path d="M6.13281 16.0002C6.13281 15.3375 6.67007 14.8002 7.33281 14.8002H24.6657C25.3284 14.8002 25.8657 15.3375 25.8657 16.0002C25.8657 16.663 25.3284 17.2002 24.6657 17.2002H7.33281C6.67007 17.2002 6.13281 16.663 6.13281 16.0002Z" fill="currentColor" />
-                    <path d="M6.13281 22.6669C6.13281 22.0041 6.67007 21.4669 7.33281 21.4669H24.6657C25.3284 21.4669 25.8657 22.0041 25.8657 22.6669C25.8657 23.3296 25.3284 23.8669 24.6657 23.8669H7.33281C6.67007 23.8669 6.13281 23.3296 6.13281 22.6669Z" fill="currentColor" />
-                </svg>
-            </button>
+            <div class="mobile">
+                <button class="hover__button menu__controller" onclick="toggleMobileMenu()">
+                    <svg class="icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.33281 8.13354C6.67007 8.13354 6.13281 8.6708 6.13281 9.33354C6.13281 9.99629 6.67007 10.5335 7.33281 10.5335H24.6657C25.3284 10.5335 25.8657 9.99629 25.8657 9.33354C25.8657 8.6708 25.3284 8.13354 24.6657 8.13354H7.33281Z" fill="currentColor" />
+                        <path d="M6.13281 16.0002C6.13281 15.3375 6.67007 14.8002 7.33281 14.8002H24.6657C25.3284 14.8002 25.8657 15.3375 25.8657 16.0002C25.8657 16.663 25.3284 17.2002 24.6657 17.2002H7.33281C6.67007 17.2002 6.13281 16.663 6.13281 16.0002Z" fill="currentColor" />
+                        <path d="M6.13281 22.6669C6.13281 22.0041 6.67007 21.4669 7.33281 21.4669H24.6657C25.3284 21.4669 25.8657 22.0041 25.8657 22.6669C25.8657 23.3296 25.3284 23.8669 24.6657 23.8669H7.33281C6.67007 23.8669 6.13281 23.3296 6.13281 22.6669Z" fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </nav>
@@ -360,27 +345,8 @@
     </div>
     <div class="mobile-menu-body">
         <div class="mobile-menu__top">
-            <div class="mobile-menu-left mobile-menu__wallet-button" id="mobile-menu-connect-wallet-button">Connect wallet</div>
-
-            <div class="mobile-menu__wallet-menu__container">
-                <div class="separator"></div>
-                <div class="mobile-menu__wallet-menu">
-                    <div class="mobile-menu__wallet-menu__row connect-wallet-tooltip-logout" >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="m9 9 3.678 3L9 15M12 12H4" stroke="currentColor" stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round" />
-                            <path
-                              d="M12 4h3.772c1.528 0 2.095.127 2.657.428.493.263.88.65 1.143 1.143.3.562.428 1.129.428 2.657v7.544c0 1.528-.127 2.095-.428 2.657-.263.493-.65.88-1.143 1.143-.562.3-1.129.428-2.657.428H12"
-                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        </svg>
-                        <span data-locale="wallet_logout">Log out</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="mobile-menu-navigation">
-                <div class="separator"></div>
                 <a class="mobile-menu-row" href="/about.html" target="_blank">
                     <div class="mobile-menu-left">
                     <span class="mobile-lottie-container">
@@ -719,6 +685,7 @@
     </div>
 </footer>
 </div>
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
 <script type="text/javascript" src="./src/libs/tonweb-0.0.59.js?6"></script>
 <script type="text/javascript" src="./src/libs/jquery.min-3.4.1.js?6"></script>
