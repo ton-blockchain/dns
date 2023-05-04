@@ -105,7 +105,7 @@ const getAuctionDuration = () => {
     return auction_start_duration - (auction_start_duration - auction_end_duration) * months / 12;
 }
 
-const API_URL = 'https://api.coingecko.com/api/v3/coins/the-open-network/';
+const API_URL = 'https://b45wjlr7aykwdxyljnnbnrzkdy0wcyth.lambda-url.eu-central-1.on.aws';
 let ACTIVE_SCREEN;
 let LAST_PRICE_UPDATED_DATE = null
 let LAST_PRICE;
