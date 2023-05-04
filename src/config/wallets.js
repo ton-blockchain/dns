@@ -1,7 +1,7 @@
 const THEME = TON_CONNECT_UI.THEME;
 
 const COLORS_SET = {
-  [THEME.LIGHT]: {
+	[THEME.LIGHT]: {
 		connectButton: {
 			background: '#0088CC',
 			foreground: '#FFFFFF',
@@ -15,13 +15,13 @@ const COLORS_SET = {
 			error: '#ED6767',
 		},
 		background: {
-				primary: '#FFFFFF',
-				secondary: '#F5F7FA',
-				segment: '#FFFFFF',
+			primary: '#FFFFFF',
+			secondary: '#F5F7FA',
+			segment: '#FFFFFF',
 		},
 		text: {
-				primary: '#04060B',
-				secondary: '#728A96',
+			primary: '#04060B',
+			secondary: '#728A96',
 		},
 	},
   [THEME.DARK]: {
@@ -38,13 +38,13 @@ const COLORS_SET = {
 			error: '#FF5C5C',
 		},
 		background: {
-				primary: '#232328',
-				secondary: '#2D2D32',
-				segment: '#232328',
+			primary: '#232328',
+			secondary: '#2D2D32',
+			segment: '#232328',
 		},
 		text: {
-				primary: '#F3F3F6',
-				secondary: '#ACACAF',
+			primary: '#F3F3F6',
+			secondary: '#ACACAF',
 		},
 	},
 }
