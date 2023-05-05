@@ -1,25 +1,53 @@
-const WALLETS_CONFIG = [
-  {
-    name: 'Tonkeeper',
-    icon: '../assets/ton-connect/wallet_icons/tonkeeper.svg',
-  },
-  {
-    name: 'OpenMask',
-    icon: '../assets/ton-connect/wallet_icons/openmask.svg',
-  },
-  {
-    name: 'MyTonWallet',
-    icon: '../assets/ton-connect/wallet_icons/mytonwallet.svg',
-  },
-  // {
-  //   name: 'Tonhub',
-  //   icon: '../assets/ton-connect/wallet_icons/tonhub.svg',
-  // },
-  // {
-  //   name: 'TonSafe',
-  //   icon: '../assets/ton-connect/wallet_icons/tonsafe.svg',
-  // },
-]
+const THEME = TON_CONNECT_UI.THEME;
+
+const COLORS_SET = {
+	[THEME.LIGHT]: {
+		connectButton: {
+			background: '#0088CC',
+			foreground: '#FFFFFF',
+		},
+		accent: '#0088CC',
+		icon: {
+			primary: '#232328',
+			secondary: '#98B2BF',
+			tertiary: '#C0D1D9',
+			success: '#47C58A',
+			error: '#ED6767',
+		},
+		background: {
+			primary: '#FFFFFF',
+			secondary: '#F5F7FA',
+			segment: '#FFFFFF',
+		},
+		text: {
+			primary: '#04060B',
+			secondary: '#728A96',
+		},
+	},
+  [THEME.DARK]: {
+		connectButton: {
+			background: '#0088CC',
+			foreground: '#FFFFFF',
+		},
+		accent: '#F3F3F6',
+		icon: {
+			primary: '#E5E5EA',
+			secondary: '#606069',
+			tertiary: '#45454B',
+			success: '#32D583',
+			error: '#FF5C5C',
+		},
+		background: {
+			primary: '#232328',
+			secondary: '#2D2D32',
+			segment: '#232328',
+		},
+		text: {
+			primary: '#F3F3F6',
+			secondary: '#ACACAF',
+		},
+	},
+}
 
 const CHAIN = {
   MAINNET: "-239",
