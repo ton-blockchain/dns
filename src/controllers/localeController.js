@@ -86,7 +86,6 @@ const INDEX_LOCALES = {
 		sent_to: 'Адрес',
 		message: 'Комментарий',
 		place_with_extension: 'Открыть кошелек',
-		place_bid: 'Сделать ставку',
 		copy_link: 'Скопировать ссылку для оплаты',
 		copy_link_copied: 'Ссылка скопирована!',
 		place_with_app: 'Сделать ставку через Tonkeeper',
@@ -122,7 +121,7 @@ const INDEX_LOCALES = {
 		wallet_modal_second_description_1: 'Отсканируйте QR-код с помощью мобильного телефона или',
 		wallet_modal_second_description_2: 'app.',
 		wallet_modal_second_back_button: 'Назад',
-		wallet_logout: 'Выйти', 
+		wallet_logout: 'Выйти',
 		payment_subheader_1: 'Откройте приложение',
 		payment_subheader_2: 'и подтвердите',
 		payment_subheader_3: 'транзакцию',
@@ -208,6 +207,7 @@ const ABOUT_LOCALES = {
 			'Разработчики в сети TON только усилили работу в этом направлении — например, последнее <a href="https://t.me/toncoin/400">обновление</a> <a href="https://t.me/wallet">@wallet</a> позволяет отправлять монеты собеседнику прямо в мессенджере Telegram, а <a href="https://t.me/toncoin/441">интеграция</a> NFT в Tonkeeper задает новый стандарт качества для криптокошельков.',
 		a_simple_and_convenient_blockchain_p3:
 			'Вы могли заметить, что в TON-приложениях почти нет технической информации — мы не забиваем голову пользователей номерами блоков и хешами транзакций.',
+		footer_support: "Помощь",
 		a_simple_and_convenient_blockchain_p4:
 			'Единственная техническая деталь, которую сразу видел пользователь — это адрес кошелька, и хоть он не сильно сложнее номера телефона или адреса банковской карты, мы рады, что с запуском TON DNS это тоже удалось упростить.',
 		but_we_are_taking_a_step_even_closer_toward:
