@@ -639,6 +639,7 @@ nav .container-inner {
 
 .badge {
     display: flex;
+    height: 48px;
     font-size: 20px;
     line-height: 16px;
     align-items: center;
@@ -2326,6 +2327,10 @@ p {
 
     .nav-input {
         display: none !important;
+    }
+
+    .badge {
+        height: auto;
     }
 }
 
