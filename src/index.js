@@ -1,12 +1,16 @@
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
 
+const RENEW_DOMAIN_PRICE = 0.015;
+
 let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
 
 $('#navInputElement').placeholder = store.localeDict.start_input_placeholder
 $('#startInputElement').placeholder = store.localeDict.start_input_placeholder
 
+
 const walletController = new WalletController({store})
+const myDomainsController = new MyDomainsController();
 const testnetController = new TestnetController() 
 
 makePageVisible()
@@ -180,6 +184,21 @@ const setDomain = (domain) => {
                 renderFreeDomain(domain)
                 setScreen('freeDomainScreen')
             } else if (ownerAddress) {
+                const domainItemTakenByUser = await myDomainsController.getDomainItemByNameOnceLoaded(
+                    currentDomain
+                );
+                const isTakenByUser = !!domainItemTakenByUser;
+
+                if (isTakenByUser) {
+                    $('#infoBtn').style.display = 'none';
+                    $('#connectBtnBusy').style.display = 'inline-flex';
+                    $('#renewDomainButton').style.display = 'inline-flex';
+                } else {
+                    $('#infoBtn').style.display = 'inline-flex';
+                    $('#connectBtnBusy').style.display = 'none';
+                    $('#renewDomainButton').style.display = 'none';
+                }
+
                 currentOwner = ownerAddress.toString(true, true, true, IS_TESTNET)
                 currentDnsItem = dnsItem
                 storeDomainStatus('busy')
@@ -187,8 +206,10 @@ const setDomain = (domain) => {
                     domain,
                     domainAddressString,
                     ownerAddress.toString(true, true, true, IS_TESTNET),
-                    lastFillUpTime
+                    lastFillUpTime,
+                    isTakenByUser
                 )
+
                 setScreen('busyDomainScreen')
             } else {
                 storeDomainStatus('auction')
@@ -289,6 +310,14 @@ const processUrl = () => {
     }
 
     const domainFromUrl = decodeURIComponent(window.location.hash.substring(1)).toLowerCase()
+
+    if (domainFromUrl === '/my-domains') {
+        // navigating back to start screen because
+        // before laoding the domain list we need to check if account authenticated
+        // if so the button to 'my domains' becomes enabled
+        window.history.pushState('', 'TON DNS ', '#');
+        setScreen('startScreen');
+    }
 
     if (domainFromUrl === currentDomain) {
         return;
@@ -429,7 +458,8 @@ const renderBusyDomain = (
     domain,
     domainItemAddress,
     ownerAddress,
-    lastFillUpTime
+    lastFillUpTime,
+    isTakenByUser,
 ) => {
     domainType = BUSY_DOMAIN_TYPE
 
@@ -439,6 +469,13 @@ const renderBusyDomain = (
     const isDateEqual = String(prevDate) === String(expiresDate)
 
     $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
+
+    if (isTakenByUser) {
+        const domainItemTakenByUser = myDomainsController.getDomainItemByName(currentDomain);
+        const { address } = domainItemTakenByUser.dns_item;
+
+        attachBidModalListeners(domain, RENEW_DOMAIN_PRICE, '#renewDomainButton', address, true)
+    }
 
     if (!isDateEqual) {
         $('#flip-clock-container').dataset.endDate = expiresDate
@@ -561,14 +598,14 @@ const renderSearchHistory = (node) => {
     window.addEventListener('touchstart', handleClickOutside, false)
 }
 
-const attachBidModalListeners = (domain, price, modalButton, address) => {
+const attachBidModalListeners = (domain, price, modalButton, address, isRenewDomain) => {
     if (removeListeners[modalButton]) {
         removeListeners[modalButton]()
     }
 
     let localPrice = price;
     let paymentStatus = null;
-    const bidAddress = address || tonRootAddress;
+    const destinationAddress = address || tonRootAddress;
     const bidModalInput = $("#bid__modal--bid__input")
     const submitStepButton = $("#bid__modal--submit__step")
     const submitPriceLabel = $("#bid__modal--submit__price")
@@ -583,6 +620,38 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const paymentLottieSuccess = $('#paymentLottieSuccess')
     const paymentLottieFailure = $('#paymentLottieFailure')
 
+
+    if (isRenewDomain) {
+        $('#bidModalSubheader').innerText = store.localeDict.renew_domain_explanation;
+        bidModalInput.disabled = true;
+        bidModalInput.style.pointerEvents = 'none';
+        bidModalInput.style.color = '#728A96';
+
+        $('#bid__modal--submit__step--label_1').innerText = store.localeDict.pay;
+        $('#bid__modal--submit__step--label_2').innerText = '';
+        $('.bid__modal--payment #domainName--bid__modal--payment').innerText = store.localeDict.renew_domain;
+        $('.bid__modal--second__step #domainName--bid__modal--payment').innerText = store.localeDict.renew_domain;
+
+        $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
+        $('#payment-message-success .payment__message--description').innerText = '';
+
+        $('#inputTonIcon').style.fill = '#728A96';
+    } else {
+        $('#bidModalSubheader').innerText = store.localeDict.enter_amount;
+        bidModalInput.disabled = false;
+        bidModalInput.style.pointerEvents = 'auto';
+        bidModalInput.style.color = 'black';
+
+        $('#bid__modal--submit__step--label_1').innerText = store.localeDict.place_label;
+        $('#bid__modal--submit__step--label_2').innerText = store.localeDict.place_label_2;
+        $('.bid__modal--payment #domainName--bid__modal--payment').innerText = store.localeDict.place_bid;
+        $('.bid__modal--second__step #domainName--bid__modal--payment').innerText = store.localeDict.place_bid;
+
+        $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
+        $('#payment-message-success .payment__message--description').innerText = store.localeDict.payment_success_description;
+
+        $('#inputTonIcon').style.fill = '#0088CC';
+    }
 
     const mask = IMask(bidModalInput, {
         mask: Number,
@@ -731,11 +800,27 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     const handlePaymentConfirmation = async () => {
         renderPaymentLoading()
 
-        if ('universalLink' in walletController.currentWallet && !walletController.currentWallet.embedded && isMobile()) {
+        if (
+            'universalLink' in walletController.currentWallet
+            && !walletController.currentWallet.embedded && isMobile()
+        ) {
             openLink(addReturnStrategy(walletController.currentWallet.universalLink, 'back'), '_blank');
         }
 
-        const transaction = await walletController.createTransaction(bidAddress, localPrice, domain)
+        const rawDestinationAddress = getRawAddress(destinationAddress);
+        const message = domain;
+        const payload = isRenewDomain ?
+            await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
+        const transaction = {
+            validUntil: Date.now() + 1000000,
+            messages: [
+                {
+                    address: rawDestinationAddress,
+                    amount: String(Number(localPrice) * 1000000000),
+                    payload,
+                },
+            ],
+        };
         await walletController.sendTransaction(
             transaction, 
             () => paymentStatus = 'success',
@@ -862,9 +947,9 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
 
-        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
+        renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
 
-        setAddress($('#freeBuyAddress'), bidAddress)
+        setAddress($('#freeBuyAddress'), destinationAddress)
 
         showOtherPaymentMethods.removeEventListener('click', renderOtherPaymentsMethods)
         showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
@@ -881,19 +966,19 @@ const attachBidModalListeners = (domain, price, modalButton, address) => {
     }
     
     const isExtensionInstalled = !isMobile() && window.ton
-    const buyUrl = 'ton://transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
+    const buyUrl = 'ton://transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
 
     if (isExtensionInstalled) {
         $('#freeBtn').href = buyUrl
     } else {
-        $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
+        $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
     }
 
     if (isMobile()) {
         $('#freeBtn').href = buyUrl
     }
 
-    $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + bidAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
+    $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
     $('#copyLinkbutton').setAttribute('address', buyUrl)
 
     $(modalButton).addEventListener('click', toggleBidModal, false)
@@ -990,6 +1075,12 @@ const connectExtension = async (domain, dnsItem) => {
         return
     }
 
+    const domainItemTakenByUser = myDomainsController.getDomainItemByName(currentDomain);
+    if (!domainItemTakenByUser) {
+        alert(store.localeDict.not_owner)
+        return
+    }
+
     const accounts = await provider.send('ton_requestAccounts')
     const account = new TonWeb.Address(accounts[0]).toString(
         true,
@@ -997,7 +1088,6 @@ const connectExtension = async (domain, dnsItem) => {
         true,
         IS_TESTNET
     )
-
     const tonConnectAccaunt = walletController.getAccountAddress()
 
     if (tonConnectAccaunt !== currentOwner && account !== currentOwner) {
@@ -1165,7 +1255,8 @@ const connectExtension = async (domain, dnsItem) => {
     analyticService.sendEvent({type: 'edit_domain'})
 }
 
-$('#connectBtn').addEventListener('click', () => connectExtension(currentDomain, currentDnsItem))
+$('#connectBtnAuction').addEventListener('click', () => connectExtension(currentDomain, currentDnsItem))
+$('#connectBtnBusy').addEventListener('click', () => connectExtension(currentDomain, currentDnsItem))
 
 $(".reset__input--icon").addEventListener('click', (e) => {
     e.preventDefault()

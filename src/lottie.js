@@ -22,18 +22,4 @@
 		moonLottie.play()
 		sunLottie.stop()
 	})
-
-	let aboutButton = document.getElementById('aboutButton')
-	let aboutLottieLight = document.getElementById('aboutLottieLight')
-	let aboutLottieDark = document.getElementById('aboutLottieDark')
-
-	aboutButton.addEventListener('mouseover', function () {
-		aboutLottieLight.play()
-		aboutLottieDark.play()
-	})
-
-	aboutButton.addEventListener('mouseleave', function () {
-		aboutLottieLight.stop()
-		aboutLottieDark.stop()
-	})
 })()

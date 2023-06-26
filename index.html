@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="./css/loader.css?6">
     <link rel="stylesheet" href="./css/dns.css?7">
     <link rel="stylesheet" href="./css/flip-clock.css?6">
+    <link rel="stylesheet" href="./css/my-domains.css?5">
     <script type="text/javascript" src="src/state.js?6"></script>
     <script type="text/javascript" src="src/controllers/themeController.js?6"></script>
     <script type="text/javascript" src="src/controllers/flipTimerController.js?6"></script>
@@ -95,13 +96,9 @@
         </div>
 
         <div class="nav__controls">
-            <a id="aboutDnsLink" class="nav-item__desktop" href="/about.html" target="_blank">
-                <button class="hover__button" id="aboutButton">
-                    <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
-                    <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
-                    <span class="bold" data-locale="about">About</span>
-                </button>
-            </a>
+            <button class="nav-item__desktop hover__button" id="myDomainsButton" style="display: none;" disabled>
+              <span class="bold" data-locale="my_domains"></span>
+            </button>
             <div id="connect-wallet-button"></div>
             <button class="nav-item__desktop hover__button" id="lottie-button" onclick="themeController.toggle()">
                 <lottie-player id="sunLottie" src="./assets/lottie/sun_moon.json" background="transparent" speed="1" style="width: 20px; height: 20px;"></lottie-player>
@@ -143,6 +140,32 @@
         </div>
     </div>
     <div class="start-error" style="display: none"></div>
+</div>
+
+<div id="myDomainsView" class="start animate">
+  <div id="myDomainsContainer">
+    <div class="my-domains-title" data-locale="my_domains">My domains</div>
+    <table class="my-domains-table">
+      <tr class="my-domains-table-headers">
+        <th data-locale="my_domains_list_domain_column">Domain</th>
+        <th data-locale="my_domains_list_price_column">Sale price</th>
+        <th data-locale="my_domains_list_date_column">Expires in</th>
+        <th class="my-domains-table-last-cell">&nbsp;</th>
+      </tr>
+    </table>
+    <button id="myDomainsShowMoreButton" class="btn inversed">
+      Show more
+    </button>
+  </div>
+  <div id="noDomainsContainer">
+    <img id="noDomainsBannerDark" src="/assets/no_domains_dark.svg" alt="No domains" class="no-domains-image" />
+    <img id="noDomainsBannerLight" src="/assets/no_domains_light.svg" alt="No domains" class="no-domains-image" />
+    <div class="no-domains-title" data-locale="my_domains_empty_title">You have no domains yet</div>
+    <div class="no-domains-caption" data-locale="my_domains_empty_caption">Participate in the auction and buy domains</div>
+    <button id="noDomainsStartNowButton" class="btn" data-locale="my_domains_empty_button">
+      Start now
+    </button>
+  </div>
 </div>
 
 <div class="main animate">
@@ -194,12 +217,11 @@
             </div>
         </div>
 
-        <p class="buttonWrapper">
-            <a id="auctionBtn" target="_blank" class="btn">
-                <img src="/assets/hammer.svg" alt="Place bid">
-                <span data-locale="place_bid">Place bid</span>
+        <div class="buttonWrapper">
+            <a id="connectBtnAuction" class="btn">
+              <span data-locale="manage_domain">Manage a domain</span>
             </a>
-        </p>
+        </div>
     </div>
 
     <div id="busyDomainScreen">
@@ -275,15 +297,20 @@
         </div>
 
         <p class="buttonWrapper">
-            <a id="connectBtn" class="btn">
+            <a id="connectBtnBusy" class="btn">
                 <span data-locale="manage_domain">
                     Manage a domain
                 </span>
             </a>
             <a id="infoBtn" class="btn outline" href="/about.html#claim-your-ton-domain" target="_blank" >
                 <span data-locale="claim_your_domain">
-                    How to claim your TON domain?
+                    What is Ton Domains?
                 </span>
+            </a>
+            <a id="renewDomainButton" class="btn outline">
+              <span data-locale="renew_this_domain">
+                Renew this domain
+              </span>
             </a>
         </p>
     </div>
@@ -316,6 +343,11 @@
                 <img src="/assets/hammer.svg" alt="Place bid">
                 <span data-locale="bid_to_start">
                     Place a bid to start the auction
+                </span>
+            </a>
+            <a id="freeDomainInfoBtn" class="btn outline" href="/about.html" target="_blank" >
+                <span data-locale="claim_your_domain">
+                    What is Ton Domains?
                 </span>
             </a>
         </p>
@@ -351,14 +383,14 @@
         <div class="mobile-menu__top">
 
             <div class="mobile-menu-navigation">
-                <a class="mobile-menu-row" href="/about.html" target="_blank">
-                    <div class="mobile-menu-left">
+                <a class="mobile-menu-row" id="myDomainsMobileButton" style="display: none;" disabled>
+                  <div class="mobile-menu-left">
                     <span class="mobile-lottie-container">
-                        <lottie-player id="aboutLottieLight" src="./assets/lottie/about_paper_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
-                        <lottie-player id="aboutLottieDark" src="./assets/lottie/about_paper_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                      <lottie-player id="myDomainsLottieLight" src="./assets/lottie/my_domains_light.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
+                        <lottie-player id="myDomainsLottieDark" src="./assets/lottie/my_domains_dark.json" background="transparent" speed="1" style="width: 24px; height: 24px;"></lottie-player>
                     </span>
-                        <span data-locale="about">About</span>
-                    </div>
+                    <span id="myDomainsMobileButtonTitle" data-locale="my_domains">My domains</span>
+                  </div>
                 </a>
                 <div class="mobile-menu-row">
                     <div class="mobile-menu-left">
@@ -396,11 +428,11 @@
         >
             Place a bid
         </span>
-            <span class="bid__modal--subheader" data-locale="enter_amount">Enter your bid amount</span>
+            <span id="bidModalSubheader" class="bid__modal--subheader" data-locale="enter_amount">Enter your bid amount</span>
             <div class="bid__input--container">
                 <svg class="icon bid__input--icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.92179 3H14.0784C14.6114 2.99998 15.0724 2.99996 15.439 3.0336C15.8104 3.06767 16.2346 3.14549 16.5994 3.41049C17.0923 3.76854 17.4102 4.31891 17.474 4.92479C17.5212 5.37322 17.3767 5.77949 17.2206 6.11821C17.0665 6.45262 16.8362 6.85187 16.5698 7.31356L10.7797 17.3498C10.6189 17.6284 10.3217 17.8 10.0001 17.8C9.67845 17.8 9.38126 17.6284 9.22053 17.3498L3.43043 7.31358C3.16404 6.85188 2.93367 6.45262 2.77958 6.11821C2.6235 5.77949 2.47895 5.37322 2.52618 4.92479C2.59 4.31891 2.90787 3.76854 3.40079 3.41049C3.76561 3.14549 4.18974 3.06767 4.56114 3.0336C4.9278 2.99996 5.38875 2.99998 5.92179 3ZM4.4494 4.87379C4.37749 4.92975 4.33022 5.01158 4.31769 5.10184C4.32054 5.11916 4.33566 5.19411 4.41437 5.36492C4.52964 5.61508 4.71729 5.94215 5.01011 6.4497L9.10009 13.539V4.8H5.96291C5.37696 4.8 4.99988 4.80091 4.72559 4.82607C4.5383 4.84325 4.46583 4.86761 4.4494 4.87379ZM10.9001 4.8V13.539L14.9901 6.4497C15.2829 5.94215 15.4705 5.61508 15.5858 5.36492C15.6645 5.19411 15.6796 5.11916 15.6825 5.10184C15.67 5.01158 15.6227 4.92975 15.5508 4.87379C15.5344 4.86761 15.4619 4.84325 15.2746 4.82607C15.0003 4.80091 14.6232 4.8 14.0373 4.8H10.9001Z" fill="#0088CC"/>
+                    <svg id="inputTonIcon" width="20" height="20" viewBox="0 0 20 20" fill="#0088CC" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.92179 3H14.0784C14.6114 2.99998 15.0724 2.99996 15.439 3.0336C15.8104 3.06767 16.2346 3.14549 16.5994 3.41049C17.0923 3.76854 17.4102 4.31891 17.474 4.92479C17.5212 5.37322 17.3767 5.77949 17.2206 6.11821C17.0665 6.45262 16.8362 6.85187 16.5698 7.31356L10.7797 17.3498C10.6189 17.6284 10.3217 17.8 10.0001 17.8C9.67845 17.8 9.38126 17.6284 9.22053 17.3498L3.43043 7.31358C3.16404 6.85188 2.93367 6.45262 2.77958 6.11821C2.6235 5.77949 2.47895 5.37322 2.52618 4.92479C2.59 4.31891 2.90787 3.76854 3.40079 3.41049C3.76561 3.14549 4.18974 3.06767 4.56114 3.0336C4.9278 2.99996 5.38875 2.99998 5.92179 3ZM4.4494 4.87379C4.37749 4.92975 4.33022 5.01158 4.31769 5.10184C4.32054 5.11916 4.33566 5.19411 4.41437 5.36492C4.52964 5.61508 4.71729 5.94215 5.01011 6.4497L9.10009 13.539V4.8H5.96291C5.37696 4.8 4.99988 4.80091 4.72559 4.82607C4.5383 4.84325 4.46583 4.86761 4.4494 4.87379ZM10.9001 4.8V13.539L14.9901 6.4497C15.2829 5.94215 15.4705 5.61508 15.5858 5.36492C15.6645 5.19411 15.6796 5.11916 15.6825 5.10184C15.67 5.01158 15.6227 4.92975 15.5508 4.87379C15.5344 4.86761 15.4619 4.84325 15.2746 4.82607C15.0003 4.80091 14.6232 4.8 14.0373 4.8H10.9001Z"/>
                     </svg>
                 </svg>
                 <input enterkeyhint="done" id="bid__modal--bid__input" class="bid_modal--input default__input" />
@@ -414,17 +446,15 @@
             </div>
             <div class="button__container">
                 <button id="bid__modal--submit__step" class="btn">
-            <span data-locale="place_label">
-                Place a&nbsp;
-            </span>
+                    <span id="bid__modal--submit__step--label_1" data-locale="place_label">
+                        Place a&nbsp;
+                    </span>
                     <svg class="bid__modal--ton__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M5.92179 3H14.0784C14.6114 2.99998 15.0724 2.99996 15.439 3.0336C15.8104 3.06767 16.2346 3.14549 16.5994 3.41049C17.0923 3.76854 17.4102 4.31891 17.474 4.92479C17.5212 5.37322 17.3767 5.77949 17.2206 6.11821C17.0665 6.45262 16.8362 6.85187 16.5698 7.31356L10.7797 17.3498C10.6189 17.6284 10.3217 17.8 10.0001 17.8C9.67845 17.8 9.38126 17.6284 9.22053 17.3498L3.43043 7.31358C3.16404 6.85188 2.93367 6.45262 2.77958 6.11821C2.6235 5.77949 2.47895 5.37322 2.52618 4.92479C2.59 4.31891 2.90787 3.76854 3.40079 3.41049C3.76561 3.14549 4.18974 3.06767 4.56114 3.0336C4.9278 2.99996 5.38875 2.99998 5.92179 3ZM4.4494 4.87379C4.37749 4.92975 4.33022 5.01158 4.31769 5.10184C4.32054 5.11916 4.33566 5.19411 4.41437 5.36492C4.52964 5.61508 4.71729 5.94215 5.01011 6.4497L9.10009 13.539V4.8H5.96291C5.37696 4.8 4.99988 4.80091 4.72559 4.82607C4.5383 4.84325 4.46583 4.86761 4.4494 4.87379ZM10.9001 4.8V13.539L14.9901 6.4497C15.2829 5.94215 15.4705 5.61508 15.5858 5.36492C15.6645 5.19411 15.6796 5.11916 15.6825 5.10184C15.67 5.01158 15.6227 4.92975 15.5508 4.87379C15.5344 4.86761 15.4619 4.84325 15.2746 4.82607C15.0003 4.80091 14.6232 4.8 14.0373 4.8H10.9001Z" fill="white"/>
                     </svg>
                     <span id="bid__modal--submit__price"></span>
                     &nbsp;
-                    <span data-locale="place_label_2">
-                bid
-            </span>
+                    <span id="bid__modal--submit__step--label_2" data-locale="place_label_2">bid</span>
                 </button>
             </div>
         </div>
@@ -562,7 +592,7 @@
         <div id="otherPaymentsMethodsContainer" class="bid__modal--payments">
             <div class="bid__modal--alert">
                 <span data-locale="pay_attention">
-                    Use only <a class="unbreak" href="https://ton.org/wallets?filterBy=wallets_non_custodial" target="_blank">non-custodial</a> wallets to place bets.
+                    Use only <a class="unbreak" href="https://ton.org/wallets?filterBy=wallets_non_custodial" target="_blank">non-custodial</a> wallets to place bets  and make payments.
                 </span>
             </div>
 
@@ -654,10 +684,14 @@
 <footer class="footer">
     <div class="separator"></div>
     <div class="copyrights">
-        <div>
+        <div class="info-links">
             <a class="support-link" href="https://t.me/ton_help_bot" target="_blank" rel="noreferrer noopener">
                 <span class="support-link__icon"></span>
                 <span data-locale="footer_support">Support</span>
+            </a>
+            <a class="about-link" href="/about.html" target="_blank" rel="noreferrer noopener">
+                <span class="about-link__icon"></span>
+                <span data-locale="about">About</span>
             </a>
         </div>
         <div class="social-links">
@@ -706,6 +740,8 @@
 <script type="text/javascript" src="./src/config/wallets.js?6"></script>
 <script type="text/javascript" src="./src/controllers/walletController.js?6"></script>
 <script type="text/javascript" src="./src/controllers/testnetController.js?6"></script>
+<script type="text/javascript" src="./src/controllers/myDomainsController.js?6"></script>
+<script type="text/javascript" src="./src/views/myDomainsView.js?6"></script>
 <script type="text/javascript" src="./src/constants.js?6"></script>
 <script type="text/javascript" src="./src/index.js?5?6"></script>
 </body>

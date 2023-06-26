@@ -3,7 +3,7 @@ const UserRejectsError = TonConnectSDK.UserRejectsError;
 class WalletController {
 	constructor(props) {
 		this.store = props.store
-    this.currentWallet = null
+		this.currentWallet = null
 
     this.connector = new TonConnectSDK.TonConnect();
     this.tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
@@ -28,38 +28,42 @@ class WalletController {
 
     const unsubscribe = this.tonConnectUI.onStatusChange(
       (walletInfo) => {
-        testnetController.update()
-        this.currentWallet = this.tonConnectUI.wallet
+				testnetController.update().then(() => {
+					this.currentWallet = this.tonConnectUI.wallet
+					this.updateMyDomainController();
+				});
       }
     );
 
     this.tonConnectUI.connectionRestored.then(restored => {
-      if (!restored) {
+			if (!restored) {
+				myDomainsController.destructor();
 				return;
       }
 
-			this.currentWallet = this.tonConnectUI.wallet
-      testnetController.update()
+			testnetController.update().then(() => {
+				this.currentWallet = this.tonConnectUI.wallet
+				this.updateMyDomainController();
+			});
     });
   }
 
-
-  async createTransaction(address, amount, message) {
-		const rawAddress = getRawAddress(address)
-		const encodedMessage = await getPayload(message)
-
-		const transaction = {
-			validUntil: Date.now() + 1000000,
-			messages: [
-				{
-					address: rawAddress,
-					amount: String(Number(amount) * 1000000000),
-					payload: encodedMessage,
-				},
-			],
+	updateMyDomainController() {
+		if (!this.currentWallet) {
+			myDomainsController.destructor();
+			return;
 		}
 
-		return transaction
+		if (myDomainsController.isInitialized) {
+			return;
+		}
+
+		myDomainsController.setIsTestnet(
+			this.tonConnectUI.account.chain === CHAIN.TESTNET
+		);
+
+		const addr = this.currentWallet.account.address;
+		myDomainsController.initialize(addr);
 	}
 
   async sendTransaction(
@@ -101,9 +105,8 @@ class WalletController {
 		return this.currentWallet
 	}
 
-  getAccountAddress() {
-		const { address, chain} = this.currentWallet?.walletInfo?.account || {}
-
+	getAccountAddress() {
+		const { address, chain } = this.currentWallet?.walletInfo?.account || {}
 
 		if (!address || !chain) {
 			return null
