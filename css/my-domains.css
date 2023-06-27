@@ -81,11 +81,11 @@ html[data-theme='dark'] #noDomainsBannerLight {
 }
 
 .my-domains-table-headers th:not(.my-domains-table-last-cell) {
-  width: 31%;
+  width: 31%; // first three table columns
 }
 
 .my-domains-table-last-cell {
-  width: 7%;
+  width: 7%; // last table column = 100% - 3 * ( 31% )
   margin-left: auto;
   margin-right: auto;
 }

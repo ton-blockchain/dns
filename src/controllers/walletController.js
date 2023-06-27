@@ -97,6 +97,10 @@ class WalletController {
 		return !!this.tonConnectUI.connected
 	}
 
+	isLoggedInSync() {
+		return !!this.tonConnectUI.connected
+	}
+
   async isTestnet() {
 		return this.tonConnectUI.account.chain === CHAIN.TESTNET
 	}

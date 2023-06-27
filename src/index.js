@@ -8,13 +8,6 @@ let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init(
 $('#navInputElement').placeholder = store.localeDict.start_input_placeholder
 $('#startInputElement').placeholder = store.localeDict.start_input_placeholder
 
-
-const walletController = new WalletController({store})
-const myDomainsController = new MyDomainsController();
-const testnetController = new TestnetController() 
-
-makePageVisible()
-
 const IS_TESTNET = window.location.href.indexOf('testnet=true') > -1
 
 const AUCTION_START_TIME = IS_TESTNET ? 1659125865 : 1659171600
@@ -38,6 +31,12 @@ const tonweb = new TonWeb(
             : TONCENTER_API_KEY,
     })
 )
+
+const walletController = new WalletController({store})
+const myDomainsController = new MyDomainsController();
+const testnetController = new TestnetController() 
+
+makePageVisible()
 
 const dnsCollection = new TonWeb.dns.DnsCollection(tonweb.provider, {
     address: tonRootAddress,
@@ -305,19 +304,10 @@ const processUrl = () => {
 
     if (backdrop.style.display === 'flex') {
         closeBidModal()
-
         return;
     }
 
     const domainFromUrl = decodeURIComponent(window.location.hash.substring(1)).toLowerCase()
-
-    if (domainFromUrl === '/my-domains') {
-        // navigating back to start screen because
-        // before laoding the domain list we need to check if account authenticated
-        // if so the button to 'my domains' becomes enabled
-        window.history.pushState('', 'TON DNS ', '#');
-        setScreen('startScreen');
-    }
 
     if (domainFromUrl === currentDomain) {
         return;
@@ -327,6 +317,16 @@ const processUrl = () => {
 
     if (domainFromUrl) {
         const error = validateDomain(domainFromUrl)
+
+        if (domainFromUrl === '/my-domains' && walletController.isLoggedInSync()) {
+            // before laoding the domain list we need to check if account authenticated
+            // so if users is not logged-in and tries to navigate to '/my-domains'
+            // they will be redirected to strat screen
+            setScreen('myDomainsView'); 
+            return;
+        } else {
+            window.history.pushState('', 'TON DNS ', '#')
+        }
 
         if (error) {
             setScreen('startScreen')
@@ -472,7 +472,7 @@ const renderBusyDomain = (
 
     if (isTakenByUser) {
         const domainItemTakenByUser = myDomainsController.getDomainItemByName(currentDomain);
-        const { address } = domainItemTakenByUser.dns_item;
+        const { address } = domainItemTakenByUser;
 
         attachBidModalListeners(domain, RENEW_DOMAIN_PRICE, '#renewDomainButton', address, true)
     }

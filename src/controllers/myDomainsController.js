@@ -3,7 +3,7 @@ class MyDomainsController {
   limit = isMobile() ? 10 : 5;
   offset = 0;
 
-  domains = [];
+  domains = []; // Array<{ name: string, expiring_at: Date, address: string }>
   accountAddress = '';
   isInitialized = false;
   isDataLoading = false;
@@ -40,13 +40,15 @@ class MyDomainsController {
   async fetchDomains() {
     try {
       const TON_API = this.isTestnet ? 'https://testnet.tonapi.io/v2' : 'https://tonapi.io/v2';
+      const dnsCollectionAddress = dnsCollection.address.toString(true, true, true, this.isTestnet);
 
-      // this endpoint doesn't provide pagination and
-      // returns only up to 1000 items per account address
-      const response = await fetch(`${TON_API}/accounts/${this.accountAddress}/dns/expiring?period=${this.expiringPeriod}`); 
-      const { items } = await response.json();
+      const responseDns = await fetch(
+        `${TON_API}/accounts/${this.accountAddress}/nfts?collection=${dnsCollectionAddress}&indirect_ownership=true`
+      );
+      // limited to 1000 items
+      const { nft_items } = await responseDns.json();
 
-      const domainsSortedByAscendingExpiryDate = items.reverse();
+      const domainsSortedByAscendingExpiryDate = await assembleDomainItems(nft_items);
       this.setDomains(domainsSortedByAscendingExpiryDate);
     } catch (e) {
       alert(e.message);
@@ -109,8 +111,7 @@ class MyDomainsController {
       return this.domainListSearchCache.get(domainName)
     }
 
-    const fullDomainName = domainName + '.ton';
-    const domainItem = this.domains.find(item => item.name === fullDomainName);
+    const domainItem = this.domains.find(item => item.name === domainName);
     this.domainListSearchCache.set(domainName, domainItem);
     return domainItem;
   }
