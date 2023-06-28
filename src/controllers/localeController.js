@@ -106,8 +106,6 @@ const INDEX_LOCALES = {
 		renew_this_domain: 'Продлить этот домен',
 		renew_domain: 'Продлить домен',
 		renew_domain_explanation: 'Внесите депозит, чтобы продлить ваш домен.',
-		manage_domain: 'Редактировать',
-		manage_domain_mobile: 'Редактировать в Tonkeeper',
 		use_other_payments: 'Другие способы оплаты <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
 				'                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
 				'                </svg>',
@@ -153,6 +151,10 @@ const INDEX_LOCALES = {
 		today: 'Сегодня',
 		hours: 'часов',
 		min: 'минут',
+		manage_domain: 'Редактировать',
+		manage_domain_go_back: 'Вернуться на страницу домена',
+		manage_domain_mobile: 'Редактировать в Tonkeeper',
+		manage_domain_unavailable: 'Что-то пошло не так. Пожалуйста, повторите попытку.'
 	},
 	en: {
 		address: 'Address',
@@ -217,6 +219,10 @@ const INDEX_LOCALES = {
 		today: 'Today',
 		hours: 'hours',
 		min: 'min',
+		manage_domain: 'Manage domain',
+		manage_domain_go_back: 'Go back',
+		manage_domain_mobile: 'Manage domain via Tonkeeper',
+		manage_domain_unavailable: 'Service is temporarily unavailable. Please try again.'
 	},
 }
 

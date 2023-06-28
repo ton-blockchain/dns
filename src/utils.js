@@ -462,9 +462,10 @@ async function assembleDomainItems(nft_items) {
     const domain_items = await nft_items.reduce(async (acc, curr) => {
         const nft_item = curr;
 
-        const name = nft_item.dns.slice(0, -4); // removing '.ton'
         const address = nft_item.address;
         const dns_item = new TonWeb.dns.DnsItem(tonweb.provider, { address });
+
+        const name = await dns_item.methods.getDomain()
 
         const lastFillUpTime = await dns_item.methods.getLastFillUpTime();
         const expiring_at = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR);

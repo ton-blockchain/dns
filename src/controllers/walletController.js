@@ -110,7 +110,7 @@ class WalletController {
 	}
 
 	getAccountAddress() {
-		const { address, chain } = this.currentWallet?.walletInfo?.account || {}
+		const { address, chain } = this.currentWallet?.account || {}
 
 		if (!address || !chain) {
 			return null

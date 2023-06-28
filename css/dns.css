@@ -1922,13 +1922,13 @@ p {
 
 /* DOMAIN EDIT */
 
-#busyDomainScreen.edit-expand #connectBtn,
+#busyDomainScreen.edit-expand #manageDomainBtn,
 #busyDomainScreen.edit-expand #connectMobile,
 #busyDomainScreen.edit-expand #busyOwnerRow {
     display: none;
 }
 
-#busyDomainScreen.edit-loading #connectBtn,
+#busyDomainScreen.edit-loading #manageDomainBtn,
 #busyDomainScreen.edit-expand #connectMobile,
 #busyDomainScreen.edit-loading #busyOwnerRow {
     display: none;
@@ -2072,7 +2072,7 @@ p {
 }
 
 @media screen and (max-width: 568px) {
-    #connectBtn {
+    #manageDomainBtn {
         display: none;
     }
 
