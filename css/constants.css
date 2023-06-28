@@ -77,8 +77,9 @@ html[data-theme='light'] {
     --busy-domain-status-backgroud: rgba(230, 70, 70, 0.08);
     --copy--icon: url("/assets/copy_btn.svg");
     --copy--icon--completed: url("/assets/copy_btn_done.svg");
-    --arrow--right: url("/assets/arrow_right_light.svg");
-    --arrow--right--inversed: url("/assets/arrow_right_dark.svg");
+
+    --arrow--right: url("/assets/arrow_right_light-blue.svg");
+    --arrow--right--inversed: url("/assets/arrow_right_light-grey.svg");
 
     --socials--color: #98B2BF;
 
@@ -157,8 +158,8 @@ html[data-theme='dark'] {
     --copy--icon: url("/assets/copy_btn_dark.svg");
     --copy--icon--completed: url("/assets/copy_btn_done_dark.svg");
 
-    --arrow--right: url("/assets/arrow_right_dark.svg");
-    --arrow--right--inversed: url("/assets/arrow_right_light.svg");
+    --arrow--right: url("/assets/arrow_right_dark-blue.svg");
+    --arrow--right--inversed: url("/assets/arrow_right_dark-grey.svg");
 
     --socials--color: #606069;
     --tonkeeper__icon: url("/assets/tonkeeper_icon.svg");

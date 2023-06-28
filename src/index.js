@@ -624,8 +624,7 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
     if (isRenewDomain) {
         $('#bidModalSubheader').innerText = store.localeDict.renew_domain_explanation;
         bidModalInput.disabled = true;
-        bidModalInput.style.pointerEvents = 'none';
-        bidModalInput.style.color = '#728A96';
+        bidModalInput.classList.add('disabled__input');
 
         $('#bid__modal--submit__step--label_1').innerText = store.localeDict.pay;
         $('#bid__modal--submit__step--label_2').innerText = '';
@@ -635,12 +634,11 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
         $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
         $('#payment-message-success .payment__message--description').innerText = '';
 
-        $('#inputTonIcon').style.fill = '#728A96';
+        $('#inputTonIcon').classList.add('disabled__inpu--icon');
     } else {
         $('#bidModalSubheader').innerText = store.localeDict.enter_amount;
         bidModalInput.disabled = false;
-        bidModalInput.style.pointerEvents = 'auto';
-        bidModalInput.style.color = 'black';
+        bidModalInput.classList.remove('disabled__input');
 
         $('#bid__modal--submit__step--label_1').innerText = store.localeDict.place_label;
         $('#bid__modal--submit__step--label_2').innerText = store.localeDict.place_label_2;
@@ -650,7 +648,7 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
         $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
         $('#payment-message-success .payment__message--description').innerText = store.localeDict.payment_success_description;
 
-        $('#inputTonIcon').style.fill = '#0088CC';
+        $('#inputTonIcon').classList.remove('disabled__inpu--icon');
     }
 
     const mask = IMask(bidModalInput, {

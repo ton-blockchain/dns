@@ -187,7 +187,7 @@ body.hidden{
 .icon.arrow__right {
     width: 16px;
     height: 16px;
-    background: var(--arrow--right--inversed);
+    background: var(--arrow--right);
     background-size: contain;
     margin-bottom: -1px;
 }
@@ -2845,6 +2845,15 @@ input.input__clicked {
 
 .default__input:focus + .edit__button a {
     color: var(--accent-default);
+}
+
+.disabled__input {
+    pointer-events: none;
+    color: var(--text-tetriary);
+}
+
+.disabled__inpu--icon {
+    fill: var(--text-tetriary);
 }
 
 input::placeholder, .start-input-container__domain {

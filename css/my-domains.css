@@ -94,7 +94,7 @@ html[data-theme='dark'] #noDomainsBannerLight {
   display: block;
   width: 16px;
   height: 16px;
-  background: var(--arrow--right);
+  background: var(--arrow--right--inversed);
   background-size: contain;
 }
 
@@ -132,7 +132,7 @@ html[data-theme='dark'] #noDomainsBannerLight {
   }
 
   .my-domains-right-arrow-icon {
-    background: var(--arrow--right--inversed);
+    background: var(--arrow--right);
   }
 }
 
