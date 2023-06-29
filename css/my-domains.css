@@ -1,0 +1,314 @@
+#myDomainsView {
+  flex: 1;
+}
+
+#myDomainsButton {
+  display: flex;
+  justify-content: center;
+  width: 118px;
+  height: 36px;
+}
+
+.my-domains-loading-button {
+  background: var(--loader--background--gradient);
+  animation: var(--gradient--animation--transition);
+}
+
+#myDomainsShowMoreButton, #noDomainsStartNowButton {
+  width: fit-content;
+}
+
+#myDomainsContainer {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  max-width: 928px;
+  width: 100%;
+  gap: 12px;
+}
+
+#noDomainsContainer {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 928px;
+  width: 100%;
+}
+
+
+html[data-theme='light'] .mobile-menu #myDomainsLottieLight {
+  display: none;
+}
+
+html[data-theme='dark'] .mobile-menu #myDomainsLottieDark {
+  display: none;
+}
+
+html[data-theme='light'] #noDomainsBannerDark {
+  display: none;
+}
+
+html[data-theme='dark'] #noDomainsBannerLight {
+  display: none;
+}
+
+.my-domains-title {
+  text-align: left;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 600;
+  width: 100%;
+  padding: 48px 0px 0px 48px;
+}
+
+.my-domains-caption {
+  text-align: left;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+  padding: 0px 0px 12px 48px;
+}
+
+.my-domains-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.my-domains-table th {
+  text-align: left;
+  border-top: var(--table-border);
+  color: var(--text-tetriary);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  padding: 12px 0 12px 24px;
+  cursor: default;
+}
+
+.my-domains-table-headers th:not(.my-domains-table-last-cell) {
+  width: 31%; // first three table columns
+}
+
+.my-domains-table-last-cell {
+  width: 7%; // last table column = 100% - 3 * ( 31% )
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.my-domains-right-arrow-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: var(--arrow--right--inversed);
+  background-size: contain;
+}
+
+.my-domains-table-cell, .my-domains-table-cell-first, .my-domains-table-cell-last {
+  text-align: left;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  padding: 12px 0 12px 24px;
+  border-top: var(--table-border);
+}
+
+.my-domains-table-row:hover {
+  cursor: pointer;
+  border-radius: 16px;
+  box-shadow: var(--table-row-hover-shadow);
+  -webkit-box-shadow: var(--table-row-hover-shadow);
+
+  .my-domains-table-cell {
+    border-bottom: var(--table-border);
+  }
+
+  .my-domains-table-cell-first {
+    border-bottom: var(--table-border);
+    border-left: var(--table-border);
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+  }
+
+  .my-domains-table-cell-last {
+    border-bottom: var(--table-border);
+    border-right: var(--table-border);
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+
+  .my-domains-right-arrow-icon {
+    background: var(--arrow--right);
+  }
+}
+
+.my-domains-table-row:hover + .my-domains-table-row {
+  & .my-domains-table-cell, .my-domains-table-cell-first, .my-domains-table-cell-last {
+    border-top: none;
+  }
+}
+
+.my-domains-cell-container {
+  float: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.my-domains-table-domain-cell {
+  width: calc(100%);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.my-domains-cell-price-title {
+  text-align: right;
+  left: 8px;
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
+}
+
+.my-domains-cell-price-title:before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  display: block;
+  transform: translateY(20%);
+  background: var(--ton-logo-path) center no-repeat;
+}
+
+.my-domains-cell-price-caption {
+  color: var(--text-tetriary);
+  text-align: left;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+}
+
+.my-domains-cell-price-caption:before {
+  content: '\2248\ \ $';
+}
+
+.my-domains-cell-expiry-title {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.my-domains-cell-expiry-caption {
+  color: var(--text-tetriary);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+}
+
+.no-domains-title {
+  padding-top: 40px;
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: bolder;
+}
+
+.no-domains-caption { 
+  color: var(--text-tetriary);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  padding-bottom: 16px;
+}
+
+@media screen and (max-width: 568px) {
+  #myDomainsView {
+    margin-top: 10px;
+  }
+
+  #myDomainsShowMoreButton, #noDomainsStartNowButton {
+    padding: 6px 16px;
+  }
+
+  #myDomainsContainer {
+    gap: 0;
+  }
+
+  .my-domains-table {
+    margin-bottom: 16px;
+  }
+
+  .my-domains-table th {
+    border-top: 0;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 16px 16px 8px 0px;
+  }
+
+  .my-domains-table-cell, .my-domains-table-cell-first, .my-domains-table-cell-last {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8px 16px 8px 0px;
+  }
+
+  .my-domains-title {
+    font-size: 20px;
+    line-height: 28px;
+    padding: 0px 0px 2px 0px;
+  }
+
+  .my-domains-caption {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 0px 0px 6px 0px;
+  }
+
+
+  .my-domains-cell-price-title {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .my-domains-cell-price-caption {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .my-domains-cell-expiry-title {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .my-domains-cell-expiry-caption {
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .my-domains-cell-price-title:before {
+    width: 16px;
+    height: 16px;
+    transform: translateY(10%);
+  }
+
+  .my-domains-table-last-cell {
+    width: 0%;
+  }
+
+  .no-domains-title {
+    padding-top: 16px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .no-domains-caption { 
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .no-domains-image {
+    width: 148px;
+    heigth: 166px;
+  }
+}

@@ -147,14 +147,16 @@ const setScreen = (name) => {
             $('.start-input').focus()
         }, 10)
     }
-    toggle('#navInput', name !== 'startScreen', 'flex')
-    toggle('.main', name !== 'startScreen')
+
+    toggle('#myDomainsView', name === 'myDomainsView', 'flex')
+    toggle('#navInput',!['startScreen', 'myDomainsView'].includes(name), 'flex')
+    toggle('.main', !['startScreen', 'myDomainsView'].includes(name))
     toggle('#auctionDomainScreen', name === 'auctionDomainScreen', 'block')
     toggle('#busyDomainScreen', name === 'busyDomainScreen', 'block')
     toggle('#freeDomainScreen', name === 'freeDomainScreen', 'block')
     toggle('#domainLoadingScreen', name === 'domainLoadingScreen', 'block')
-    toggle('#domainStatus', name !== 'main')
-    toggleClassName('nav .container-inner', name !== 'startScreen', 'squizedPadding')
+    toggle('#domainStatus', !['main', 'myDomainsView'].includes(name))
+    toggleClassName('nav .container-inner', !['startScreen', 'myDomainsView'].includes(name), 'squizedPadding')
     toggleClassName('.main', false, 'main--loading')
 
     if (name === 'auctionDomainScreen') {
@@ -166,9 +168,13 @@ const setScreen = (name) => {
         $('#domainStatus').classList.add('free')
         $('#domainStatus span').innerText = store.localeDict.free
     } else if (name === 'busyDomainScreen') {
+        // bugfix: resetting clock on busy domain screen
+        $('#flip-clock-container').dataset.endDate = '';
+        
         $('#domainStatus').classList.add('busy')
         $('#domainStatus').classList.remove('free')
-        $('#domainStatus span').innerText = store.localeDict.busy
+
+        $('#domainStatus span').innerText = store.localeDict.busy;
     }
 }
 
@@ -378,13 +384,31 @@ function getRawAddress(address) {
     return new TonWeb.Address(address).toString(false, true, true, true)
 }
 
-async function getPayload(string) {
+async function getAuctionBidPayload(string) {
     let a = new TonWeb.boc.Cell();
     a.bits.writeUint(0, 32);
     a.bits.writeString(string);
     let payload = TonWeb.utils.bytesToBase64(await a.toBoc());
 
     return payload
+}
+
+/**
+ * Method to construct a transaction payload for updating a dns record.
+ * Works for both claimed and unclaimed domains.
+ * Creates op::change_dns_record = 0x4eb1f0f9;
+ */
+async function getChangeDnsRecordPayload(message) {
+    const cell = new TonWeb.boc.Cell();
+    cell.bits.writeUint(0x4eb1f0f9, 32);
+    cell.bits.writeUint(0, 32); // queryId
+    cell.bits.writeUint(0, 256);
+    cell.bits.writeString(message);
+
+    const cellBytes = await cell.toBoc(false);
+    const payload = TonWeb.utils.bytesToBase64(cellBytes);
+
+    return payload;
 }
 
 function openLink(href, target = '_self') {
@@ -407,4 +431,100 @@ function makeid(length) {
       counter += 1;
     }
     return result;
+}
+
+function findSortedInsertIndex(arr, item, compareFunc) {
+    let start = 0;
+    let end = arr.length;
+
+    while (start < end) {
+        const mid = (start + end) >> 1;
+        const comparisonResult = compareFunc(item, arr[mid]);
+
+        if (comparisonResult === 0) {
+            return mid;
+        } else if (comparisonResult < 0) {
+            end = mid;
+        } else {
+            start = mid + 1;
+        }
+    }
+
+    return end;
+}
+
+function pushInOrder(arr, item, compareFunc) {
+    const insetionIndex = findSortedInsertIndex(arr, item, compareFunc);
+    arr.splice(insetionIndex, 0, item);
+}
+
+async function assembleDomainItems(nft_items) {
+    const domain_items = await nft_items.reduce(async (acc, curr) => {
+        const nft_item = curr;
+
+        const address = nft_item.address;
+        const dns_item = new TonWeb.dns.DnsItem(tonweb.provider, { address });
+
+        const name = await dns_item.methods.getDomain()
+
+        const lastFillUpTime = await dns_item.methods.getLastFillUpTime();
+        const expiring_at = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR);
+
+        const domain_item = { name, expiring_at, address };
+
+        const arr = await acc;
+        pushInOrder(arr, domain_item, (a, b) => {
+          if (a.expiring_at < b.expiring_at) {
+            return 1;
+          }
+          if (a.expiring_at > b.expiring_at) {
+            return -1;
+          }
+          return 0;
+        });
+
+        return arr;
+    }, []);
+    
+    return domain_items;
+}
+
+function sleep(ms = 300) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function formatDate(date) {
+    const month = store.localeDict.months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const hour = date.getHours();
+    let minute = date.getMinutes();
+    minute = (minute < 10 ? '0' : '') + minute;
+
+    return `${day} ${month} ${year} ${store.localeDict.at} ${hour}:${minute}`;
+}
+
+function formatDateShort(date) {
+    const month = store.localeDict.months[date.getMonth()];
+    const day = date.getDate();
+    const hour = date.getHours();
+    let minute = date.getMinutes();
+    minute = (minute < 10 ? '0' : '') + minute;
+
+    return `${day} ${month} ${store.localeDict.at} ${hour}:${minute}`;
+}
+
+function getDifferenceBetweenDates(futureDate, pastDate) {
+    let delta = Math.abs(futureDate - pastDate) / 1000;
+
+    const days = Math.floor(delta / 86400);
+    delta -= days * 86400;
+
+    const hours = Math.floor(delta / 3600) % 24;
+    delta -= hours * 3600;
+
+    const minutes = Math.floor(delta / 60) % 60;
+    delta -= minutes * 60;
+    
+    return { days, hours, minutes };
 }

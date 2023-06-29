@@ -77,7 +77,9 @@ html[data-theme='light'] {
     --busy-domain-status-backgroud: rgba(230, 70, 70, 0.08);
     --copy--icon: url("/assets/copy_btn.svg");
     --copy--icon--completed: url("/assets/copy_btn_done.svg");
-    --arrow--right: url("/assets/arrow_right.svg");
+
+    --arrow--right: url("/assets/arrow_right_light-blue.svg");
+    --arrow--right--inversed: url("/assets/arrow_right_light-grey.svg");
 
     --socials--color: #98B2BF;
 
@@ -87,6 +89,9 @@ html[data-theme='light'] {
 
     --copy__link__icon: url("/assets/copy_link_icon.svg");
     --copy__link__icon--success: url("/assets/copy_link_success.svg");
+
+    --table-border: 0.5px solid #DDE3E6;
+    --table-row-hover-shadow: 0px 2px 24px rgba(114, 138, 150, 0.12);
 }
 
 html[data-theme='dark'] {
@@ -153,13 +158,19 @@ html[data-theme='dark'] {
     --copy--icon: url("/assets/copy_btn_dark.svg");
     --copy--icon--completed: url("/assets/copy_btn_done_dark.svg");
 
-    --arrow--right: url("/assets/arrow_right_dark.svg");
+    --arrow--right: url("/assets/arrow_right_dark-blue.svg");
+    --arrow--right--inversed: url("/assets/arrow_right_dark-grey.svg");
+
     --socials--color: #606069;
     --tonkeeper__icon: url("/assets/tonkeeper_icon.svg");
     --tonkeeper__icon--mono: url("/assets/tonkeeper_icon.svg");
     --web__wallet__icon: url("/assets/web_wallet.svg");
     --copy__link__icon: url("/assets/copy_link_icon_dark.svg");
     --copy__link__icon--success: url("/assets/copy_link_success.svg");
+
+
+    --table-border: 0.5px solid #2D2D32;
+    --table-row-hover-shadow: 0px 2px 24px rgba(0, 0, 0, 0.16);
 }
 
 @keyframes shine-lines {
