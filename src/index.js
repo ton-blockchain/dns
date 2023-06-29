@@ -183,10 +183,9 @@ const setDomain = (domain) => {
                 renderFreeDomain(domain)
                 setScreen('freeDomainScreen')
             } else if (ownerAddress) {
-                const domainItemTakenByUser = await myDomainsController.getDomainItemByNameOnceLoaded(
-                    currentDomain
-                );
-                const isTakenByUser = !!domainItemTakenByUser;
+                currentOwner = ownerAddress.toString(true, true, true, IS_TESTNET);
+
+                const isTakenByUser = walletController.getAccountAddress() === currentOwner;
 
                 $('#manageDomainGoBackBtn').style.display = 'none';
                 if (isTakenByUser) {
@@ -199,7 +198,6 @@ const setDomain = (domain) => {
                     $('#renewDomainButton').style.display = 'none';
                 }
 
-                currentOwner = ownerAddress.toString(true, true, true, IS_TESTNET)
                 currentDnsItem = dnsItem
                 storeDomainStatus('busy')
                 renderBusyDomain(
@@ -424,7 +422,6 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
         if (price) {
             $('#auctionAmountConverted').innerText = formatNumber(auctionAmount * price, 2)
         }
-       
         if (price) {
             $('#auctionMinBetConverted').innerText = formatNumber(minBet * price, 2)
         }
@@ -472,10 +469,7 @@ const renderBusyDomain = (
     $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
 
     if (isTakenByUser) {
-        const domainItemTakenByUser = myDomainsController.getDomainItemByName(currentDomain);
-        const { address } = domainItemTakenByUser;
-
-        attachBidModalListeners(domain, RENEW_DOMAIN_PRICE, '#renewDomainButton', address, true)
+        attachBidModalListeners(domain, RENEW_DOMAIN_PRICE, '#renewDomainButton', domainItemAddress, true)
     }
 
     if (!isDateEqual) {
@@ -624,7 +618,6 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
 
     if (isRenewDomain) {
         $('#bidModalSubheader').innerText = store.localeDict.renew_domain_explanation;
-        bidModalInput.disabled = true;
         bidModalInput.classList.add('disabled__input');
 
         $('#bid__modal--submit__step--label_1').innerText = store.localeDict.pay;
@@ -638,7 +631,6 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
         $('#inputTonIcon').classList.add('disabled__inpu--icon');
     } else {
         $('#bidModalSubheader').innerText = store.localeDict.enter_amount;
-        bidModalInput.disabled = false;
         bidModalInput.classList.remove('disabled__input');
 
         $('#bid__modal--submit__step--label_1').innerText = store.localeDict.place_label;
@@ -1061,8 +1053,7 @@ const createEditBtn = (containerName) => {
 }
 
 const toggleManageDomainForm = async (domain, dnsItem) => {
-    const domainItemTakenByUser = myDomainsController.getDomainItemByName(currentDomain);
-    if (!domainItemTakenByUser) {
+    if (currentOwner !== walletController.getAccountAddress()) {
         alert(store.localeDict.not_owner)
         return
     }

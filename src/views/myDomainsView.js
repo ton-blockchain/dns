@@ -70,7 +70,7 @@ $('#noDomainsStartNowButton').addEventListener('click', () => {
 const assembleRowData = (item) => {
   const domainName = item.name;
   const salePrice = TonWeb.utils.fromNano(getMinPrice(domainName));
-  const expiryDate = item.expiring_at;
+  const expiryDate = new Date(item.expiring_at * 1000);
   
   return { domainName, salePrice, expiryDate };
 }
@@ -80,7 +80,7 @@ const buildDomainCell = (cell, domain) => {
 
   const domainCellDiv = document.createElement('div');
   domainCellDiv.classList.add("my-domains-table-domain-cell");
-  domainCellDiv.innerText = domain + '.ton';
+  domainCellDiv.innerText = domain;
   cell.appendChild(domainCellDiv);
 }
 
@@ -156,8 +156,9 @@ function rednerMoreDomains(domains) {
     row.classList.add('my-domains-table-row');
 
     row.onclick = function () {
-        setDomainToBrowserHistory(domainName);
-        setDomain(domainName).then(() => {
+        const domainNameWithoutDotTon = domainName.slice(0, -4);
+        setDomainToBrowserHistory(domainNameWithoutDotTon);
+        setDomain(domainNameWithoutDotTon).then(() => {
             analyticService.sendEvent({ type: 'view_domain_info' })
         });
     };

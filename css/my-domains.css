@@ -59,7 +59,17 @@ html[data-theme='dark'] #noDomainsBannerLight {
   line-height: 36px;
   font-weight: 600;
   width: 100%;
-  padding: 48px 0px 12px 48px;
+  padding: 48px 0px 0px 48px;
+}
+
+.my-domains-caption {
+  text-align: left;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  width: 100%;
+  padding: 0px 0px 12px 48px;
 }
 
 .my-domains-table {
@@ -137,7 +147,7 @@ html[data-theme='dark'] #noDomainsBannerLight {
 }
 
 .my-domains-table-row:hover + .my-domains-table-row {
-  .my-domains-table-cell, .my-domains-table-cell-first, .my-domains-table-cell-last {
+  & .my-domains-table-cell, .my-domains-table-cell-first, .my-domains-table-cell-last {
     border-top: none;
   }
 }
@@ -246,8 +256,15 @@ html[data-theme='dark'] #noDomainsBannerLight {
   .my-domains-title {
     font-size: 20px;
     line-height: 28px;
+    padding: 0px 0px 2px 0px;
+  }
+
+  .my-domains-caption {
+    font-size: 14px;
+    line-height: 20px;
     padding: 0px 0px 6px 0px;
   }
+
 
   .my-domains-cell-price-title {
     font-size: 14px;

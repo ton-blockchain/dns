@@ -145,6 +145,9 @@
 <div id="myDomainsView" class="start animate">
   <div id="myDomainsContainer">
     <div class="my-domains-title" data-locale="my_domains">My domains</div>
+    <div class="my-domains-caption" data-locale="my_expiring_domains_caption">
+        This table includes only domains expiring in the next 360 days
+    </div>
     <table class="my-domains-table">
       <tr class="my-domains-table-headers">
         <th data-locale="my_domains_list_domain_column">Domain</th>
@@ -160,7 +163,7 @@
   <div id="noDomainsContainer">
     <img id="noDomainsBannerDark" src="/assets/no_domains_dark.svg" alt="No domains" class="no-domains-image" />
     <img id="noDomainsBannerLight" src="/assets/no_domains_light.svg" alt="No domains" class="no-domains-image" />
-    <div class="no-domains-title" data-locale="my_domains_empty_title">You have no domains yet</div>
+    <div class="no-domains-title" data-locale="my_domains_empty_title">You have no expiring domains yet</div>
     <div class="no-domains-caption" data-locale="my_domains_empty_caption">Participate in the auction and buy domains</div>
     <button id="noDomainsStartNowButton" class="btn" data-locale="my_domains_empty_button">
       Start now
@@ -218,6 +221,10 @@
         </div>
 
         <div class="buttonWrapper">
+            <a id="auctionBtn" target="_blank" class="btn">
+                <img src="/assets/hammer.svg" alt="Place bid">
+                <span data-locale="place_bid">Place bid</span>
+            </a>
             <a id="auctionInfoBtn" class="btn outline" href="/about.html#claim-your-ton-domain" target="_blank" >
                 <span data-locale="claim_your_domain">
                     What is Ton Domains?
