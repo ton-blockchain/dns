@@ -103,15 +103,10 @@ const buildSalePriceCell = (cell, priceInTON, priceInUSDT) => {
   cell.appendChild(priceCellDiv);
 }
 
-const buildExpiryDate = (cell, expiryDate) => {
-  cell.classList.add("my-domains-table-cell");
+const buildDesktopSpanPriceInTON = (node, { days, hours, minutes }) => {
+  const desktopSpanPriceInTON = document.createElement('span');
+  desktopSpanPriceInTON.classList.add('my-domains-cell-expiry-title-desktop');
 
-  const priceCellDiv = document.createElement('div');
-  priceCellDiv.classList.add('my-domains-cell-container');
-
-  const spanPriceInTON = document.createElement('span');
-  spanPriceInTON.classList.add('my-domains-cell-expiry-title');
-  const { days, hours, minutes } = getDifferenceBetweenDates(expiryDate, new Date());
   let dayStr = '';
   if (days === 1) {
     dayStr = `1 ${store.localeDict.day} `;
@@ -119,17 +114,55 @@ const buildExpiryDate = (cell, expiryDate) => {
   if(days > 1){
     dayStr = `${days} ${store.localeDict.days} `;
   }
-  if (isMobile() && days === 0) {
-    dayStr = store.localeDict.today;
-  }
-  spanPriceInTON.innerText = isMobile() ?
-    dayStr : `${dayStr} ${hours} ${store.localeDict.hours} ${minutes} ${store.localeDict.min}`;
-  priceCellDiv.appendChild(spanPriceInTON);
 
-  const spanPriceInUSDT = document.createElement('span');
-  spanPriceInUSDT.classList.add("my-domains-cell-expiry-caption");
-  spanPriceInUSDT.innerText = isMobile() ? formatDateShort(expiryDate) : formatDate(expiryDate); 
-  priceCellDiv.appendChild(spanPriceInUSDT);
+  desktopSpanPriceInTON.innerHTML = `${dayStr} ${hours} ${store.localeDict.hours} ${minutes} ${store.localeDict.min}`;
+  node.appendChild(desktopSpanPriceInTON);
+}
+
+const buildMobileSpanPriceInTON = (node, { days }) => {
+  const mobileSpanPriceInTON = document.createElement('span');
+  mobileSpanPriceInTON.classList.add('my-domains-cell-expiry-title-mobile');
+
+  let dayStr = '';
+  if (days === 1) {
+    dayStr = `1 ${store.localeDict.day} `;
+  }
+  if(days > 1){
+    dayStr = `${days} ${store.localeDict.days} `;
+  }
+
+  mobileSpanPriceInTON.innerHTML = days === 0 ? store.localeDict.today : dayStr;
+  node.appendChild(mobileSpanPriceInTON);
+}
+
+const buildDesktopSpanPriceInUSDT = (node, expiryDate) => {
+  const desktopSpanPriceInUSDT = document.createElement('span');
+  desktopSpanPriceInUSDT.classList.add("my-domains-cell-expiry-caption-desktop");
+
+  desktopSpanPriceInUSDT.innerText = formatDate(expiryDate); 
+  node.appendChild(desktopSpanPriceInUSDT);
+}
+
+const buildMobileSpanPriceInUSDT = (node, expiryDate) => {
+  const mobileSpanPriceInUSDT = document.createElement('span');
+  mobileSpanPriceInUSDT.classList.add("my-domains-cell-expiry-caption-mobile");
+
+  mobileSpanPriceInUSDT.innerText = formatDateShort(expiryDate); 
+  node.appendChild(mobileSpanPriceInUSDT);
+}
+
+const buildExpiryDate = (cell, expiryDate) => {
+  cell.classList.add("my-domains-table-cell");
+
+  const priceCellDiv = document.createElement('div');
+  priceCellDiv.classList.add('my-domains-cell-container');
+
+  const datetime = getDifferenceBetweenDates(expiryDate, new Date());
+  buildDesktopSpanPriceInTON(priceCellDiv, datetime);
+  buildMobileSpanPriceInTON(priceCellDiv, datetime);
+
+  buildDesktopSpanPriceInUSDT(priceCellDiv, expiryDate);
+  buildMobileSpanPriceInUSDT(priceCellDiv, expiryDate);
 
   cell.appendChild(priceCellDiv);
 }

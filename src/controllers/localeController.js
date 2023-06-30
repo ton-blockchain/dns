@@ -202,7 +202,7 @@ const INDEX_LOCALES = {
 		payment_done_button: 'Done',
 		wallet_connect_mytonwallet_unknown_error: 'Please check your wallet. Try to switch network in the wallet settings.',
 		my_domains: 'My domains',
-		my_expiring_domains_caption: 'This table includes only domains expiring in the next 360 days',
+		my_expiring_domains_caption: 'This list includes only domains expiring in the next 360 days',
 		my_domains_empty_title: 'You have no expiring domains yet',
 		my_domains_empty_caption: 'Participate in the auction and buy domains.',
 		my_domains_empty_button: 'Start now',
