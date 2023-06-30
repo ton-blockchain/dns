@@ -170,7 +170,6 @@ const buildExpiryDate = (cell, expiryDate) => {
 const buildArrowRight = (cell) => {
   cell.classList.add("my-domains-table-cell-last");
 
-  cell.classList.add('my-domains-table-last-cell');
   const rightChevronLottie = document.createElement('span');
   rightChevronLottie.classList.add('my-domains-right-arrow-icon');
   cell.appendChild(rightChevronLottie);
