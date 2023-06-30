@@ -287,7 +287,7 @@ const ABOUT_LOCALES = {
 		rules_for_ton_domain_names_p3:
 			'Хотя технически можно было сделать доменные имена даже в виде эмоджи, они недоступны, т.к многие символы выглядят одинаково (например, 😗 и 😙), что могло бы быть использовано мошенниками.',
 		rules_for_ton_domain_names_p4:
-			'Раз в год владельцу домена требуется отправить хотя бы одну нанокопейку на смарт-контракт домена и продлить таким образом домен еще на год. Если домен не продлить, он перейдет в режим аукциона. Это сделано для того, чтобы домены не были потеряны навечно, если их владельцы каким-либо образом утратили к ним доступ.',
+			'Раз в год владельцу домена требуется отправить 0.015 TON на смарт-контракт домена и продлить таким образом домен еще на год. Если домен не продлить, он перейдет в режим аукциона. Это сделано для того, чтобы домены не были потеряны навечно, если их владельцы каким-либо образом утратили к ним доступ.',
 		decentralization: 'Децентрализация',
 		decentralization_p1:
 			'TON DNS — это децентрализованная доменная система. Не существует "администратора", который сможет заблокировать ваш домен.',
@@ -406,7 +406,7 @@ const ABOUT_LOCALES = {
 		rules_for_ton_domain_names_p3:
 			'However, technically, a domain name could depict an emoji, but they’re unavailable because a lot of them look the same — e.g., 😗 and 😙 — which scammers would use to trick unsuspecting users easily.',
 		rules_for_ton_domain_names_p4:
-			'Once per year, the domain’s owner will have to send a nanoton to the domain’s smart contract to extend the domain for a year. If the owner fails to extend their domain, it will go up for auction. Such is to prevent losing a domain forever in the event its owner loses access.',
+			'Once per year, the domain’s owner will have to send 0.015 TON to the domain’s smart contract to extend the domain for a year. If the owner fails to extend their domain, it will go up for auction. Such is to prevent losing a domain forever in the event its owner loses access.',
 		decentralization: 'Decentralization',
 		decentralization_p1:
 			'TON DNS is a decentralized domain name system. There is no “administrator” who can block your domain name.',
