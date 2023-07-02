@@ -105,7 +105,7 @@ const INDEX_LOCALES = {
 		claim_your_domain: 'Что такое Ton Domains?',
 		renew_this_domain: 'Продлить этот домен',
 		renew_domain: 'Продлить домен',
-		renew_domain_explanation: 'Внесите депозит, чтобы продлить ваш домен.',
+		renew_domain_explanation: 'Сделайте оплату, чтобы продлить ваш домен.',
 		use_other_payments: 'Другие способы оплаты <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
 				'                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
 				'                </svg>',
@@ -177,7 +177,7 @@ const INDEX_LOCALES = {
 		claim_your_domain: 'What is Ton Domains?',
 		renew_this_domain: 'Renew this domain',
 		renew_domain: 'Renew domain',
-		renew_domain_explanation: 'Pay a deposit to renew your domain ownership',
+		renew_domain_explanation: 'Make a payment to renew your domain ownership',
 		footer_support: 'Support',
 		wallet_connect_button: 'Connect wallet',
 		wallet_connect_button_mobile: 'Connect',
