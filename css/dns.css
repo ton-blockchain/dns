@@ -1304,10 +1304,10 @@ p {
 }
 
 .line-clamp {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    word-break: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
 }
 
 .bid__modal--qr {
@@ -1979,7 +1979,7 @@ p {
 }
 
 .edit__label {
-    padding-left: 32px;
+    padding-left: 24px;
     font-weight: 400;
     font-size: 18px;
     line-height: 28px;
@@ -2006,7 +2006,7 @@ p {
 }
 
 .edit-row-checkbox {
-    padding-left: 32px;
+    padding-left: 24px;
     margin-top: -16px;
 }
 
@@ -2852,7 +2852,7 @@ input.input__clicked {
     color: var(--text-tetriary);
 }
 
-.disabled__inpu--icon {
+.disabled__input--icon {
     fill: var(--text-tetriary);
 }
 

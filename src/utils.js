@@ -411,6 +411,17 @@ async function getChangeDnsRecordPayload(message) {
     return payload;
 }
 
+async function getManageDomainPayload(key, value) {
+    const cell = await TonWeb.dns.DnsItem.createChangeContentEntryBody({
+        category: key,
+        value: value,
+    });
+    const cellBytes = await cell.toBoc(false);
+    const payload = TonWeb.utils.bytesToBase64(cellBytes);
+
+    return payload;
+}
+
 function openLink(href, target = '_self') {
 	window.open(href, target, 'noreferrer noopener');
 }
@@ -527,4 +538,58 @@ function getDifferenceBetweenDates(futureDate, pastDate) {
     delta -= minutes * 60;
     
     return { days, hours, minutes };
+}
+
+// modalType: 'place a bid' | 'renew' | 'manage domain'
+function adjustPaymentModalCaption(modalType) {
+    if (modalType === 'place a bid') {
+        $('#bidModalSubheader').innerText = store.localeDict.enter_amount;
+        $('#bid__modal--bid__input').classList.remove('disabled__input');
+
+        $('#bid__modal--submit__step--label_1').innerText = store.localeDict.place_label;
+        $('#bid__modal--submit__step--label_2').innerText = store.localeDict.place_label_2;
+        $('.bid__modal--payment #domainName--bid__modal--payment').innerText = store.localeDict.place_bid;
+        $('.bid__modal--second__step #domainName--bid__modal--payment').innerText = store.localeDict.place_bid;
+
+        $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
+        $('#payment-message-success .payment__message--description').innerText = store.localeDict.payment_success_description;
+
+        $('#inputTonIcon').classList.remove('disabled__input--icon');
+
+        return;
+    }
+
+    if (modalType === 'renew') {
+        $('#bidModalSubheader').innerText = store.localeDict.renew_domain_explanation;
+        $('#bid__modal--bid__input').classList.add('disabled__input');
+
+        $('#bid__modal--submit__step--label_1').innerText = store.localeDict.pay;
+        $('#bid__modal--submit__step--label_2').innerText = '';
+        $('.bid__modal--payment #domainName--bid__modal--payment').innerText = store.localeDict.renew_domain;
+        $('.bid__modal--second__step #domainName--bid__modal--payment').innerText = store.localeDict.renew_domain;
+
+        $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
+        $('#payment-message-success .payment__message--description').innerText = '';
+
+        $('#inputTonIcon').classList.add('disabled__input--icon');
+
+        return;
+    }
+
+    if (modalType === 'manage domain') {
+        $('#bidModalSubheader').innerText = store.localeDict.manage_domain_payment_explanation;
+        $('#bid__modal--bid__input').classList.add('disabled__input');
+
+        $('#bid__modal--submit__step--label_1').innerText = store.localeDict.pay;
+        $('#bid__modal--submit__step--label_2').innerText = '';
+        $('.bid__modal--payment #domainName--bid__modal--payment').innerText = store.localeDict.manage_domain_payment_caption;
+        $('.bid__modal--second__step #domainName--bid__modal--payment').innerText = store.localeDict.manage_domain_payment_caption;
+
+        $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
+        $('#payment-message-success .payment__message--description').innerText = '';
+
+        $('#inputTonIcon').classList.add('disabled__input--icon');
+
+        return;
+    }
 }

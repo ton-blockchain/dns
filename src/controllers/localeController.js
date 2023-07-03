@@ -95,6 +95,7 @@ const INDEX_LOCALES = {
 		not_owner: 'Вы не владелец домена',
 		login_extention: 'Войдите и авторизуйтесь в расширении TON Wallet для редактирования домена',
 		invalid_address: 'Неправильный адрес',
+		invalid_adnl_address: 'Неправильный ADNL адрес',
 		install_extension: 'Установите расширение TON Wallet для управления доменом',
 		auction: 'Аукцион',
 		free: 'Свободен',
@@ -105,7 +106,7 @@ const INDEX_LOCALES = {
 		claim_your_domain: 'Что такое Ton Domains?',
 		renew_this_domain: 'Продлить этот домен',
 		renew_domain: 'Продлить домен',
-		renew_domain_explanation: 'Сделайте оплату, чтобы продлить ваш домен.',
+		renew_domain_explanation: 'Оплатите сетевую комиссию для продления домена',
 		use_other_payments: 'Другие способы оплаты <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
 				'                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
 				'                </svg>',
@@ -114,7 +115,7 @@ const INDEX_LOCALES = {
 		wallet_connect_button: 'Подключить кошелёк',
 		wallet_connect_button_mobile: 'Подключить',
 		wallet_modal_first_title: 'Подключить кошелёк',
-		wallet_modal_first_description: 'Выберете кошелёк из списка, чтобы начать работу.',
+		wallet_modal_first_description: 'Выберете кошелёк из списка, чтобы начать работу',
 		wallet_modal_first_footer: 'У вас нет кошелька?',
 		wallet_modal_first_setup: 'Установите кошелёк',
 		wallet_modal_second_title_1: 'Подключить',
@@ -155,7 +156,11 @@ const INDEX_LOCALES = {
 		manage_domain: 'Редактировать',
 		manage_domain_go_back: 'Вернуться на страницу домена',
 		manage_domain_mobile: 'Редактировать в Tonkeeper',
-		manage_domain_unavailable: 'Что-то пошло не так. Пожалуйста, повторите попытку.'
+		manage_domain_unavailable: 'Что-то пошло не так. Пожалуйста, повторите попытку.',
+		manage_domain_payment_caption: 'Редактирование настроек домена',
+		manage_domain_payment_explanation: 'Сделайте оплату для редактирования настроек домена.',
+		invalid_hex_address: 'Некорректный HEX',
+		payment_failure_alert: 'Транзакция отменена. Что-то пошло не так.',
 	},
 	en: {
 		address: 'Address',
@@ -169,6 +174,7 @@ const INDEX_LOCALES = {
 		not_owner: 'You are not the owner of this domain.',
 		login_extention: 'Open and log in to the TON Wallet extension for domain management.',
 		invalid_address: 'The address is invalid.',
+		invalid_adnl_address: 'The ADNL address is invalid.',
 		install_extension: 'Please install the TON Wallet extension to edit the domain',
 		auction: 'On auction',
 		free: 'Available',
@@ -224,7 +230,11 @@ const INDEX_LOCALES = {
 		manage_domain: 'Manage domain',
 		manage_domain_go_back: 'Go back',
 		manage_domain_mobile: 'Manage domain via Tonkeeper',
-		manage_domain_unavailable: 'Service is temporarily unavailable. Please try again.'
+		manage_domain_unavailable: 'Service is temporarily unavailable. Please try again.',
+		manage_domain_payment_caption: 'Manage domain',
+		manage_domain_payment_explanation: 'Make a payment to change domain settings.',
+		invalid_hex_address: 'The HEX field is invalid.',
+		payment_failure_alert: 'Transaction canceled. Something went wrong',
 	},
 }
 
