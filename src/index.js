@@ -34,7 +34,7 @@ const tonweb = new TonWeb(
 
 const walletController = new WalletController({store})
 const myDomainsController = new MyDomainsController();
-const testnetController = new TestnetController() 
+const testnetController = new TestnetController()
 
 makePageVisible()
 
@@ -500,7 +500,7 @@ const renderSearchHistory = (node) => {
         const historyMarkup = getHistoryFromStorage().map(
             (historyRecord) => {
                 const sanitizedValue = encodeHTML(historyRecord)
-                
+
                 return `<button class="hover__button" data-record="${sanitizedValue}">
                     <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M2.99939 12C2.99939 7.02944 7.02883 3 11.9994 3C16.97 3 20.9994 7.02944 20.9994 12C20.9994 16.9706 16.97 21 11.9994 21C9.44416 21 7.13764 19.9351 5.49939 18.225" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -813,12 +813,12 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
             ],
         };
         await walletController.sendTransaction(
-            transaction, 
+            transaction,
             () => paymentStatus = 'success',
             () => paymentStatus = 'rejection',
             () => paymentStatus = 'error'
         )
-        
+
     }
 
     const renderPaymentLoading = () => {
@@ -955,7 +955,7 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
         $('#bidPrice').innerText = formatNumber(localPrice, false)
         $('#bidPrice-payment-loading').innerText = formatNumber(localPrice, false)
     }
-    
+
     const isExtensionInstalled = !isMobile() && window.ton
     const buyUrl = 'ton://transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
 
@@ -1126,6 +1126,7 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                 );
 
                 const transaction = {
+                    validUntil: Date.now() + 60 * 1000, // 1 minute
                     messages: [
                         {
                             address: destinationAddress,
@@ -1134,7 +1135,7 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                         },
                     ],
                 };
-                
+
                 await walletController.sendTransaction(transaction);
             }
 
