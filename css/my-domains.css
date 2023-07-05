@@ -54,22 +54,24 @@ html[data-theme='dark'] #noDomainsBannerLight {
 }
 
 .my-domains-title {
+  box-sizing: border-box;
   text-align: left;
   font-size: 28px;
   line-height: 36px;
   font-weight: 600;
   width: 100%;
-  padding: 48px 0px 0px 48px;
+  padding: 48px 0px 0px 24px;
 }
 
 .my-domains-caption {
+  box-sizing: border-box;
   text-align: left;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   width: 100%;
-  padding: 0px 0px 12px 48px;
+  padding: 0px 0px 12px 24px;
 }
 
 .my-domains-table {
@@ -90,14 +92,14 @@ html[data-theme='dark'] #noDomainsBannerLight {
   cursor: default;
 }
 
-.my-domains-table-headers th:not(.my-domains-table-last-cell) {
-  width: 31%; // first three table columns
+
+.my-domains-table-headers th:not(.my-domains-table-last-column) {
+  width: 31%; /* first three table columns */
 }
 
-.my-domains-table-last-cell {
-  width: 7%; // last table column = 100% - 3 * ( 31% )
-  margin-left: auto;
-  margin-right: auto;
+
+.my-domains-table-last-column {
+  width: 7%; /* last table column = 100% - 3 * ( 31% ) */
 }
 
 .my-domains-right-arrow-icon {
@@ -195,17 +197,32 @@ html[data-theme='dark'] #noDomainsBannerLight {
   content: '\2248\ \ $';
 }
 
-.my-domains-cell-expiry-title {
+.my-domains-cell-expiry-title-desktop {
   font-size: 16px;
   line-height: 24px;
   font-weight: 600;
 }
 
-.my-domains-cell-expiry-caption {
+.my-domains-cell-expiry-title-mobile {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  display: none;
+}
+
+.my-domains-cell-expiry-caption-desktop {
   color: var(--text-tetriary);
   font-size: 14px;
   line-height: 18px;
   font-weight: 400;
+}
+
+.my-domains-cell-expiry-caption-mobile {
+  color: var(--text-tetriary);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  display: none;
 }
 
 .no-domains-title {
@@ -276,24 +293,26 @@ html[data-theme='dark'] #noDomainsBannerLight {
     line-height: 16px;
   }
 
-  .my-domains-cell-expiry-title {
-    font-size: 14px;
-    line-height: 20px;
+  .my-domains-cell-expiry-title-desktop {
+    display: none;
   }
 
-  .my-domains-cell-expiry-caption {
-    font-size: 12px;
-    line-height: 16px;
+  .my-domains-cell-expiry-title-mobile {
+    display: block;
+  }
+
+  .my-domains-cell-expiry-caption-desktop {
+    display: none;
+  }
+
+  .my-domains-cell-expiry-caption-mobile {
+    display: block;
   }
 
   .my-domains-cell-price-title:before {
     width: 16px;
     height: 16px;
     transform: translateY(10%);
-  }
-
-  .my-domains-table-last-cell {
-    width: 0%;
   }
 
   .no-domains-title {

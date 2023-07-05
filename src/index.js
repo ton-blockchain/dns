@@ -2,6 +2,7 @@ MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
 
 const RENEW_DOMAIN_PRICE = 0.015;
+const MANAGE_DOMAIN_PRICE = 0.05;
 
 let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
 
@@ -416,7 +417,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
     $('#auctionBidStep').innerText = formatNumber(bidStep, false)
     $('#auctionBidStepConverted').innerText = formatNumber(bidStepToPercent.toFixed(2))
 
-    attachBidModalListeners(domain, minBet, '#auctionBtn', domainItemAddress)
+    attachPaymentModalListeners('place a bid', domain, minBet, '#auctionBtn', domainItemAddress)
 
     getCoinPrice().then((price) => {
         if (price) {
@@ -441,7 +442,7 @@ const renderFreeDomain = async (domain) => {
     ).toISOString()
     FlipTimer.addTimer('#bid-flip-clock-container', false)
 
-    attachBidModalListeners(domain, salePrice, '#bidButton')
+    attachPaymentModalListeners('place a bid', domain, salePrice, '#bidButton')
 
     getCoinPrice().then((price) => {
         if (price) {
@@ -469,7 +470,7 @@ const renderBusyDomain = (
     $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
 
     if (isTakenByUser) {
-        attachBidModalListeners(domain, RENEW_DOMAIN_PRICE, '#renewDomainButton', domainItemAddress, true)
+        attachPaymentModalListeners('renew', domain, RENEW_DOMAIN_PRICE, '#renewDomainButton', domainItemAddress)
     }
 
     if (!isDateEqual) {
@@ -593,11 +594,46 @@ const renderSearchHistory = (node) => {
     window.addEventListener('touchstart', handleClickOutside, false)
 }
 
-const attachBidModalListeners = (domain, price, modalButton, address, isRenewDomain) => {
+const attachPaymentModalListeners = (
+    modalType,
+    domain,
+    price,
+    modalButton,
+    address,
+) => {
     if (removeListeners[modalButton]) {
         removeListeners[modalButton]()
     }
+    const showOtherPaymentMethods = $('#otherPaymentsMethods')
 
+    const togglePaymentModalOnClick = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        togglePaymentModal(
+            modalType,
+            domain,
+            price,
+            address,
+        ); 
+    }
+
+    $(modalButton).addEventListener('click', togglePaymentModalOnClick, false)
+    showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
+
+    removeListeners[modalButton] = () => {
+        $(modalButton).removeEventListener('click', togglePaymentModalOnClick, false)
+        showOtherPaymentMethods.removeEventListener('click', renderOtherPaymentsMethods)
+    }
+}
+
+function togglePaymentModal(
+    modalType,
+    domain,
+    price,
+    address,
+    payloadIn,
+    validUntil = Date.now() + 1000000 // 16.7 min
+) {
     let localPrice = price;
     let paymentStatus = null;
     const destinationAddress = address || tonRootAddress;
@@ -607,7 +643,6 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
     const convertedPriceSlot = $("#bid__input--converted__price")
     const error = $(".bid__input--error")
     const backdrop = $('.bid__modal--backdrop')
-    const showOtherPaymentMethods = $('#otherPaymentsMethods')
     const paymentLoadingWallet = $('#payment-loading-wallet')
     const paymentCloseButton = $('#paymentCloseButton')
     const qrContainer = $('#freeQr')
@@ -615,34 +650,7 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
     const paymentLottieSuccess = $('#paymentLottieSuccess')
     const paymentLottieFailure = $('#paymentLottieFailure')
 
-
-    if (isRenewDomain) {
-        $('#bidModalSubheader').innerText = store.localeDict.renew_domain_explanation;
-        bidModalInput.classList.add('disabled__input');
-
-        $('#bid__modal--submit__step--label_1').innerText = store.localeDict.pay;
-        $('#bid__modal--submit__step--label_2').innerText = '';
-        $('.bid__modal--payment #domainName--bid__modal--payment').innerText = store.localeDict.renew_domain;
-        $('.bid__modal--second__step #domainName--bid__modal--payment').innerText = store.localeDict.renew_domain;
-
-        $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
-        $('#payment-message-success .payment__message--description').innerText = '';
-
-        $('#inputTonIcon').classList.add('disabled__inpu--icon');
-    } else {
-        $('#bidModalSubheader').innerText = store.localeDict.enter_amount;
-        bidModalInput.classList.remove('disabled__input');
-
-        $('#bid__modal--submit__step--label_1').innerText = store.localeDict.place_label;
-        $('#bid__modal--submit__step--label_2').innerText = store.localeDict.place_label_2;
-        $('.bid__modal--payment #domainName--bid__modal--payment').innerText = store.localeDict.place_bid;
-        $('.bid__modal--second__step #domainName--bid__modal--payment').innerText = store.localeDict.place_bid;
-
-        $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
-        $('#payment-message-success .payment__message--description').innerText = store.localeDict.payment_success_description;
-
-        $('#inputTonIcon').classList.remove('disabled__inpu--icon');
-    }
+    adjustPaymentModalCaption(modalType)
 
     const mask = IMask(bidModalInput, {
         mask: Number,
@@ -725,9 +733,7 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
         $('body').classList.remove('scroll__disabled')
     }
 
-    const toggleBidModal = (e) => {
-        e.preventDefault()
-        e.stopPropagation()
+    const togglePaymentModal = () => {
         scrollToTop()
         backdrop.addEventListener('click', handleModalClose)
 
@@ -800,18 +806,24 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
 
         const rawDestinationAddress = getRawAddress(destinationAddress);
         const message = domain;
-        const payload = isRenewDomain ?
-            await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
+
+        let payload = payloadIn;
+        if (!payload) {
+            payload = modalType === 'renew' ?
+                await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
+        }
+
         const transaction = {
-            validUntil: Date.now() + 1000000,
+            validUntil,
             messages: [
                 {
                     address: rawDestinationAddress,
-                    amount: String(Number(localPrice) * 1000000000),
+                    amount: TonWeb.utils.toNano(String(localPrice)).toString(),
                     payload,
                 },
             ],
         };
+
         await walletController.sendTransaction(
             transaction,
             () => paymentStatus = 'success',
@@ -940,7 +952,7 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
 
         renderQr('#freeQr', 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000)))
 
-        setAddress($('#freeBuyAddress'), destinationAddress)
+        setAddress($('#transactionAddress'), destinationAddress)
 
         showOtherPaymentMethods.removeEventListener('click', renderOtherPaymentsMethods)
         showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
@@ -972,14 +984,8 @@ const attachBidModalListeners = (domain, price, modalButton, address, isRenewDom
     $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
     $('#copyLinkbutton').setAttribute('address', buyUrl)
 
-    $(modalButton).addEventListener('click', toggleBidModal, false)
-    showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
-
-    removeListeners[modalButton] = () => {
-        $(modalButton).removeEventListener('click', toggleBidModal, false)
-        showOtherPaymentMethods.removeEventListener('click', renderOtherPaymentsMethods)
-    }
-}
+    togglePaymentModal();
+} 
 
 let otherPaymentsTimerId = null;
 function renderOtherPaymentsMethods() {
@@ -1109,14 +1115,7 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                 ? dnsRecordResolver.toString(true, true, true, IS_TESTNET)
                 : ''
 
-            const setTx = async (key, value) => {
-                const cell = await TonWeb.dns.DnsItem.createChangeContentEntryBody({
-                    category: key,
-                    value: value,
-                });
-                const cellBytes = await cell.toBoc(false);
-                const payload = TonWeb.utils.bytesToBase64(cellBytes);
-
+            const setTx = async (btnToOpenModalId, key, value) => {
                 const dnsItemAddress = await dnsItem.getAddress();
                 const destinationAddress = dnsItemAddress.toString(
                     true,
@@ -1125,18 +1124,17 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                     IS_TESTNET
                 );
 
-                const transaction = {
-                    validUntil: Date.now() + 60 * 1000, // 1 minute
-                    messages: [
-                        {
-                            address: destinationAddress,
-                            amount: TonWeb.utils.toNano('0.05').toString(),
-                            payload,
-                        },
-                    ],
-                };
+                const payload = await getManageDomainPayload(key, value);
+                const validUntil = Date.now() + 60 * 1000;  // validUntil = 1 minute
 
-                await walletController.sendTransaction(transaction);
+                togglePaymentModal(
+                    'manage domain',
+                    domain,
+                    MANAGE_DOMAIN_PRICE,
+                    destinationAddress,
+                    payload,
+                    validUntil,
+                );
             }
 
             $('#editWalletRow input').placeholder = store.localeDict.address
@@ -1147,11 +1145,10 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                     const value = $('#editWalletRow input').value
                     if (!value || TonWeb.Address.isValid(value)) {
                         setTx(
+                            '#editWalletRow',
                             TonWeb.dns.DNS_CATEGORY_WALLET,
-                            value
-                                ? TonWeb.dns.createSmartContractAddressRecord(
-                                    new TonWeb.Address(value)
-                                )
+                            value ?
+                                TonWeb.dns.createSmartContractAddressRecord(new TonWeb.Address(value))
                                 : null
                         )
                     } else {
@@ -1178,12 +1175,11 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                         }
                     } catch (e) {
                         console.error(e)
-                        alert(store.localeDict.invalid_address)
+                        alert(store.localeDict.invalid_adnl_address);
                         return
                     }
                 }
-
-                setTx(TonWeb.dns.DNS_CATEGORY_SITE, value ? record : null)
+                setTx('#editAdnlRow', TonWeb.dns.DNS_CATEGORY_SITE, value ? record : null)
             })
 
             createEditBtn('#editStorageRow .edit-btn').addEventListener('click', () => {
@@ -1196,12 +1192,12 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                         record = TonWeb.dns.createStorageBagIdRecord(bagId);
                     } catch (e) {
                         console.error(e);
-                        alert(store.localeDict.invalid_address);
+                        alert(store.localeDict.invalid_hex_address);
                         return;
                     }
                 }
 
-                setTx(TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
+                setTx('#editStorageRow', TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
             });
 
             $('#editResolverRow input').placeholder = store.localeDict.address
@@ -1212,9 +1208,10 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                     const value = $('#editResolverRow input').value
                     if (!value || TonWeb.Address.isValid(value)) {
                         setTx(
+                            '#editResolverRow',
                             TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER,
-                            value
-                                ? TonWeb.dns.createNextResolverRecord(new TonWeb.Address(value))
+                            value ?
+                                TonWeb.dns.createNextResolverRecord(new TonWeb.Address(value))
                                 : null
                         )
                     } else {
