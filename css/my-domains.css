@@ -14,7 +14,7 @@
   animation: var(--gradient--animation--transition);
 }
 
-#myDomainsShowMoreButton, #noDomainsStartNowButton {
+#myDomainsLoadMoreButton, #noDomainsStartNowButton {
   width: fit-content;
 }
 
@@ -53,25 +53,34 @@ html[data-theme='dark'] #noDomainsBannerLight {
   display: none;
 }
 
+.my-domains-title-container {
+  width: 100%;
+  margin: 48px 0px 12px 48px;
+}
+
 .my-domains-title {
-  box-sizing: border-box;
-  text-align: left;
   font-size: 28px;
   line-height: 36px;
   font-weight: 600;
-  width: 100%;
-  padding: 48px 0px 0px 24px;
+  text-align: left;
+  width: fit-content;
 }
 
-.my-domains-caption {
-  box-sizing: border-box;
-  text-align: left;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
+.my-domains-title-loading {
+  border-radius: 8px;
+  color: transparent;
+  background: var(--loader--background--gradient);
+  animation: var(--gradient--animation--transition);
+}
+
+.my-domains-table-loading {
+  border-radius: 16px;
   width: 100%;
-  padding: 0px 0px 12px 24px;
+  color: transparent;
+  height: 50vh;
+  box-sizing: border-box;
+  background: var(--loader--background--gradient);
+  animation: var(--gradient--animation--transition);
 }
 
 .my-domains-table {
@@ -245,7 +254,7 @@ html[data-theme='dark'] #noDomainsBannerLight {
     margin-top: 10px;
   }
 
-  #myDomainsShowMoreButton, #noDomainsStartNowButton {
+  #myDomainsLoadMoreButton, #noDomainsStartNowButton {
     padding: 6px 16px;
   }
 
@@ -270,18 +279,14 @@ html[data-theme='dark'] #noDomainsBannerLight {
     padding: 8px 16px 8px 0px;
   }
 
+  .my-domains-title-container {
+    margin: 0px 0px 2px 0px;
+  }
+
   .my-domains-title {
     font-size: 20px;
     line-height: 28px;
-    padding: 0px 0px 2px 0px;
   }
-
-  .my-domains-caption {
-    font-size: 14px;
-    line-height: 20px;
-    padding: 0px 0px 6px 0px;
-  }
-
 
   .my-domains-cell-price-title {
     font-size: 14px;

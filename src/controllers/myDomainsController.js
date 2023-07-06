@@ -1,5 +1,7 @@
 class MyDomainsController {
-  expiringPeriod = 360;
+  myDomainsView = new MyDomainsView();
+
+  expiringPeriod = 366;
   limit = isMobile() ? 10 : 5;
   offset = 0;
 
@@ -7,7 +9,6 @@ class MyDomainsController {
   accountAddress = '';
   isInitialized = false;
   isDataLoading = false;
-  domainListSearchCache = new Map();
 
   myDomainsButton = $('#myDomainsButton');
   myDomainsMobileButton = $('#myDomainsMobileButton');
@@ -21,9 +22,12 @@ class MyDomainsController {
   async initialize(accountAddress) {
     this.isInitialized = true;
 
-    this.setAccountAddress(accountAddress);
     this.showMyDomainsButton();
     this.startLoadingMyDomainsButton();
+  
+    this.setAccountAddress(accountAddress);
+    this.stopLoadingMyDomainsButton();
+
     await this.fetchDomains();
   }
 
@@ -37,10 +41,13 @@ class MyDomainsController {
     setScreen('startScreen');
   }
 
-  async fetchDomains() {
+  async fetchDomains(sleepTime = 0) {
     try {
+      this.startDataLoading();
+
+      await sleep(sleepTime);
+
       const TON_API = this.isTestnet ? 'https://testnet.tonapi.io/v2' : 'https://tonapi.io/v2';
-      const dnsCollectionAddress = dnsCollection.address.toString(true, true, true, this.isTestnet);
 
       // this endpoint doesn't provide pagination and
       // returns only up to 1000 items per account address
@@ -55,10 +62,14 @@ class MyDomainsController {
       this.setDomains(domainsSortedByAscendingExpiryDate);
     } catch (e) {
       console.error(e.message);
-      this.hideMyDomainsButton();
     } finally {
-      this.stopLoadingMyDomainsButton();
+      this.stopDataLoading();
     }
+  }
+
+  resetPagination() {
+    this.limit = isMobile() ? 10 : 5;
+    this.offset = 0;
   }
 
   showMyDomainsButton() {
@@ -72,8 +83,6 @@ class MyDomainsController {
   }
 
   startLoadingMyDomainsButton() {
-    this.isDataLoading = true;
-
     this.myDomainsButton.disabled = true;
     this.myDomainsMobileButton.disabled = true;
 
@@ -82,8 +91,6 @@ class MyDomainsController {
   }
 
   stopLoadingMyDomainsButton() {
-    this.isDataLoading = false;
-
     this.myDomainsButton.disabled = false;
     this.myDomainsMobileButton.disabled = false;
 
@@ -92,6 +99,19 @@ class MyDomainsController {
 
     this.myDomainsButtonInnerSpan.innerText = store.localeDict.my_domains; 
     this.myDomainsMobileButtonInnerSpan.innerText = store.localeDict.my_domains;
+  }
+
+  startDataLoading() {
+    this.isDataLoading = true;
+    this.resetPagination();
+    this.myDomainsView.resetTable();
+    this.myDomainsView.renderLoadingView();
+  }
+
+  stopDataLoading() {
+    const { moreDomainsToDisplay, isLoadMore } = this.getNextDomainsToDisplay();
+    this.myDomainsView.rednder(moreDomainsToDisplay, isLoadMore);
+    this.isDataLoading = false;
   }
 
   setIsTestnet(isTestnetIn) {
@@ -106,39 +126,14 @@ class MyDomainsController {
     this.domains = domainsIn;
   }
 
-  // Cache is necessary here:
-  // We don't want to iterate over domains (up to 1000 items) every time this
-  // function gets called at the domain page update
-  getDomainItemByName(domainName) {
-    if (this.domainListSearchCache.has(domainName)) {
-      return this.domainListSearchCache.get(domainName)
-    }
-
-    const fullDomainName = domainName + '.ton';
-    const domainItem = this.domains.find(item => item.name === fullDomainName);
-    this.domainListSearchCache.set(domainName, domainItem);
-    return domainItem;
-  }
-
-  async getDomainItemByNameOnceLoaded(domainName) {
-    if (this.isDataLoading) {
-      await sleep();
-      return this.getDomainItemByNameOnceLoaded(domainName);
-    }
-
-    return this.getDomainItemByName(domainName);
-  }
-
   getNextDomainsToDisplay() {
     const moreDomainsToDisplay = this.domains.slice(this.offset, this.offset + this.limit);
     this.offset += this.limit;
 
     if (this.offset >= this.domains.length) {
-      return { moreDomainsToDisplay, isShowMore: false };
+      return { moreDomainsToDisplay, isLoadMore: false };
     }
 
-    return { moreDomainsToDisplay, isShowMore: true };
+    return { moreDomainsToDisplay, isLoadMore: true };
   }
-
-
 }

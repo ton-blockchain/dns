@@ -1,4 +1,5 @@
-// --- Fetch Ton to Usdt ratio
+// --- Utility methods:
+
 let tonToUsdtRatio = 1;
 const fetchTonToUsdtRatio = (async () => {
   try {
@@ -8,64 +9,6 @@ const fetchTonToUsdtRatio = (async () => {
     console.error(e.message);
   }
 })();
-// ---
-
-// --- Navigation button click
-// isFirstClick allows to fetch first domain items from myDomainsController
-// and prevents the view from rendering additional items in the
-// table for every "My domains" button click
-let isFirstClick = true;
-function navigateToMyDomainsView () {
-  clear();
-  if (isFirstClick) {
-    isFirstClick = false;
-
-    const { moreDomainsToDisplay, isShowMore } = myDomainsController.getNextDomainsToDisplay();
-    if (moreDomainsToDisplay.length) {
-      showMyDomainsContainer();
-      rednerMoreDomains(moreDomainsToDisplay);
-    } else {
-      renderEmptyView();
-    }
-
-    if (!isShowMore) {
-      hideShowMoreButton();
-    }
-  }
-  window.history.pushState({}, 'TON DNS ', '#/my-domains');
-  setScreen('myDomainsView');
-}
-
-$('#myDomainsButton').addEventListener('click', navigateToMyDomainsView);
-$('#myDomainsMobileButton').addEventListener('click', () => {
-  navigateToMyDomainsView();
-  toggleMobileMenu();
-});
-// ---
-
-// --- Load more button click
-const showMoreButton = $('#myDomainsShowMoreButton');
-showMoreButton.addEventListener('click', () => {
-  const { moreDomainsToDisplay, isShowMore } = myDomainsController.getNextDomainsToDisplay();
-  rednerMoreDomains(moreDomainsToDisplay);
-
-  if (!isShowMore) {
-    hideShowMoreButton();
-  }
-});
-
-function hideShowMoreButton() {
-  showMoreButton.style.display = 'none';
-}
-// ---
-
-// --- Navigate to start screen
-$('#noDomainsStartNowButton').addEventListener('click', () => {
-  clear();
-  window.history.pushState('', 'TON DNS ', '#');
-  setScreen('startScreen');
-});
-// ---
 
 const assembleRowData = (item) => {
   const domainName = item.name;
@@ -76,27 +19,27 @@ const assembleRowData = (item) => {
 }
 
 const buildDomainCell = (cell, domain) => {
-  cell.classList.add("my-domains-table-cell-first");
+  cell.classList.add('my-domains-table-cell-first');
 
   const domainCellDiv = document.createElement('div');
-  domainCellDiv.classList.add("my-domains-table-domain-cell");
+  domainCellDiv.classList.add('my-domains-table-domain-cell');
   domainCellDiv.innerText = domain;
   cell.appendChild(domainCellDiv);
 }
 
 const buildSalePriceCell = (cell, priceInTON, priceInUSDT) => {
-  cell.classList.add("my-domains-table-cell");
+  cell.classList.add('my-domains-table-cell');
 
   const priceCellDiv = document.createElement('div');
-  priceCellDiv.classList.add("my-domains-cell-container");
+  priceCellDiv.classList.add('my-domains-cell-container');
 
   const spanPriceInTON = document.createElement('span');
-  spanPriceInTON.classList.add("my-domains-cell-price-title");
+  spanPriceInTON.classList.add('my-domains-cell-price-title');
   spanPriceInTON.innerHTML = '&nbsp;'+formatNumber(priceInTON, 2);
   priceCellDiv.appendChild(spanPriceInTON);
 
   const spanPriceInUSDT = document.createElement('span');
-  spanPriceInUSDT.classList.add("my-domains-cell-price-caption");
+  spanPriceInUSDT.classList.add('my-domains-cell-price-caption');
   spanPriceInUSDT.innerText = formatNumber(priceInUSDT, 2); 
   priceCellDiv.appendChild(spanPriceInUSDT);
 
@@ -137,7 +80,7 @@ const buildMobileSpanPriceInTON = (node, { days }) => {
 
 const buildDesktopSpanPriceInUSDT = (node, expiryDate) => {
   const desktopSpanPriceInUSDT = document.createElement('span');
-  desktopSpanPriceInUSDT.classList.add("my-domains-cell-expiry-caption-desktop");
+  desktopSpanPriceInUSDT.classList.add('my-domains-cell-expiry-caption-desktop');
 
   desktopSpanPriceInUSDT.innerText = formatDate(expiryDate); 
   node.appendChild(desktopSpanPriceInUSDT);
@@ -145,14 +88,14 @@ const buildDesktopSpanPriceInUSDT = (node, expiryDate) => {
 
 const buildMobileSpanPriceInUSDT = (node, expiryDate) => {
   const mobileSpanPriceInUSDT = document.createElement('span');
-  mobileSpanPriceInUSDT.classList.add("my-domains-cell-expiry-caption-mobile");
+  mobileSpanPriceInUSDT.classList.add('my-domains-cell-expiry-caption-mobile');
 
   mobileSpanPriceInUSDT.innerText = formatDateShort(expiryDate); 
   node.appendChild(mobileSpanPriceInUSDT);
 }
 
 const buildExpiryDate = (cell, expiryDate) => {
-  cell.classList.add("my-domains-table-cell");
+  cell.classList.add('my-domains-table-cell');
 
   const priceCellDiv = document.createElement('div');
   priceCellDiv.classList.add('my-domains-cell-container');
@@ -168,31 +111,31 @@ const buildExpiryDate = (cell, expiryDate) => {
 }
 
 const buildArrowRight = (cell) => {
-  cell.classList.add("my-domains-table-cell-last");
+  cell.classList.add('my-domains-table-cell-last');
 
   const rightChevronLottie = document.createElement('span');
   rightChevronLottie.classList.add('my-domains-right-arrow-icon');
   cell.appendChild(rightChevronLottie);
 }
 
-function showMyDomainsContainer() {
-  const container = document.getElementById('myDomainsContainer');
-  container.style.display = "flex";
-}
-
 function rednerMoreDomains(domains) {
+  $('.my-domains-title').classList.remove('my-domains-title-loading');
+  $('.my-domains-table-loading').style.display = 'none';
+
   const myDomainsTableElement = $('.my-domains-table');
+  myDomainsTableElement.removeAttribute('style');
+
   for (const item of domains) {
     const { domainName, salePrice, expiryDate } = assembleRowData(item);
     const row = myDomainsTableElement.insertRow(-1);
     row.classList.add('my-domains-table-row');
 
     row.onclick = function () {
-        const domainNameWithoutDotTon = domainName.slice(0, -4);
-        setDomainToBrowserHistory(domainNameWithoutDotTon);
-        setDomain(domainNameWithoutDotTon).then(() => {
-            analyticService.sendEvent({ type: 'view_domain_info' })
-        });
+      const domainNameWithoutDotTon = domainName.slice(0, -4);
+      setDomainToBrowserHistory(domainNameWithoutDotTon);
+      setDomain(domainNameWithoutDotTon).then(() => {
+          analyticService.sendEvent({ type: 'view_domain_info' })
+      });
     };
 
     buildDomainCell(row.insertCell(0), domainName);
@@ -202,10 +145,84 @@ function rednerMoreDomains(domains) {
   }
 }
 
-function renderEmptyView() {
-  const container = document.getElementById('noDomainsContainer');
-  container.style.display = "flex";
+// Navigate to starting page
+$('#noDomainsStartNowButton').addEventListener('click', () => {
+  clear();
+  window.history.pushState('', 'TON DNS ', '#');
+  setScreen('startScreen');
+});
 
-  const view = document.getElementById('myDomainsView');
-  view.style.justifyContent = 'center';
+// Load more button click
+const loadMoreButton = $('#myDomainsLoadMoreButton');
+loadMoreButton.addEventListener('click', () => {
+  const { moreDomainsToDisplay, isLoadMore } = myDomainsController.getNextDomainsToDisplay();
+  rednerMoreDomains(moreDomainsToDisplay);
+
+  if (!isLoadMore) {
+    hideLoadMoreButton();
+  }
+});
+
+function hideLoadMoreButton() {
+  loadMoreButton.style.display = 'none';
+}
+
+function showLoadMoreButton() {
+  loadMoreButton.style.display = 'flex';
+}
+
+// ---
+
+// --- Navigation button click
+function navigateToMyDomainsView () {
+  clear();
+  window.history.pushState({}, 'TON DNS ', '#/my-domains');
+  setScreen('myDomainsView');
+}
+
+$('#myDomainsButton').addEventListener('click', navigateToMyDomainsView);
+$('#myDomainsMobileButton').addEventListener('click', () => {
+  navigateToMyDomainsView();
+  toggleMobileMenu();
+});
+// ---
+
+class MyDomainsView {
+
+  constructor() { }
+
+  renderLoadingView() {
+    $('#myDomainsContainer').style.display = 'flex';
+    $('.my-domains-title').classList.add('my-domains-title-loading');
+    $('.my-domains-table').style.display = 'none';
+    $('.my-domains-table-loading').style.display = 'flex';
+  }
+
+  renderEmptyView() {
+    $('.my-domains-title').classList.remove('my-domains-title-loading');
+    $('.my-domains-title').style.display = 'none';
+    $('.my-domains-table-loading').style.display = 'none';
+
+    $('#noDomainsContainer').style.display = 'flex';
+    $('#myDomainsView').style.justifyContent = 'center';
+  }
+
+  resetTable() {
+    document.querySelectorAll('.my-domains-table-row').forEach(node => node.remove());
+  }
+
+  rednder(moreDomainsToDisplay, isLoadMore) {
+    if (moreDomainsToDisplay.length) {
+      rednerMoreDomains(moreDomainsToDisplay);
+
+      if (isLoadMore) {
+        showLoadMoreButton();
+      }
+
+      return;
+    }
+
+    this.renderEmptyView();
+  }
+
 }
