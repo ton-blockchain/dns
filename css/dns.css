@@ -1305,9 +1305,6 @@ p {
 
 .line-clamp {
     word-break: break-word;
-    hyphens: auto;
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
 }
 
 .bid__modal--qr {
