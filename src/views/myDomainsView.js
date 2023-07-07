@@ -1,5 +1,41 @@
-// --- Utility methods:
+class MyDomainsView {
+  constructor() { }
 
+  renderLoadingView() {
+    showMyDomainsContainer();
+    showTableLoading();
+    showMyDomainsTitle();
+    resetViewAlignment();
+  }
+
+  renderEmptyView() {
+    hideTableLoading();
+    hideMyDomainsTitle();
+
+    showNoDomainsContainer();
+    centerView();
+  }
+
+  resetTable() {
+    document.querySelectorAll('.my-domains-table-row').forEach(node => node.remove());
+  }
+
+  rednder(moreDomainsToDisplay, isLoadMore) {
+    if (moreDomainsToDisplay.length) {
+      rednerMoreDomains(moreDomainsToDisplay);
+
+      if (isLoadMore) {
+        showLoadMoreButton();
+      }
+      return;
+    }
+
+    this.renderEmptyView();
+  }
+}
+
+
+// --- UTILITY REDNER METHODS ---
 let tonToUsdtRatio = 1;
 const fetchTonToUsdtRatio = (async () => {
   try {
@@ -119,15 +155,12 @@ const buildArrowRight = (cell) => {
 }
 
 function rednerMoreDomains(domains) {
-  $('.my-domains-title').classList.remove('my-domains-title-loading');
-  $('.my-domains-table-loading').style.display = 'none';
+  hideTableLoading();
 
   const myDomainsTableElement = $('.my-domains-table');
-  myDomainsTableElement.removeAttribute('style');
-
   for (const item of domains) {
     const { domainName, salePrice, expiryDate } = assembleRowData(item);
-    const row = myDomainsTableElement.insertRow(-1);
+    const row = $('.my-domains-table').insertRow(-1);
     row.classList.add('my-domains-table-row');
 
     row.onclick = function () {
@@ -144,7 +177,9 @@ function rednerMoreDomains(domains) {
     buildArrowRight(row.insertCell(3));
   }
 }
+// -----------------------
 
+// --- BUTTONS ---
 // Navigate to starting page
 $('#noDomainsStartNowButton').addEventListener('click', () => {
   clear();
@@ -153,8 +188,7 @@ $('#noDomainsStartNowButton').addEventListener('click', () => {
 });
 
 // Load more button click
-const loadMoreButton = $('#myDomainsLoadMoreButton');
-loadMoreButton.addEventListener('click', () => {
+$('#myDomainsLoadMoreButton').addEventListener('click', () => {
   const { moreDomainsToDisplay, isLoadMore } = myDomainsController.getNextDomainsToDisplay();
   rednerMoreDomains(moreDomainsToDisplay);
 
@@ -162,16 +196,6 @@ loadMoreButton.addEventListener('click', () => {
     hideLoadMoreButton();
   }
 });
-
-function hideLoadMoreButton() {
-  loadMoreButton.style.display = 'none';
-}
-
-function showLoadMoreButton() {
-  loadMoreButton.style.display = 'flex';
-}
-
-// ---
 
 // --- Navigation button click
 function navigateToMyDomainsView () {
@@ -185,44 +209,61 @@ $('#myDomainsMobileButton').addEventListener('click', () => {
   navigateToMyDomainsView();
   toggleMobileMenu();
 });
-// ---
+// ---------------
 
-class MyDomainsView {
-
-  constructor() { }
-
-  renderLoadingView() {
-    $('#myDomainsContainer').style.display = 'flex';
-    $('.my-domains-title').classList.add('my-domains-title-loading');
-    $('.my-domains-table').style.display = 'none';
-    $('.my-domains-table-loading').style.display = 'flex';
-  }
-
-  renderEmptyView() {
-    $('.my-domains-title').classList.remove('my-domains-title-loading');
-    $('.my-domains-title').style.display = 'none';
-    $('.my-domains-table-loading').style.display = 'none';
-
-    $('#noDomainsContainer').style.display = 'flex';
-    $('#myDomainsView').style.justifyContent = 'center';
-  }
-
-  resetTable() {
-    document.querySelectorAll('.my-domains-table-row').forEach(node => node.remove());
-  }
-
-  rednder(moreDomainsToDisplay, isLoadMore) {
-    if (moreDomainsToDisplay.length) {
-      rednerMoreDomains(moreDomainsToDisplay);
-
-      if (isLoadMore) {
-        showLoadMoreButton();
-      }
-
-      return;
-    }
-
-    this.renderEmptyView();
-  }
-
+// --- HIDE/SHOW TOGGLE METHODS ---
+function hideLoadMoreButton() {
+  $('#myDomainsLoadMoreButton').style.display = 'none';
 }
+
+function showLoadMoreButton() {
+  $('#myDomainsLoadMoreButton').style.display = 'flex';
+}
+
+function showMyDomainsContainer() { // and hide noDomainsContainer
+  $('#myDomainsContainer').style.display = 'flex';
+  $('#noDomainsContainer').style.display = 'none';
+}
+
+function showNoDomainsContainer() { // and hide myDomainsContainer
+  $('#myDomainsContainer').style.display = 'none';
+  $('#noDomainsContainer').style.display = 'flex';
+}
+
+function showTableLoading() {
+  $('.my-domains-title').classList.add('my-domains-title-loading');
+  $('.my-domains-table-loading').style.display = 'flex';
+  hideMyDomainsTable();
+}
+
+function hideTableLoading() {
+  $('.my-domains-title').classList.remove('my-domains-title-loading');
+  $('.my-domains-table-loading').style.display = 'none';
+  showMyDomainsTable();
+}
+
+function showMyDomainsTable() {
+  $('.my-domains-table').removeAttribute('style');
+}
+
+function hideMyDomainsTable() {
+  $('.my-domains-table').style.display = 'none';
+}
+
+function showMyDomainsTitle() {
+  $('.my-domains-title').removeAttribute('style');
+}
+
+function hideMyDomainsTitle() {
+  $('.my-domains-title').style.display = 'none';
+}
+
+function centerView() {
+  $('#myDomainsView').style.justifyContent = 'center';
+}
+
+function resetViewAlignment() {
+  $('#myDomainsView').style.justifyContent = 'flex-start';
+}
+
+// --------------------------------

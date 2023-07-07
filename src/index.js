@@ -831,10 +831,6 @@ function togglePaymentModal(
             () => paymentStatus = 'error'
         )
 
-        // update my domains list
-        if (modalType === 'renew') {
-            await myDomainsController.fetchDomains(10000);
-        }
     }
 
     const renderPaymentLoading = () => {
