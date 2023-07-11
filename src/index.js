@@ -814,13 +814,6 @@ function togglePaymentModal(
     const handlePaymentConfirmation = async () => {
         renderPaymentLoading()
 
-        if (
-            'universalLink' in walletController.currentWallet
-            && !walletController.currentWallet.embedded && isMobile()
-        ) {
-            openLink(addReturnStrategy(walletController.currentWallet.universalLink, 'back'), '_blank');
-        }
-
         const rawDestinationAddress = getRawAddress(destinationAddress);
         const message = domain;
 
