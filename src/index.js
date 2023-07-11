@@ -194,7 +194,7 @@ const setDomain = (domain) => {
                     const { expiryDate } = assembleRowData(domainInfo)
                     const { days } = getDifferenceBetweenDates(expiryDate, new Date())
 
-                    allowRenew = days < 14
+                    allowRenew = days <= 355;
                 }
 
                 const isTakenByUser = walletController.getAccountAddress() === currentOwner;
