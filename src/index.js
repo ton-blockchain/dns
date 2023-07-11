@@ -185,14 +185,29 @@ const setDomain = (domain) => {
                 setScreen('freeDomainScreen')
             } else if (ownerAddress) {
                 currentOwner = ownerAddress.toString(true, true, true, IS_TESTNET);
+                $('#manageDomainGoBackBtn').style.display = 'none';
+
+                const domainInfo = myDomainsController.domains.find((item) => item.name.split('.')[0] === domain);
+                let allowRenew = true;
+
+                if (domainInfo) {
+                    const { expiryDate } = assembleRowData(domainInfo)
+                    const { days } = getDifferenceBetweenDates(expiryDate, new Date())
+
+                    allowRenew = days <= 180;
+                }
 
                 const isTakenByUser = walletController.getAccountAddress() === currentOwner;
 
-                $('#manageDomainGoBackBtn').style.display = 'none';
                 if (isTakenByUser) {
                     $('#infoBtn').style.display = 'none';
                     $('#manageDomainBtn').style.display = 'inline-flex';
-                    $('#renewDomainButton').style.display = 'inline-flex';
+
+                    if (allowRenew) {
+                        $('#renewDomainButton').style.display = 'inline-flex';
+                    } else {
+                        $('#renewDomainButton').style.display = 'none';
+                    }
                 } else {
                     $('#infoBtn').style.display = 'inline-flex';
                     $('#manageDomainBtn').style.display = 'none';
@@ -614,7 +629,7 @@ const attachPaymentModalListeners = (
             domain,
             price,
             address,
-        ); 
+        );
     }
 
     $(modalButton).addEventListener('click', togglePaymentModalOnClick, false)
@@ -731,6 +746,8 @@ function togglePaymentModal(
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         $('body').classList.remove('scroll__disabled')
+
+        setDomain(domain);
     }
 
     const togglePaymentModal = () => {
@@ -985,7 +1002,7 @@ function togglePaymentModal(
     $('#copyLinkbutton').setAttribute('address', buyUrl)
 
     togglePaymentModal();
-} 
+}
 
 let otherPaymentsTimerId = null;
 function renderOtherPaymentsMethods() {
