@@ -58,10 +58,6 @@ class WalletController {
 			return;
 		}
 
-		myDomainsController.setIsTestnet(
-			this.tonConnectUI.account.chain === CHAIN.TESTNET
-		);
-
 		const addr = this.currentWallet.account.address;
 		myDomainsController.initialize(addr);
 	}

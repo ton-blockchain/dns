@@ -42,6 +42,14 @@
     <link rel="stylesheet" href="./css/dns.css?8">
     <link rel="stylesheet" href="./css/flip-clock.css?8">
     <link rel="stylesheet" href="./css/my-domains.css?8">
+
+    <link 
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+        integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
     <script type="text/javascript" src="src/state.js?8"></script>
     <script type="text/javascript" src="src/controllers/themeController.js?8"></script>
     <script type="text/javascript" src="src/controllers/flipTimerController.js?8"></script>
@@ -161,7 +169,19 @@
       </tr>
     </table>
     <button id="myDomainsLoadMoreButton" class="btn inversed" style="display: none;">
-      Show more
+        <span 
+            id="myDomainsLoadMoreButtonText"
+            data-locale="show_more_domains_button"
+        >
+            Show more
+        </span>
+        <span 
+            id="myDomainsLoadMoreButtonLoader" 
+            style="display: none;" 
+            data-locale="loading_more_domains_button"
+        >
+            Loading...
+        </span>
     </button>
   </div>
   <div id="noDomainsContainer">

@@ -20,9 +20,9 @@ class MyDomainsView {
     document.querySelectorAll('.my-domains-table-row').forEach(node => node.remove());
   }
 
-  rednder(moreDomainsToDisplay, isLoadMore) {
+  async rednder(moreDomainsToDisplay, isLoadMore) {
     if (moreDomainsToDisplay.length) {
-      rednerMoreDomains(moreDomainsToDisplay);
+      await firstRender(moreDomainsToDisplay);
 
       if (isLoadMore) {
         showLoadMoreButton();
@@ -46,9 +46,9 @@ const fetchTonToUsdtRatio = (async () => {
   }
 })();
 
-const assembleRowData = (item) => {
+const assembleRowData = async (item) => {
   const domainName = item.name;
-  const salePrice = TonWeb.utils.fromNano(getMinPrice(domainName));
+  const salePrice = await getSalePrice(domainName);
   const expiryDate = new Date(item.expiring_at * 1000);
   
   return { domainName, salePrice, expiryDate };
@@ -154,29 +154,38 @@ const buildArrowRight = (cell) => {
   cell.appendChild(rightChevronLottie);
 }
 
-function rednerMoreDomains(domains) {
-  hideTableLoading();
+async function renderRow(rowData) {
+  const { domainName, salePrice, expiryDate } = rowData;
+  const row = $('.my-domains-table').insertRow(-1);
+  row.classList.add('my-domains-table-row');
 
-  const myDomainsTableElement = $('.my-domains-table');
-  for (const item of domains) {
-    const { domainName, salePrice, expiryDate } = assembleRowData(item);
-    const row = $('.my-domains-table').insertRow(-1);
-    row.classList.add('my-domains-table-row');
+  row.onclick = function () {
+    const domainNameWithoutDotTon = domainName.slice(0, -4);
+    setDomainToBrowserHistory(domainNameWithoutDotTon);
+    setDomain(domainNameWithoutDotTon).then(() => {
+        analyticService.sendEvent({ type: 'view_domain_info' })
+    });
+  };
 
-    row.onclick = function () {
-      const domainNameWithoutDotTon = domainName.slice(0, -4);
-      setDomainToBrowserHistory(domainNameWithoutDotTon);
-      setDomain(domainNameWithoutDotTon).then(() => {
-          analyticService.sendEvent({ type: 'view_domain_info' })
-      });
-    };
+  buildDomainCell(row.insertCell(0), domainName);
+  buildSalePriceCell(row.insertCell(1), salePrice, salePrice * tonToUsdtRatio);
+  buildExpiryDate(row.insertCell(2), expiryDate);
+  buildArrowRight(row.insertCell(3));
+}
 
-    buildDomainCell(row.insertCell(0), domainName);
-    buildSalePriceCell(row.insertCell(1), salePrice, salePrice * tonToUsdtRatio);
-    buildExpiryDate(row.insertCell(2), expiryDate);
-    buildArrowRight(row.insertCell(3));
+async function rednerMoreDomains(domains) {
+  const rows = await Promise.all(domains.map((item) => assembleRowData(item)));
+
+  for (const row of rows) {
+    renderRow(row);
   }
 }
+
+async function firstRender(domains) {
+  await rednerMoreDomains(domains);
+  hideTableLoading();
+}
+
 // -----------------------
 
 // --- BUTTONS ---
@@ -188,9 +197,14 @@ $('#noDomainsStartNowButton').addEventListener('click', () => {
 });
 
 // Load more button click
-$('#myDomainsLoadMoreButton').addEventListener('click', () => {
+$('#myDomainsLoadMoreButton').addEventListener('click', async () => {
+  hideLoadMoreButtonText();
+  showLoadMoreButtonSpinner();
+
   const { moreDomainsToDisplay, isLoadMore } = myDomainsController.getNextDomainsToDisplay();
-  rednerMoreDomains(moreDomainsToDisplay);
+  await rednerMoreDomains(moreDomainsToDisplay);
+  hideLoadMoreButtonSpinner();
+  showLoadMoreButtonText();
 
   if (!isLoadMore) {
     hideLoadMoreButton();
@@ -218,6 +232,22 @@ function hideLoadMoreButton() {
 
 function showLoadMoreButton() {
   $('#myDomainsLoadMoreButton').style.display = 'flex';
+}
+
+function hideLoadMoreButtonText() {
+  $('#myDomainsLoadMoreButtonText').style.display = 'none';
+}
+
+function showLoadMoreButtonText() {
+  $('#myDomainsLoadMoreButtonText').style.display = 'block';
+}
+
+function hideLoadMoreButtonSpinner() {
+  $('#myDomainsLoadMoreButtonLoader').style.display = 'none';
+}
+
+function showLoadMoreButtonSpinner() {
+  $('#myDomainsLoadMoreButtonLoader').style.display = 'block';
 }
 
 function showMyDomainsContainer() { // and hide noDomainsContainer

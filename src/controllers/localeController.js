@@ -161,6 +161,8 @@ const INDEX_LOCALES = {
 		manage_domain_payment_explanation: 'Совершите оплату для редактирования настроек домена.',
 		invalid_hex_address: 'Некорректный HEX',
 		payment_failure_alert: 'Транзакция отменена. Что-то пошло не так.',
+		show_more_domains_button: 'Покзать больше',
+		loading_more_domains_button: 'Загрузка...',
 	},
 	en: {
 		address: 'Address',
@@ -234,6 +236,8 @@ const INDEX_LOCALES = {
 		manage_domain_payment_explanation: 'Make a payment to change domain settings.',
 		invalid_hex_address: 'The HEX field is invalid.',
 		payment_failure_alert: 'Transaction canceled. Something went wrong',
+		show_more_domains_button: 'Show more',
+		loading_more_domains_button: 'Loading...',
 	},
 }
 

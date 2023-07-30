@@ -19,6 +19,8 @@ const toncenterUrl = IS_TESTNET
     ? TONCENTER_ENDPOINT_TESTNET
     : TONCENTER_ENDPOINT
 
+const TONAPI_URL = IS_TESTNET ? TONAPI_ENDPOINT_TESTNET : TONAPI_ENDPOINT;
+
 const tonRootAddress = IS_TESTNET
     ? new TonWeb.Address(
         TON_ROOT_ADDRESS_TESTNET
@@ -191,7 +193,7 @@ const setDomain = (domain) => {
                 let allowRenew = true;
 
                 if (domainInfo) {
-                    const { expiryDate } = assembleRowData(domainInfo)
+                    const expiryDate = new Date(domainInfo.expiring_at * 1000);
                     const { days } = getDifferenceBetweenDates(expiryDate, new Date())
 
                     allowRenew = days <= 180;

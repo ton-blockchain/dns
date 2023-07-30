@@ -266,6 +266,11 @@ html[data-theme='dark'] #noDomainsBannerLight {
     margin-bottom: 16px;
   }
 
+  .my-domains-table-loading {
+    height: 60vh;
+    margin-top: 6px;
+  }
+
   .my-domains-table th {
     border-top: 0;
     font-size: 14px;
