@@ -38,10 +38,10 @@ html[data-theme='light'] {
     --wallet-button-secondary-stroke: #F7F9FB;
 
 
-    --accent-default: #0088CC;
-    --accent-default--border-pressed: rgba(0, 136, 204, 0.8);
-    --accent-hover: #0099E5;
-    --button--background: #0088CC;
+    --accent-default: #0098EA;
+    --accent-default--border-pressed: rgba(0, 152, 234, 0.8);
+    --accent-hover: #00A6FF;
+    --button--background: #0098EA;
 
     --icon-primary: #232328;
     --icon-secondary: #98B2BF;
@@ -63,7 +63,7 @@ html[data-theme='light'] {
     --input--box--shadow--hover: 0px 0px 1px 6px rgb(5 139 207 / 10%);
     --default--input--box--shadow--hover: 0px 0px 0px 6px rgba(5, 139, 207, 0.1);
     --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(5, 139, 207, 0.125);
-    --accent-light-hover: #0099E5;
+    --accent-light-hover: #00A6FF;
     --dns-logo-path: url("/assets/dns_logo.svg");
     --dns-logo-path-hover: url("/assets/dns_logo_hover.svg");
     --ton-logo-path: url("/assets/ton_logo_light.svg");
@@ -118,9 +118,9 @@ html[data-theme='dark'] {
     --wallet-button-secondary-stroke: #2D2D32;
     
 
-    --accent-default: #01A4F5;
-    --accent-default--border-pressed: rgba(0, 153, 229, 0.8);
-    --accent-hover: #00AAFF;
+    --accent-default: #07ACFF;
+    --accent-default--border-pressed: rgba(7, 172, 255, 0.8);
+    --accent-hover: #34BCFF;
 
     --icon-primary: #E5E5EA;
     --icon-secondary: #606069;
@@ -139,7 +139,7 @@ html[data-theme='dark'] {
     --text-error: #FF5C5C;
     --error--bg: rgb(255, 92, 92, 0.1);
 
-    --accent-light-hover: #04A2F0;
+    --accent-light-hover: #00A6FF;
     --default--input--box--shadow--hover: 0px 0px 0px 6px rgba(1, 164, 245, 0.1);
     --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(1, 164, 245, 0.125);
 

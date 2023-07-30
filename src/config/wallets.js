@@ -3,10 +3,10 @@ const THEME = TON_CONNECT_UI.THEME;
 const COLORS_SET = {
 	[THEME.LIGHT]: {
 		connectButton: {
-			background: '#0088CC',
+			background: '#0098EA',
 			foreground: '#FFFFFF',
 		},
-		accent: '#0088CC',
+		accent: '#0098EA',
 		icon: {
 			primary: '#232328',
 			secondary: '#98B2BF',
@@ -26,7 +26,7 @@ const COLORS_SET = {
 	},
   [THEME.DARK]: {
 		connectButton: {
-			background: '#0088CC',
+			background: '#0098EA',
 			foreground: '#FFFFFF',
 		},
 		accent: '#F3F3F6',
