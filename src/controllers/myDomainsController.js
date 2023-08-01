@@ -50,7 +50,7 @@ class MyDomainsController {
     } catch (e) {
       console.error(e.message);
     } finally {
-      await this.stopDataLoading();
+      this.stopDataLoading();
     }
   }
 
@@ -95,9 +95,9 @@ class MyDomainsController {
     this.myDomainsView.renderLoadingView();
   }
 
-  async stopDataLoading() {
+  stopDataLoading() {
     const { moreDomainsToDisplay, isLoadMore } = this.getNextDomainsToDisplay();
-    await this.myDomainsView.rednder(moreDomainsToDisplay, isLoadMore);
+    this.myDomainsView.rednder(moreDomainsToDisplay, isLoadMore);
     this.isDataLoading = false;
   }
 

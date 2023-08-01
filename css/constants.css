@@ -2,6 +2,7 @@ html {
     --block--transition: 0.2s cubic-bezier(0, 1.5, 1, 1.5);
     --loader--transition: 0.2s ease-in-out;
     --gradient--animation--transition: 3s linear infinite alternate shine-lines;
+    --gradient--animation--transition--slower: 6s linear infinite alternate shine-lines;
     --opacity--animation--transition: opacity 0.3s ease-in-out;
     --defatul--transition: 0.3s ease-in-out;
     --form--switch-transition: 0.3s linear;
@@ -121,6 +122,7 @@ html[data-theme='dark'] {
     --accent-default: #07ACFF;
     --accent-default--border-pressed: rgba(7, 172, 255, 0.8);
     --accent-hover: #34BCFF;
+    --button--background: #0098EA;
 
     --icon-primary: #E5E5EA;
     --icon-secondary: #606069;
