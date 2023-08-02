@@ -10,8 +10,6 @@ class MyDomainsController {
   isInitialized = false;
   isDataLoading = false;
 
-  isTestnet = window.location.href.indexOf('testnet=true') > -1;
-
   constructor() { }
 
   async initialize(accountAddress) {
@@ -40,8 +38,7 @@ class MyDomainsController {
     try {
       this.startDataLoading();
 
-      const TON_API = this.isTestnet ? 'https://testnet.tonapi.io/v2' : 'https://tonapi.io/v2';
-      const response = await fetch(`${TON_API}/accounts/${this.accountAddress}/dns/expiring?period=${this.expiringPeriod}`);
+      const response = await fetch(`${TONAPI_URL}/accounts/${this.accountAddress}/dns/expiring?period=${this.expiringPeriod}`);
 
       const { items } = await response.json();
       if (!items) {
@@ -102,10 +99,6 @@ class MyDomainsController {
     const { moreDomainsToDisplay, isLoadMore } = this.getNextDomainsToDisplay();
     this.myDomainsView.rednder(moreDomainsToDisplay, isLoadMore);
     this.isDataLoading = false;
-  }
-
-  setIsTestnet(isTestnetIn) {
-    this.isTestnet = isTestnetIn;
   }
 
   setAccountAddress(accountAddressIn) {

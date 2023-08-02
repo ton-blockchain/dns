@@ -22,7 +22,7 @@ class MyDomainsView {
 
   rednder(moreDomainsToDisplay, isLoadMore) {
     if (moreDomainsToDisplay.length) {
-      rednerMoreDomains(moreDomainsToDisplay);
+      firstRender(moreDomainsToDisplay);
 
       if (isLoadMore) {
         showLoadMoreButton();
@@ -48,10 +48,10 @@ const fetchTonToUsdtRatio = (async () => {
 
 const assembleRowData = (item) => {
   const domainName = item.name;
-  const salePrice = TonWeb.utils.fromNano(getMinPrice(domainName));
+  const salePricePromise = getSalePrice(domainName);
   const expiryDate = new Date(item.expiring_at * 1000);
   
-  return { domainName, salePrice, expiryDate };
+  return { domainName, salePricePromise, expiryDate };
 }
 
 const buildDomainCell = (cell, domain) => {
@@ -63,23 +63,59 @@ const buildDomainCell = (cell, domain) => {
   cell.appendChild(domainCellDiv);
 }
 
-const buildSalePriceCell = (cell, priceInTON, priceInUSDT) => {
+const buildSalePriceCell = (cell, salePricePromise) => {
   cell.classList.add('my-domains-table-cell');
 
   const priceCellDiv = document.createElement('div');
   priceCellDiv.classList.add('my-domains-cell-container');
 
+  // --- first row in the cell
+  const firstRow = document.createElement('div');
+  firstRow.classList.add('my-domains-cell-price-row');
+  priceCellDiv.appendChild(firstRow);
+
   const spanPriceInTON = document.createElement('span');
-  spanPriceInTON.classList.add('my-domains-cell-price-title');
-  spanPriceInTON.innerHTML = '&nbsp;'+formatNumber(priceInTON, 2);
-  priceCellDiv.appendChild(spanPriceInTON);
+  spanPriceInTON.classList.add('my-domains-cell-price-loading');
+  spanPriceInTON.classList.add('my-domains-cell-price-title-loading');
+  spanPriceInTON.innerHTML = '&nbsp;';
+  firstRow.appendChild(spanPriceInTON);
+
+  const tonLogoSpan = document.createElement('span');
+  tonLogoSpan.classList.add('my-domains-cell-price-ton-logo');
+  firstRow.insertBefore(tonLogoSpan, spanPriceInTON);
+  // ---
+
+  // --- second row in the cell
+  const secondRow = document.createElement('div');
+  secondRow.classList.add('my-domains-cell-price-row');
+  priceCellDiv.appendChild(secondRow);
 
   const spanPriceInUSDT = document.createElement('span');
-  spanPriceInUSDT.classList.add('my-domains-cell-price-caption');
-  spanPriceInUSDT.innerText = formatNumber(priceInUSDT, 2); 
-  priceCellDiv.appendChild(spanPriceInUSDT);
+  spanPriceInUSDT.classList.add('my-domains-cell-price-loading');
+  spanPriceInUSDT.classList.add('my-domains-cell-price-caption-loading');
+  spanPriceInUSDT.innerText = '&nbsp;'; 
+  secondRow.appendChild(spanPriceInUSDT);
+
+  const dollarSignSpan = document.createElement('span');
+  dollarSignSpan.classList.add('my-domains-cell-price-caption');
+  dollarSignSpan.innerText = '≈ $';
+  secondRow.insertBefore(dollarSignSpan, spanPriceInUSDT);
+  // ---
 
   cell.appendChild(priceCellDiv);
+
+  salePricePromise.then((priceInTON) => {
+    spanPriceInTON.classList.remove('my-domains-cell-price-loading');
+    spanPriceInTON.classList.remove('my-domains-cell-price-title-loading');
+    spanPriceInTON.classList.add('my-domains-cell-price-title');
+    spanPriceInTON.innerHTML = '&nbsp;' + formatNumber(priceInTON, 2);
+
+    const priceInUSDT = priceInTON * tonToUsdtRatio;
+    spanPriceInUSDT.classList.remove('my-domains-cell-price-loading');
+    spanPriceInUSDT.classList.remove('my-domains-cell-price-caption-loading');
+    spanPriceInUSDT.classList.add('my-domains-cell-price-caption');
+    spanPriceInUSDT.innerText = formatNumber(priceInUSDT, 2);
+  });
 }
 
 const buildDesktopSpanPriceInTON = (node, { days, hours, minutes }) => {
@@ -154,29 +190,37 @@ const buildArrowRight = (cell) => {
   cell.appendChild(rightChevronLottie);
 }
 
-function rednerMoreDomains(domains) {
-  hideTableLoading();
+function renderRow(rowData) {
+  const { domainName, salePricePromise, expiryDate } = rowData;
+  const row = $('.my-domains-table').insertRow(-1);
+  row.classList.add('my-domains-table-row');
 
-  const myDomainsTableElement = $('.my-domains-table');
-  for (const item of domains) {
-    const { domainName, salePrice, expiryDate } = assembleRowData(item);
-    const row = $('.my-domains-table').insertRow(-1);
-    row.classList.add('my-domains-table-row');
+  row.onclick = function () {
+    const domainNameWithoutDotTon = domainName.slice(0, -4);
+    setDomainToBrowserHistory(domainNameWithoutDotTon);
+    setDomain(domainNameWithoutDotTon).then(() => {
+        analyticService.sendEvent({ type: 'view_domain_info' })
+    });
+  };
 
-    row.onclick = function () {
-      const domainNameWithoutDotTon = domainName.slice(0, -4);
-      setDomainToBrowserHistory(domainNameWithoutDotTon);
-      setDomain(domainNameWithoutDotTon).then(() => {
-          analyticService.sendEvent({ type: 'view_domain_info' })
-      });
-    };
+  buildDomainCell(row.insertCell(0), domainName);
+  buildSalePriceCell(row.insertCell(1), salePricePromise);
+  buildExpiryDate(row.insertCell(2), expiryDate);
+  buildArrowRight(row.insertCell(3));
+}
 
-    buildDomainCell(row.insertCell(0), domainName);
-    buildSalePriceCell(row.insertCell(1), salePrice, salePrice * tonToUsdtRatio);
-    buildExpiryDate(row.insertCell(2), expiryDate);
-    buildArrowRight(row.insertCell(3));
+function renderMoreDomains(domains) {
+  for (const domain of domains) {
+    const row = assembleRowData(domain)
+    renderRow(row);
   }
 }
+
+function firstRender(domains) {
+  renderMoreDomains(domains);
+  hideTableLoading();
+}
+
 // -----------------------
 
 // --- BUTTONS ---
@@ -188,9 +232,14 @@ $('#noDomainsStartNowButton').addEventListener('click', () => {
 });
 
 // Load more button click
-$('#myDomainsLoadMoreButton').addEventListener('click', () => {
+$('#myDomainsLoadMoreButton').addEventListener('click', async () => {
+  hideLoadMoreButtonText();
+  showLoadMoreButtonSpinner();
+
   const { moreDomainsToDisplay, isLoadMore } = myDomainsController.getNextDomainsToDisplay();
-  rednerMoreDomains(moreDomainsToDisplay);
+  renderMoreDomains(moreDomainsToDisplay);
+  hideLoadMoreButtonSpinner();
+  showLoadMoreButtonText();
 
   if (!isLoadMore) {
     hideLoadMoreButton();
@@ -218,6 +267,22 @@ function hideLoadMoreButton() {
 
 function showLoadMoreButton() {
   $('#myDomainsLoadMoreButton').style.display = 'flex';
+}
+
+function hideLoadMoreButtonText() {
+  $('#myDomainsLoadMoreButtonText').style.display = 'none';
+}
+
+function showLoadMoreButtonText() {
+  $('#myDomainsLoadMoreButtonText').style.display = 'block';
+}
+
+function hideLoadMoreButtonSpinner() {
+  $('#myDomainsLoadMoreButtonLoader').style.display = 'none';
+}
+
+function showLoadMoreButtonSpinner() {
+  $('#myDomainsLoadMoreButtonLoader').style.display = 'block';
 }
 
 function showMyDomainsContainer() { // and hide noDomainsContainer

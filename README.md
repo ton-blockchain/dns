@@ -20,3 +20,5 @@ Finally, start the `ngrok` tunnel at the same port as in the previous step:
 ```bash
 ngrok http 5500
 ```
+
+If the wallet metadata is needed when debugging, update the `url` field in the `tonconnect-manifest.json` with the url provided by `ngrok`.

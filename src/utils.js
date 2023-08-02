@@ -593,3 +593,38 @@ function adjustPaymentModalCaption(modalType) {
         return;
     }
 }
+
+function getMsToSleep(retryHeaderString) {
+    let msToSleep = Math.round(parseFloat(retryHeaderString) * 1000);
+    if (isNaN(msToSleep)) {
+        msToSleep = Math.max(0, new Date(retryHeaderString) - new Date());
+    }
+    return msToSleep;
+}
+
+async function fetchAndRetry(fetchFn) {
+    const response = await fetchFn();
+    
+    if (response.status === 429) {
+        const retryAfter = response.headers.get('retry-after');
+        const msToSleep = getMsToSleep(retryAfter);
+        await sleep(msToSleep);
+        return fetchAndRetryIfNecessary(callAPIFn);
+    }
+
+    return response;
+}
+
+async function getSalePrice(domainName, isTestnet = false) {
+    const response = await fetchAndRetry(async () => (
+        await fetch(`${TONAPI_URL}/dns/${domainName}/bids`)
+    ));
+    const { data } = await response.json();
+
+    if (!data.length) {
+        console.error(`Bids for the given domain (${domainName}) were not found`);
+        return;
+    }
+
+    return TonWeb.utils.fromNano(data[0].value.toString());
+}

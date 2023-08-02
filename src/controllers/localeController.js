@@ -108,7 +108,7 @@ const INDEX_LOCALES = {
 		renew_domain: 'Продлить домен',
 		renew_domain_explanation: 'Оплатите сетевую комиссию для продления домена',
 		use_other_payments: 'Другие способы оплаты <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
-				'                    <path d="M16 15L11.5 10L7 15" stroke="#0088CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+				'                    <path d="M16 15L11.5 10L7 15" stroke="#0098EA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
 				'                </svg>',
 		storage_checkbox: "Хостинг на TON Storage",
 		footer_support: "Помощь",
@@ -161,6 +161,8 @@ const INDEX_LOCALES = {
 		manage_domain_payment_explanation: 'Совершите оплату для редактирования настроек домена.',
 		invalid_hex_address: 'Некорректный HEX',
 		payment_failure_alert: 'Транзакция отменена. Что-то пошло не так.',
+		show_more_domains_button: 'Покзать больше',
+		loading_more_domains_button: 'Загрузка...',
 	},
 	en: {
 		address: 'Address',
@@ -234,6 +236,8 @@ const INDEX_LOCALES = {
 		manage_domain_payment_explanation: 'Make a payment to change domain settings.',
 		invalid_hex_address: 'The HEX field is invalid.',
 		payment_failure_alert: 'Transaction canceled. Something went wrong',
+		show_more_domains_button: 'Show more',
+		loading_more_domains_button: 'Loading...',
 	},
 }
 
