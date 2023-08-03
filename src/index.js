@@ -336,8 +336,8 @@ const processUrl = () => {
         if (domainFromUrl === '/my-domains') {
             if (walletController.isLoggedInSync()) {
                 // before laoding the domain list we need to check if account authenticated
-                // so if users is not logged-in and tries to navigate to '/my-domains'
-                // they will be redirected to strat screen
+                // so if a user is not logged-in and tries to navigate to '/my-domains',
+                // user will be redirected to strat screen
                 setScreen('myDomainsView');
                 return;
             } else {
@@ -484,15 +484,28 @@ const renderBusyDomain = (
     const prevDate = $('#flip-clock-container').dataset.endDate
     const isDateEqual = String(prevDate) === String(expiresDate)
 
-    $('#expiresDate').innerText = expiresDate.toISOString().slice(0,10).split('-').reverse().join(".")
+    const formattedExpiryDate = expiresDate.toISOString().slice(0, 10).split('-').reverse().join(".");
 
     if (isTakenByUser) {
         attachPaymentModalListeners('renew', domain, RENEW_DOMAIN_PRICE, '#renewDomainButton', domainItemAddress)
     }
 
-    if (!isDateEqual) {
-        $('#flip-clock-container').dataset.endDate = expiresDate
-        FlipTimer.addTimer('#flip-clock-container', true)
+    if (isDateEqual) {
+        return;
+    }
+
+    $('#flip-clock-container').dataset.endDate = expiresDate
+    FlipTimer.addTimer('#flip-clock-container', true)
+
+    const isDomainExpired = expiresDate.getTime() <= new Date().getTime();
+    if (isDomainExpired) {
+        $('#busyDomainYetToExpire').style.display = 'none';
+        $('#busyDomainAlreadyExpired').style.display = 'inline';
+        $('#busyDomainAlreadyExpired #expiredDate').innerText = formattedExpiryDate;
+    } else {
+        $('#busyDomainYetToExpire').style.display = 'inline';
+        $('#busyDomainAlreadyExpired').style.display = 'none';
+        $('#expiresDate').innerText = formattedExpiryDate;
     }
 }
 

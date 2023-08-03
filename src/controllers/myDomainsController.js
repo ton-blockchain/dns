@@ -45,13 +45,32 @@ class MyDomainsController {
         throw new Error('No items property in the response')
       }
 
-      const domainsSortedByAscendingExpiryDate = items.reverse();
-      this.setDomains(domainsSortedByAscendingExpiryDate);
+      if (!items.length) {
+        return;
+      }
+
+      const fetchedDomains = this.prepareDomains(items);
+      this.setDomains(fetchedDomains); 
     } catch (e) {
       console.error(e.message);
     } finally {
       this.stopDataLoading();
     }
+  }
+
+  prepareDomains(domainsSortedByDescendingExpiryDate) {
+    const notExpiredDomains = [];
+
+    for (const domain of domainsSortedByDescendingExpiryDate) {
+      const isDomainExpired = domain.expiring_at * 1000 <= new Date().getTime();
+      if (isDomainExpired) {
+        break;
+      }
+
+      notExpiredDomains.push(domain);
+    }
+
+    return notExpiredDomains.reverse();
   }
 
   resetPagination() {

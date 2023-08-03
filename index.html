@@ -310,9 +310,21 @@
         </div>
 
         <div class="flip__container">
-            <span class="expires__date" data-locale="expires">
+            <span
+                id="busyDomainYetToExpire"
+                class="expires__date"
+                data-locale="expires"
+            >
                 Expires on
                 <span id="expiresDate"></span>
+            </span>
+            <span 
+                id="busyDomainAlreadyExpired"
+                class="expires__date"
+                style="display: none;"
+            >
+                <span data-locale="already_expired">Has expired on</span>
+                <span id="expiredDate"></span>
             </span>
             <div id="busyEndTimeRow" class="flip__row">
                 <div id="busyEndDate" class="flip__strong">

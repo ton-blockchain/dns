@@ -163,6 +163,7 @@ const INDEX_LOCALES = {
 		payment_failure_alert: 'Транзакция отменена. Что-то пошло не так.',
 		show_more_domains_button: 'Покзать больше',
 		loading_more_domains_button: 'Загрузка...',
+		already_expired: 'Истёк',
 	},
 	en: {
 		address: 'Address',
@@ -238,6 +239,7 @@ const INDEX_LOCALES = {
 		payment_failure_alert: 'Transaction canceled. Something went wrong',
 		show_more_domains_button: 'Show more',
 		loading_more_domains_button: 'Loading...',
+		already_expired: 'Has expired on',
 	},
 }
 
