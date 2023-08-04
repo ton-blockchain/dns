@@ -149,7 +149,7 @@ const INDEX_LOCALES = {
 		months: ["янв.", "февр.", "марта", "апр.", "мая", "июня", "июля", "авг.", "сент.", "окт.", "нояб.", "дек."],
 		at: 'в',
 		day: 'день',
-		days: 'дней',
+		days: 'дня',
 		today: 'Сегодня',
 		hours: 'часов',
 		min: 'минут',
@@ -163,6 +163,8 @@ const INDEX_LOCALES = {
 		payment_failure_alert: 'Транзакция отменена. Что-то пошло не так.',
 		show_more_domains_button: 'Покзать больше',
 		loading_more_domains_button: 'Загрузка...',
+		already_expired: 'Истёк',
+		my_domains_domain_expired: 'Домен истёк',
 	},
 	en: {
 		address: 'Address',
@@ -238,6 +240,8 @@ const INDEX_LOCALES = {
 		payment_failure_alert: 'Transaction canceled. Something went wrong',
 		show_more_domains_button: 'Show more',
 		loading_more_domains_button: 'Loading...',
+		already_expired: 'Has expired on',
+		my_domains_domain_expired: 'Domain expired',
 	},
 }
 

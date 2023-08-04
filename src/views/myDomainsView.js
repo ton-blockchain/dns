@@ -48,7 +48,7 @@ const fetchTonToUsdtRatio = (async () => {
 
 const assembleRowData = (item) => {
   const domainName = item.name;
-  const salePricePromise = getSalePrice(domainName);
+  const salePricePromise = getSalePrice(domainName); // new Promise((r) => r(100));
   const expiryDate = new Date(item.expiring_at * 1000);
   
   return { domainName, salePricePromise, expiryDate };
@@ -118,9 +118,16 @@ const buildSalePriceCell = (cell, salePricePromise) => {
   });
 }
 
-const buildDesktopSpanPriceInTON = (node, { days, hours, minutes }) => {
-  const desktopSpanPriceInTON = document.createElement('span');
-  desktopSpanPriceInTON.classList.add('my-domains-cell-expiry-title-desktop');
+const buildExpiredDate = (node) => {
+  const expiredDateSpan = document.createElement('span');
+  expiredDateSpan.classList.add('my-domains-cell-expiried-date');
+  expiredDateSpan.innerHTML = store.localeDict.my_domains_domain_expired;
+  node.appendChild(expiredDateSpan);
+}
+
+const buildDesktopExpiryDateTitleSpan = (node, { days, hours, minutes }) => {
+  const desktopExpiryDateSpan = document.createElement('span');
+  desktopExpiryDateSpan.classList.add('my-domains-cell-expiry-title-desktop');
 
   let dayStr = '';
   if (days === 1) {
@@ -130,13 +137,13 @@ const buildDesktopSpanPriceInTON = (node, { days, hours, minutes }) => {
     dayStr = `${days} ${store.localeDict.days} `;
   }
 
-  desktopSpanPriceInTON.innerHTML = `${dayStr} ${hours} ${store.localeDict.hours} ${minutes} ${store.localeDict.min}`;
-  node.appendChild(desktopSpanPriceInTON);
+  desktopExpiryDateSpan.innerHTML = `${dayStr} ${hours} ${store.localeDict.hours} ${minutes} ${store.localeDict.min}`;
+  node.appendChild(desktopExpiryDateSpan);
 }
 
-const buildMobileSpanPriceInTON = (node, { days }) => {
-  const mobileSpanPriceInTON = document.createElement('span');
-  mobileSpanPriceInTON.classList.add('my-domains-cell-expiry-title-mobile');
+const buildMobileExpiryDateTitleSpan = (node, { days }) => {
+  const mobileExpiryDateSpan = document.createElement('span');
+  mobileExpiryDateSpan.classList.add('my-domains-cell-expiry-title-mobile');
 
   let dayStr = '';
   if (days === 1) {
@@ -146,40 +153,47 @@ const buildMobileSpanPriceInTON = (node, { days }) => {
     dayStr = `${days} ${store.localeDict.days} `;
   }
 
-  mobileSpanPriceInTON.innerHTML = days === 0 ? store.localeDict.today : dayStr;
-  node.appendChild(mobileSpanPriceInTON);
+  mobileExpiryDateSpan.innerHTML = days === 0 ? store.localeDict.today : dayStr;
+  node.appendChild(mobileExpiryDateSpan);
 }
 
-const buildDesktopSpanPriceInUSDT = (node, expiryDate) => {
-  const desktopSpanPriceInUSDT = document.createElement('span');
-  desktopSpanPriceInUSDT.classList.add('my-domains-cell-expiry-caption-desktop');
+const buildDesktopExpiryDateCaptionSpan = (node, expiryDate) => {
+  const desktopExpiryDateCaptionSpan = document.createElement('span');
+  desktopExpiryDateCaptionSpan.classList.add('my-domains-cell-expiry-caption-desktop');
 
-  desktopSpanPriceInUSDT.innerText = formatDate(expiryDate); 
-  node.appendChild(desktopSpanPriceInUSDT);
+  desktopExpiryDateCaptionSpan.innerText = formatDate(expiryDate); 
+  node.appendChild(desktopExpiryDateCaptionSpan);
 }
 
-const buildMobileSpanPriceInUSDT = (node, expiryDate) => {
-  const mobileSpanPriceInUSDT = document.createElement('span');
-  mobileSpanPriceInUSDT.classList.add('my-domains-cell-expiry-caption-mobile');
+const buildMobileExpiryDateCaptionSpan = (node, expiryDate) => {
+  const mobileExpiryDateCaptionSpan = document.createElement('span');
+  mobileExpiryDateCaptionSpan.classList.add('my-domains-cell-expiry-caption-mobile');
 
-  mobileSpanPriceInUSDT.innerText = formatDateShort(expiryDate); 
-  node.appendChild(mobileSpanPriceInUSDT);
+  mobileExpiryDateCaptionSpan.innerText = formatDateShort(expiryDate); 
+  node.appendChild(mobileExpiryDateCaptionSpan);
 }
 
 const buildExpiryDate = (cell, expiryDate) => {
   cell.classList.add('my-domains-table-cell');
 
-  const priceCellDiv = document.createElement('div');
-  priceCellDiv.classList.add('my-domains-cell-container');
+  const expiryDateCellDiv = document.createElement('div');
+  expiryDateCellDiv.classList.add('my-domains-cell-container');
 
-  const datetime = getDifferenceBetweenDates(expiryDate, new Date());
-  buildDesktopSpanPriceInTON(priceCellDiv, datetime);
-  buildMobileSpanPriceInTON(priceCellDiv, datetime);
+  const isDomainExpired = expiryDate.getTime() <= new Date().getTime();
 
-  buildDesktopSpanPriceInUSDT(priceCellDiv, expiryDate);
-  buildMobileSpanPriceInUSDT(priceCellDiv, expiryDate);
+  if (isDomainExpired) {
+    buildExpiredDate(expiryDateCellDiv);
+  } else {
+    const datetime = getDifferenceBetweenDates(expiryDate, new Date());
 
-  cell.appendChild(priceCellDiv);
+    buildDesktopExpiryDateTitleSpan(expiryDateCellDiv, datetime);
+    buildMobileExpiryDateTitleSpan(expiryDateCellDiv, datetime);
+
+    buildDesktopExpiryDateCaptionSpan(expiryDateCellDiv, expiryDate);
+    buildMobileExpiryDateCaptionSpan(expiryDateCellDiv, expiryDate);
+  }
+
+  cell.appendChild(expiryDateCellDiv);
 }
 
 const buildArrowRight = (cell) => {

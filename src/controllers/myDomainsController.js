@@ -45,6 +45,10 @@ class MyDomainsController {
         throw new Error('No items property in the response')
       }
 
+      if (!items.length) {
+        return;
+      }
+
       const domainsSortedByAscendingExpiryDate = items.reverse();
       this.setDomains(domainsSortedByAscendingExpiryDate);
     } catch (e) {

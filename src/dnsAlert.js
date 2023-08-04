@@ -1,6 +1,24 @@
 const backdrop = $('.alert--backdrop')
 
-const dnsAlert = async (message = '', buttonMessage = 'Ok', onclick = () => {}) => {
+function sanitize(string) {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  };
+  const reg = /[&<>"'`=\/]/g;
+  return String(string).replace(reg, (s)=>(map[s]));
+}
+
+const dnsAlert = async (message = '', buttonMessage = 'Ok', onclick = () => { }) => {
+  const sanitziedMessage = sanitize(message);
+  const sanitziedButtonMessage = sanitize(buttonMessage);
+
   if (backdrop.children.length > 0) {
     await until(() => backdrop.children.length === 0)
   }
@@ -10,7 +28,7 @@ const dnsAlert = async (message = '', buttonMessage = 'Ok', onclick = () => {}) 
 
   const alertId = makeid(5)
 
-  const alert = createAlert(message, buttonMessage, onclick, alertId)
+  const alert = createAlert(sanitziedMessage, sanitziedButtonMessage, onclick, alertId)
   alert.classList.add('fade')
 
   alert.onclick = (e) => e.stopPropagation()
@@ -22,16 +40,19 @@ const dnsAlert = async (message = '', buttonMessage = 'Ok', onclick = () => {}) 
 
 
 const createAlert = (message, buttonMessage, onclick, alertId) => {
+  const sanitziedMessage = sanitize(message);
+  const sanitziedButtonMessage = sanitize(buttonMessage);
+
   const container = document.createElement('div');
   container.setAttribute('id', alertId)
   container.classList.add('alert--container')
 
   const template = `
       <div class="alert--message">
-        ${message}
+        ${sanitziedMessage}
       </div>
       <div class="alert--button--container">
-          <button class="alert--button btn outline" id="alert--button--id">${buttonMessage}</button>
+          <button class="alert--button btn outline" id="alert--button--id">${sanitziedButtonMessage}</button>
       </div>
     `
   container.innerHTML = template

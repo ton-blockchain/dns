@@ -219,6 +219,13 @@ html[data-theme='dark'] #noDomainsBannerLight {
   line-height: 16px;
 }
 
+.my-domains-cell-expiried-date {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: #FF5C5C;
+}
+
 .my-domains-cell-expiry-title-desktop {
   font-size: 16px;
   line-height: 24px;
@@ -330,6 +337,11 @@ html[data-theme='dark'] #noDomainsBannerLight {
   .my-domains-cell-price-caption-loading {
     margin-top: 1px;
     line-height: 14px;
+  }
+
+  .my-domains-cell-expiried-date {
+    font-size: 14px;
+    line-height: 20px;
   }
 
   .my-domains-cell-expiry-title-desktop {
