@@ -123,13 +123,15 @@ const validateDomain = (domain) => {
     }
 }
 
-const setDomain = (domain) => {
+const setDomain = (domain, isTimerMounted) => {
     scrollToTop()
     currentDomain = domain
 
     const loadDomain = async (setShimmers) => {
         if (setShimmers) {
-            FlipTimer.unmountTimers()
+            if (!isTimerMounted) {
+                FlipTimer.unmountTimers()
+            }
             setScreen('domainLoadingScreen')
             renderDomainLoadingScreen()
         } else {
@@ -679,6 +681,7 @@ function togglePaymentModal(
     const paymentLottieLoading = $('#paymentLottieLoading')
     const paymentLottieSuccess = $('#paymentLottieSuccess')
     const paymentLottieFailure = $('#paymentLottieFailure')
+    const showOtherPaymentMethods = $('#otherPaymentsMethods')
 
     adjustPaymentModalCaption(modalType)
 
@@ -762,7 +765,7 @@ function togglePaymentModal(
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         $('body').classList.remove('scroll__disabled')
 
-        setDomain(domain);
+        setDomain(domain, true);
     }
 
     const togglePaymentModal = () => {
