@@ -126,6 +126,7 @@ html[data-theme='dark'] #noDomainsBannerLight {
   font-weight: 600;
   padding: 12px 0 12px 24px;
   border-top: var(--table-border);
+  height: 50px;
 }
 
 .my-domains-table-row:hover {
@@ -175,29 +176,27 @@ html[data-theme='dark'] #noDomainsBannerLight {
   overflow: hidden;
 }
 
-.my-domains-cell-price-row {
+.my-domains-cell-price-container {
   display: flex;
   flex-direction: row;
 }
 
 .my-domains-cell-price-loading {
-  flex: 1;
   margin-left: 4px;
   border-radius: 6px;
   color: transparent;
   background: var(--loader--background--gradient);
   animation: var(--gradient--animation--transition--slower);
+  margin-bottom: 2px;
+  line-height: 26px;
 }
 
-.my-domains-cell-price-title {
+.my-domains-cell-price {
   font-size: 16px;
   line-height: 28px;
   font-weight: 600;
-}
-
-.my-domains-cell-price-title-loading {
-  margin-bottom: 2px;
-  line-height: 26px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .my-domains-cell-price-ton-logo {
@@ -205,18 +204,6 @@ html[data-theme='dark'] #noDomainsBannerLight {
   height: 20px;
   transform: translateY(20%);
   background: var(--ton-logo-path) center no-repeat;
-}
-
-.my-domains-cell-price-caption {
-  color: var(--text-tetriary);
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 400;
-}
-
-.my-domains-cell-price-caption-loading {
-  margin-top: 2px;
-  line-height: 16px;
 }
 
 .my-domains-cell-expiried-date {
@@ -301,7 +288,7 @@ html[data-theme='dark'] #noDomainsBannerLight {
   .my-domains-table-cell, .my-domains-table-cell-first, .my-domains-table-cell-last {
     font-size: 14px;
     line-height: 20px;
-    padding: 8px 16px 8px 0px;
+    padding: 8px 8px 8px 0px;
   }
 
   .my-domains-title-container {
@@ -313,12 +300,12 @@ html[data-theme='dark'] #noDomainsBannerLight {
     line-height: 28px;
   }
 
-  .my-domains-cell-price-title {
+  .my-domains-cell-price {
     font-size: 14px;
     line-height: 20px;
   }
 
-  .my-domains-cell-price-title-loading {
+  .my-domains-cell-price-loading {
     margin-bottom: 1px;
     line-height: 18px;
   }
@@ -327,16 +314,6 @@ html[data-theme='dark'] #noDomainsBannerLight {
     width: 16px;
     height: 16px;
     transform: translateY(12%);
-  }
-
-  .my-domains-cell-price-caption {
-    font-size: 12px;
-    line-height: 16px;
-  }
-
-  .my-domains-cell-price-caption-loading {
-    margin-top: 1px;
-    line-height: 14px;
   }
 
   .my-domains-cell-expiried-date {
@@ -360,7 +337,7 @@ html[data-theme='dark'] #noDomainsBannerLight {
     display: block;
   }
 
-  .my-domains-cell-price-title:before {
+  .my-domains-cell-price:before {
     width: 16px;
     height: 16px;
     transform: translateY(10%);
@@ -380,5 +357,14 @@ html[data-theme='dark'] #noDomainsBannerLight {
   .no-domains-image {
     width: 148px;
     heigth: 166px;
+  }
+
+  .my-domains-table-headers th:not(.my-domains-table-last-column) {
+    width: 32%; /* first three table columns */
+  }
+
+
+  .my-domains-table-last-column {
+    width: 4%; /* last table column = 100% - 3 * ( 32% ) */
   }
 }

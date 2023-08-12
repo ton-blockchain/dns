@@ -53,7 +53,7 @@ const INDEX_LOCALES = {
 		address: 'Адрес',
 		adnl: 'ADNL адрес',
 		testnet_badge_message: 'Внимание, это тестовая сеть! Не отправляйте настоящие TON. Тестовые домены могут быть удалены.',
-		open_auction: 'Купить домены .ton',
+		open_auction: 'Зарегистрировать домены .ton',
 		start_input_placeholder: 'Введите домен',
 		start_splash: 'Зарегистрируйте короткие читаемые имена для кошельков, смарт-контрактов и веб-сайтов.',
 		more_info: 'Подробнее<span class="icon arrow__right unbreak"></span>',
