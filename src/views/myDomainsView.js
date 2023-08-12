@@ -36,19 +36,9 @@ class MyDomainsView {
 
 
 // --- UTILITY REDNER METHODS ---
-let tonToUsdtRatio = 1;
-const fetchTonToUsdtRatio = (async () => {
-  try {
-    const coinPrice = await getCoinPrice();
-    tonToUsdtRatio = coinPrice;
-  } catch (e) {
-    console.error(e.message);
-  }
-})();
-
 const assembleRowData = (item) => {
   const domainName = item.name;
-  const salePricePromise = getSalePrice(domainName); // new Promise((r) => r(100));
+  const salePricePromise = getSalePrice(domainName); // new Promise((r) => setTimeout(() => r(1234567), 5000))
   const expiryDate = new Date(item.expiring_at * 1000);
   
   return { domainName, salePricePromise, expiryDate };
@@ -63,58 +53,30 @@ const buildDomainCell = (cell, domain) => {
   cell.appendChild(domainCellDiv);
 }
 
+const loadingPricePlaceholder = isMobile() ? 123 : 12345;
 const buildSalePriceCell = (cell, salePricePromise) => {
   cell.classList.add('my-domains-table-cell');
 
-  const priceCellDiv = document.createElement('div');
-  priceCellDiv.classList.add('my-domains-cell-container');
-
   // --- first row in the cell
-  const firstRow = document.createElement('div');
-  firstRow.classList.add('my-domains-cell-price-row');
-  priceCellDiv.appendChild(firstRow);
+  const priceCellDiv = document.createElement('div');
+  priceCellDiv.classList.add('my-domains-cell-price-container');
 
   const spanPriceInTON = document.createElement('span');
   spanPriceInTON.classList.add('my-domains-cell-price-loading');
-  spanPriceInTON.classList.add('my-domains-cell-price-title-loading');
-  spanPriceInTON.innerHTML = '&nbsp;';
-  firstRow.appendChild(spanPriceInTON);
+  spanPriceInTON.innerHTML = '&nbsp;' + formatNumber(loadingPricePlaceholder, 2);
+  priceCellDiv.appendChild(spanPriceInTON);
 
   const tonLogoSpan = document.createElement('span');
   tonLogoSpan.classList.add('my-domains-cell-price-ton-logo');
-  firstRow.insertBefore(tonLogoSpan, spanPriceInTON);
-  // ---
-
-  // --- second row in the cell
-  const secondRow = document.createElement('div');
-  secondRow.classList.add('my-domains-cell-price-row');
-  priceCellDiv.appendChild(secondRow);
-
-  const spanPriceInUSDT = document.createElement('span');
-  spanPriceInUSDT.classList.add('my-domains-cell-price-loading');
-  spanPriceInUSDT.classList.add('my-domains-cell-price-caption-loading');
-  spanPriceInUSDT.innerText = '&nbsp;'; 
-  secondRow.appendChild(spanPriceInUSDT);
-
-  const dollarSignSpan = document.createElement('span');
-  dollarSignSpan.classList.add('my-domains-cell-price-caption');
-  dollarSignSpan.innerText = '≈ $';
-  secondRow.insertBefore(dollarSignSpan, spanPriceInUSDT);
+  priceCellDiv.insertBefore(tonLogoSpan, spanPriceInTON);
   // ---
 
   cell.appendChild(priceCellDiv);
 
   salePricePromise.then((priceInTON) => {
     spanPriceInTON.classList.remove('my-domains-cell-price-loading');
-    spanPriceInTON.classList.remove('my-domains-cell-price-title-loading');
-    spanPriceInTON.classList.add('my-domains-cell-price-title');
+    spanPriceInTON.classList.add('my-domains-cell-price');
     spanPriceInTON.innerHTML = '&nbsp;' + formatNumber(priceInTON, 2);
-
-    const priceInUSDT = priceInTON * tonToUsdtRatio;
-    spanPriceInUSDT.classList.remove('my-domains-cell-price-loading');
-    spanPriceInUSDT.classList.remove('my-domains-cell-price-caption-loading');
-    spanPriceInUSDT.classList.add('my-domains-cell-price-caption');
-    spanPriceInUSDT.innerText = formatNumber(priceInUSDT, 2);
   });
 }
 
