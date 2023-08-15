@@ -376,12 +376,12 @@ function until(conditionFunction) {
       if(conditionFunction()) resolve();
       else setTimeout(_ => poll(resolve), 400);
     }
-  
-    return new Promise(poll);
-  }
 
-function getRawAddress(address) {
-    return new TonWeb.Address(address).toString(false, true, true, true)
+    return new Promise(poll);
+}
+
+function addressToString(address, isTestNet = false) {
+    return new TonWeb.Address(address).toString(true, true, true, isTestNet);
 }
 
 async function getAuctionBidPayload(string) {

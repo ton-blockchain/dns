@@ -832,7 +832,7 @@ function togglePaymentModal(
     const handlePaymentConfirmation = async () => {
         renderPaymentLoading()
 
-        const rawDestinationAddress = getRawAddress(destinationAddress);
+        const addressString = addressToString(destinationAddress, IS_TESTNET);
         const message = domain;
 
         let payload = payloadIn;
@@ -845,7 +845,7 @@ function togglePaymentModal(
             validUntil,
             messages: [
                 {
-                    address: rawDestinationAddress,
+                    address: addressString,
                     amount: TonWeb.utils.toNano(String(localPrice)).toString(),
                     payload,
                 },
