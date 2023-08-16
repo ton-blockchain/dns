@@ -312,7 +312,7 @@ const ABOUT_LOCALES = {
 			'Для исключительных случаев предусмотрена возможность смены владельца или удаление домена посредством общесетевого голосования. Заметим, что большинством в сети можно поменять не только DNS, но и любую конфигурацию блокчейна, но т.к. в сети несколько сотен независимых валидаторов, то для таких изменений нужен исключительно веский повод.',
 		auction_rules: 'Условия аукциона',
 		auction_rules_li1:
-			'Аукцион на домен длится неделю. В будущем длительность аукциона может быть снижена для удобства пользователей.',
+			'Изначально, аукцион на любой домен без владельца длится неделю. Однако, для истекших доменов, повторный аукционый длится 1 час.',
 		auction_rules_li2:
 			'Любой пользователь может сделать ставку в Toncoin на приобретение любого домена.',
 		auction_rules_li3:
@@ -321,6 +321,8 @@ const ABOUT_LOCALES = {
 			'Каждая новая ставка должна не менее чем на 5% превышать предыдущую.',
 		auction_rules_li5:
 			'После окончания аукциона пользователь, сделавший лучшую ставку, забирает домен.',
+		auction_rules_li6:
+			'Более подробную информацию об аукционе можно найти в <a target="_blank" href="https://github.com/ton-blockchain/dns-contract/blob/main/func/nft-item.fc">коде соответствующего смарт-контракта</a>.',
 		claim_your_ton_domain:
 			'Как забрать TON-домен с аукциона и привязать к нему кошелёк',
 		claim_your_ton_domain_h1: 'Убедитесь, что вы выиграли аукцион',
@@ -412,7 +414,7 @@ const ABOUT_LOCALES = {
 		ton_domain_names_are_nft_p2:
 			'That means that once you obtain a domain name, you’ll be able to store, gift, or sell it — the same way you’d handle regular NFTs.',
 		ton_domain_names_are_nft_p3:
-			'Your domain will be stored in your wallet, and you’ll be able to put it up for sale on NFT marketplaces, such as <a href="https://getgems.io/">Getgems</a> or <a href="https://beta.disintar.io/">Disintar</a>, which already support TON DNS.',
+			'Your domain will be stored in your wallet, and you’ll be able to put it up for sale on NFT marketplaces, such as <a target="_blank" href="https://getgems.io/">Getgems</a> or <a target="_blank" href="https://beta.disintar.io/">Disintar</a>, which already support TON DNS.',
 		ton_domain_names_are_nft_image1:
 			'Domain names for sale on NFT marketplace Getgems.',
 		rules_for_ton_domain_names: 'Rules for .ton domain names',
@@ -431,7 +433,7 @@ const ABOUT_LOCALES = {
 			'For exceptional cases, it is possible to change the owner or delete the domain by means of network-wide voting. Note that most of the network can change not only DNS, but also any configuration of the blockchain, but since there are several hundred independent validators on the network, then such changes need an exceptionally good reason.',
 		auction_rules: 'Auction rules',
 		auction_rules_li1:
-			'The domain auction will last one week. In the future, the auction period may be shortened to make the process more convenient for all users.',
+			'For domains with no owner, the auction lasts one week. However, for expired domains, the auction duration is only one hour.',
 		auction_rules_li2:
 			'All users will be able to place bids in Toncoin to win a domain name.',
 		auction_rules_li3:
@@ -440,6 +442,8 @@ const ABOUT_LOCALES = {
 			'Every new bid must be at least 5% higher than the previous.',
 		auction_rules_li5:
 			'When the auction closes, the user who placed the highest bid will collect their domain name.',
+		auction_rules_li6:
+			'To learn more, please refer to <a target="_blank" href="https://github.com/ton-blockchain/dns-contract/blob/main/func/nft-item.fc">the code of the corresponding smart contract</a>.',
 		claim_your_ton_domain:
 			'How to claim your TON domain from the auction and assign a wallet to it',
 		claim_your_ton_domain_h1:
