@@ -1,6 +1,7 @@
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
 
+const DOMAIN_RENEW_LIMIT_IN_DAYS = 180;
 const RENEW_DOMAIN_PRICE = 0.015;
 const MANAGE_DOMAIN_PRICE = 0.05;
 
@@ -190,28 +191,28 @@ const setDomain = (domain, isTimerMounted) => {
             } else if (ownerAddress) {
                 currentOwner = ownerAddress.toString(true, true, true, IS_TESTNET);
                 $('#manageDomainGoBackBtn').style.display = 'none';
-
-                const domainInfo = myDomainsController.domains.find((item) => item.name.split('.')[0] === domain);
-                let allowRenew = true;
-
-                if (domainInfo) {
-                    const expiryDate = new Date(domainInfo.expiring_at * 1000);
-                    const { days } = getDifferenceBetweenDates(expiryDate, new Date())
-
-                    allowRenew = days <= 180;
-                }
-
                 const isTakenByUser = walletController.getAccountAddress() === currentOwner;
 
                 if (isTakenByUser) {
                     $('#infoBtn').style.display = 'none';
                     $('#manageDomainBtn').style.display = 'inline-flex';
 
-                    if (allowRenew) {
+                    // ---
+                    // Always allow to renew a domain if it's expried OR
+                    // allow to renew it only if the expiry date is within the specified limit
+                    const lastFillUpTime = await dnsItem.methods.getLastFillUpTime();
+                    const expiryDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR);
+
+                    const isDomainExpired = expiryDate.getTime() <= new Date().getTime();
+                    const { days } = getDifferenceBetweenDates(expiryDate, new Date()); // always returns absolute difference
+
+                    const isDomainRenewable = isDomainExpired || days <= DOMAIN_RENEW_LIMIT_IN_DAYS;
+                    if (isDomainRenewable) {
                         $('#renewDomainButton').style.display = 'inline-flex';
                     } else {
                         $('#renewDomainButton').style.display = 'none';
                     }
+                    // ---
                 } else {
                     $('#infoBtn').style.display = 'inline-flex';
                     $('#manageDomainBtn').style.display = 'none';
@@ -722,8 +723,6 @@ function togglePaymentModal(
     }
 
     const handleModalClose = (e) => {
-        localPrice = price;
-
         if (e && !e.target.classList.contains('bid__modal--backdrop')) {
             return;
         }
@@ -832,7 +831,7 @@ function togglePaymentModal(
     const handlePaymentConfirmation = async () => {
         renderPaymentLoading()
 
-        const rawDestinationAddress = getRawAddress(destinationAddress);
+        const addressString = addressToString(destinationAddress, IS_TESTNET);
         const message = domain;
 
         let payload = payloadIn;
@@ -845,7 +844,7 @@ function togglePaymentModal(
             validUntil,
             messages: [
                 {
-                    address: rawDestinationAddress,
+                    address: addressString,
                     amount: TonWeb.utils.toNano(String(localPrice)).toString(),
                     payload,
                 },
