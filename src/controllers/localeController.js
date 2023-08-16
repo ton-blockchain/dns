@@ -312,7 +312,7 @@ const ABOUT_LOCALES = {
 			'Для исключительных случаев предусмотрена возможность смены владельца или удаление домена посредством общесетевого голосования. Заметим, что большинством в сети можно поменять не только DNS, но и любую конфигурацию блокчейна, но т.к. в сети несколько сотен независимых валидаторов, то для таких изменений нужен исключительно веский повод.',
 		auction_rules: 'Условия аукциона',
 		auction_rules_li1:
-			'Изначально, аукцион на любой домен без владельца длится неделю. Однако, для истекших доменов, повторный аукционый длится 1 час.',
+			'Изначально, аукцион на любой домен без владельца длится один час. Однако, для истекших доменов, повторный аукционый длится одну неделю.',
 		auction_rules_li2:
 			'Любой пользователь может сделать ставку в Toncoin на приобретение любого домена.',
 		auction_rules_li3:
@@ -433,7 +433,7 @@ const ABOUT_LOCALES = {
 			'For exceptional cases, it is possible to change the owner or delete the domain by means of network-wide voting. Note that most of the network can change not only DNS, but also any configuration of the blockchain, but since there are several hundred independent validators on the network, then such changes need an exceptionally good reason.',
 		auction_rules: 'Auction rules',
 		auction_rules_li1:
-			'For domains with no owner, the auction lasts one week. However, for expired domains, the auction duration is only one hour.',
+			'For domains with no owner, the auction lasts only one hour. However, for expired domains, the auction duration is one week.',
 		auction_rules_li2:
 			'All users will be able to place bids in Toncoin to win a domain name.',
 		auction_rules_li3:
