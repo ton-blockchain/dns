@@ -161,7 +161,7 @@ const INDEX_LOCALES = {
 		manage_domain_payment_explanation: 'Совершите оплату для редактирования настроек домена.',
 		invalid_hex_address: 'Некорректный HEX',
 		payment_failure_alert: 'Транзакция отменена. Что-то пошло не так.',
-		show_more_domains_button: 'Покзать больше',
+		show_more_domains_button: 'Показать больше',
 		loading_more_domains_button: 'Загрузка...',
 		already_expired: 'Истёк',
 		my_domains_domain_expired: 'Домен истёк',
