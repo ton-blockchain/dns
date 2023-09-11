@@ -8,7 +8,7 @@ First, install `ngrok`:
 ```bash
 npm install ngrok -g
 ```
-Or see [other instaltion options](https://ngrok.com/download).
+Or see [other installation options](https://ngrok.com/download).
 
 Launch a static HTTP-server:
 ```bash
@@ -16,7 +16,7 @@ npx http-server -p 5500
 ```
 Or use any other HTTP-server providers, e.g., [live-server](https://www.npmjs.com/package/live-server). There is also a [VSCode Live Server extenstion](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer).
 
-Finally, start the `ngrok` tunnel at the same port as in the previous step:
+Start the `ngrok` tunnel at the same port as in the previous step:
 ```bash
 ngrok http 5500
 ```
