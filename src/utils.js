@@ -594,7 +594,13 @@ function adjustPaymentModalCaption(modalType) {
     }
 }
 
+
+const DEFAULT_RETRY_AFTER_MS = 2000;
 function getMsToSleep(retryHeaderString) {
+    if (!retryHeaderString) {
+        return DEFAULT_RETRY_AFTER_MS;
+    }
+
     let msToSleep = Math.round(parseFloat(retryHeaderString) * 1000);
     if (isNaN(msToSleep)) {
         msToSleep = Math.max(0, new Date(retryHeaderString) - new Date());
@@ -603,16 +609,20 @@ function getMsToSleep(retryHeaderString) {
 }
 
 async function fetchAndRetry(fetchFn) {
-    const response = await fetchFn();
-    
-    if (response.status === 429) {
-        const retryAfter = response.headers.get('retry-after');
-        const msToSleep = getMsToSleep(retryAfter);
-        await sleep(msToSleep);
-        return fetchAndRetryIfNecessary(callAPIFn);
-    }
+    try {
+        const response = await fetchFn();
+        
+        if (response.status === 429) {
+            const retryAfter = response.headers.get('retry-after');
+            const msToSleep = getMsToSleep(retryAfter);
+            await sleep(msToSleep);
+            return fetchAndRetry(fetchFn);
+        }
 
-    return response;
+        return response;
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 async function getSalePrice(domainName, isTestnet = false) {
