@@ -40,11 +40,14 @@ class MyDomainsController {
 
       const response = await fetch(`${TONAPI_WRAPPER_API}/expiring-domains?accountAddress=${this.accountAddress}&period=${this.expiringPeriod}`);
 
-      const { items } = await response.json();
+
+      const { items, error } = await response.json();
+      if (error) {
+        throw new Error(error)
+      }
       if (!items) {
         throw new Error('No items property in the response')
       }
-
       if (!items.length) {
         return;
       }
