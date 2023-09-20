@@ -38,7 +38,7 @@ class MyDomainsController {
     try {
       this.startDataLoading();
 
-      const response = await fetch(`${TONAPI_URL}/accounts/${this.accountAddress}/dns/expiring?period=${this.expiringPeriod}`);
+      const response = await fetch(`${TONAPI_WRAPPER_API}/expiring-domains?accountAddress=${this.accountAddress}&period=${this.expiringPeriod}`);
 
       const { items } = await response.json();
       if (!items) {

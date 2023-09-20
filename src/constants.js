@@ -10,8 +10,7 @@ TON_ROOT_ADDRESS = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz'
 TONSCAN_ENDPOINT_TESTNET = 'https://testnet.tonscan.org'
 TONSCAN_ENDPOINT = 'https://tonscan.org'
 
-TONAPI_ENDPOINT_TESTNET = 'https://testnet.tonapi.io/v2'
-TONAPI_ENDPOINT = 'https://tonapi.io/v2'
+TONAPI_WRAPPER_API = 'https://dp2xyxeojwjddkgygogm5jbjbe0crwaj.lambda-url.eu-central-1.on.aws'
 
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000
