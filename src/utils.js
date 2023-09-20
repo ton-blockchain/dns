@@ -627,7 +627,7 @@ async function fetchAndRetry(fetchFn) {
 
 async function getSalePrice(domainName, isTestnet = false) {
     const response = await fetchAndRetry(async () => (
-        await fetch(`${TONAPI_URL}/dns/${domainName}/bids`)
+        await fetch(`${TONAPI_WRAPPER_API}/sale-price?domainName=${domainName}`)
     ));
     const { data } = await response.json();
 
