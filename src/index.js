@@ -967,6 +967,8 @@ function togglePaymentModal(
 
     const renderSecondStep = () => {
         updateBidModalPaymentData()
+        prepareLinks();
+
         isDomainFree(domainType)
             ? analyticService.sendEvent({type: 'place_an_initial_bid'})
             : analyticService.sendEvent({type: 'place_a_bid'})
@@ -983,7 +985,6 @@ function togglePaymentModal(
         showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
     }
 
-    // update bid modal payemnt data
     const updateBidModalPaymentData = () => {
         $('#domainName--bid__modal--payment').innerText = domain + '.ton'
         $('#freeComment').innerText = domain
@@ -993,22 +994,24 @@ function togglePaymentModal(
         $('#bidPrice-payment-loading').innerText = formatNumber(localPrice, false)
     }
 
-    const isExtensionInstalled = !isMobile() && window.ton
-    const buyUrl = 'ton://transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
+    const prepareLinks = () => {
+        const isExtensionInstalled = !isMobile() && window.ton;
+        const buyUrl = 'ton://transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000));
 
-    if (isExtensionInstalled) {
-        $('#freeBtn').href = buyUrl
-    } else {
-        $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
+        if (isExtensionInstalled) {
+            $('#freeBtn').href = buyUrl;
+        } else {
+            $('#freeBtn').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000));
+        }
+
+        if (isMobile()) {
+            $('#freeBtn').href = buyUrl;
+        }
+
+        $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000));
+        $('#copyLinkbutton').setAttribute('address', buyUrl);
     }
-
-    if (isMobile()) {
-        $('#freeBtn').href = buyUrl
-    }
-
-    $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000))
-    $('#copyLinkbutton').setAttribute('address', buyUrl)
-
+    
     togglePaymentModal();
 }
 
