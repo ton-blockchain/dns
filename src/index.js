@@ -640,12 +640,12 @@ const attachPaymentModalListeners = (
     const togglePaymentModalOnClick = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        togglePaymentModal(
+        togglePaymentModal({
             modalType,
             domain,
             price,
             address,
-        );
+        });
     }
 
     $(modalButton).addEventListener('click', togglePaymentModalOnClick, false)
@@ -657,14 +657,14 @@ const attachPaymentModalListeners = (
     }
 }
 
-function togglePaymentModal(
+function togglePaymentModal({
     modalType,
     domain,
     price,
     address,
     payloadIn,
-    validUntil = Date.now() + 1000000 // 16.7 min
-) {
+    validUntilTimeMS = 1000000, // 16.7 min
+}) {
     let localPrice = price;
     let paymentStatus = null;
     const destinationAddress = address || tonRootAddress;
@@ -765,7 +765,7 @@ function togglePaymentModal(
         setDomain(domain, true);
     }
 
-    const togglePaymentModal = () => {
+    const openPaymentModal = () => {
         scrollToTop()
         backdrop.addEventListener('click', handleModalClose)
 
@@ -832,12 +832,13 @@ function togglePaymentModal(
         const addressString = addressToString(destinationAddress, IS_TESTNET);
         const message = domain;
 
-        let payload = payloadIn;
-        if (!payload) {
-            payload = modalType === 'renew' ?
+        let payload = modalType === 'renew' ?
                 await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
+        if (!payload) {
+            payload = payloadIn;
         }
 
+        const validUntil = Date.now() + validUntilTimeMS;
         const transaction = {
             validUntil,
             messages: [
@@ -1012,7 +1013,7 @@ function togglePaymentModal(
         $('#copyLinkbutton').setAttribute('address', buyUrl);
     }
     
-    togglePaymentModal();
+    openPaymentModal();
 }
 
 let otherPaymentsTimerId = null;
@@ -1153,16 +1154,15 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                 );
 
                 const payload = await getManageDomainPayload(key, value);
-                const validUntil = Date.now() + 60 * 1000;  // validUntil = 1 minute
 
-                togglePaymentModal(
-                    'manage domain',
+                togglePaymentModal({
+                    modalType: 'manage domain',
                     domain,
-                    MANAGE_DOMAIN_PRICE,
-                    destinationAddress,
-                    payload,
-                    validUntil,
-                );
+                    price: MANAGE_DOMAIN_PRICE,
+                    address: destinationAddress,
+                    payloadIn: payload,
+                    validUntilTimeMS: 60 * 1000, // 1 minute
+                });
             }
 
             $('#editWalletRow input').placeholder = store.localeDict.address
