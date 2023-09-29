@@ -7,7 +7,11 @@ class AnalyticService {
         this.provider.init()
     }
     sendEvent(event) {
-        this.provider.sendEvent(event);
+        try {
+            this.provider.sendEvent(event);
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
 
