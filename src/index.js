@@ -724,7 +724,6 @@ function togglePaymentModal({
         if (e && !e.target.classList.contains('bid__modal--backdrop')) {
             return;
         }
-
         history.back()
     }
 
@@ -740,6 +739,7 @@ function togglePaymentModal({
         $('#otherPaymentsMethodsContainer').classList.remove('show')
         $('#otherPaymentsMethodsContainer').style.display = 'none'
         $('#otherPaymentsMethods svg').classList.remove('rotate')
+        $('body').classList.remove('scroll__disabled')
 
 
         toggle('#paymentLottieLoading', false)
@@ -756,13 +756,13 @@ function togglePaymentModal({
         toggle('#payment-message-error', false)
 
         qrContainer.innerHTML = ''
-
         paymentStatus = null
 
-        bidModalInput.removeEventListener('input', handleBidInput)
+        bidModalInput.removeEventListener('input', handleBidInput);
+        bidModalInput.removeEventListener('keypress', handleInputEnterPress);
+
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
-        $('body').classList.remove('scroll__disabled')
 
         backdrop.removeEventListener('click', handleModalCloseViaBackdrop);
         window.removeEventListener('popstate', handleModalClose);
@@ -808,19 +808,20 @@ function togglePaymentModal({
         convertedPriceSlot.style.display = 'block'
         error.style.display = 'none'
 
-        bidModalInput.addEventListener('keypress', (e) => {
-            if (e.key === "Enter" && !submitStepButton.getAttribute('disabled')) {
-                checkIfLoggedIn()
-                hideKeyboard();
-            }
-        })
-
         submitStepButton.addEventListener('click', checkIfLoggedIn)
         submitPriceLabel.innerText = formatNumber(localPrice)
         renderConvertedTonPrice(convertedPriceSlot, localPrice);
 
-        bidModalInput.addEventListener('input', handleBidInput)
+        bidModalInput.addEventListener('input', handleBidInput);
+        bidModalInput.addEventListener('keypress', handleInputEnterPress);
     }
+
+    const handleInputEnterPress = (e) => {
+        if (e.key === 'Enter' && !submitStepButton.getAttribute('disabled')) {
+            checkIfLoggedIn();
+            hideKeyboard();
+        }
+    };
 
     const checkIfLoggedIn = async () => {
         const isLoggedIn = await walletController.isLoggedIn()
@@ -838,10 +839,10 @@ function togglePaymentModal({
         const addressString = addressToString(destinationAddress, IS_TESTNET);
         const message = domain;
 
-        let payload = modalType === 'renew' ?
-                await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
+        let payload = payloadIn;
         if (!payload) {
-            payload = payloadIn;
+            payload = modalType === 'renew' ?
+                await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
         }
 
         const validUntil = Date.now() + validUntilTimeMS;
