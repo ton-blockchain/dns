@@ -720,12 +720,15 @@ function togglePaymentModal({
         }
     }
 
-    const handleModalClose = (e) => {
+    const handleModalCloseViaBackdrop = (e) => {
         if (e && !e.target.classList.contains('bid__modal--backdrop')) {
             return;
         }
 
         history.back()
+    }
+
+    const handleModalClose = (e) => {
         hideKeyboard()
 
         toggle('.bid__modal--first__step', false)
@@ -757,17 +760,20 @@ function togglePaymentModal({
         paymentStatus = null
 
         bidModalInput.removeEventListener('input', handleBidInput)
-        backdrop.removeEventListener('click', handleModalClose)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         submitStepButton.removeEventListener('click', checkIfLoggedIn)
         $('body').classList.remove('scroll__disabled')
+
+        backdrop.removeEventListener('click', handleModalCloseViaBackdrop);
+        window.removeEventListener('popstate', handleModalClose);
 
         setDomain(domain, true);
     }
 
     const openPaymentModal = () => {
         scrollToTop()
-        backdrop.addEventListener('click', handleModalClose)
+        backdrop.addEventListener('click',  handleModalCloseViaBackdrop)
+        window.addEventListener('popstate', handleModalClose);
 
         paymentStatus = null
 
