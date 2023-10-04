@@ -66,7 +66,6 @@ html[data-theme='light'] {
     --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(5, 139, 207, 0.125);
     --accent-light-hover: #00A6FF;
     --dns-logo-path: url("/assets/dns_logo.svg");
-    --dns-logo-path-hover: url("/assets/dns_logo_hover.svg");
     --ton-logo-path: url("/assets/ton_logo_light.svg");
 
     --free-domain-status-color: #47C58A;
@@ -146,7 +145,6 @@ html[data-theme='dark'] {
     --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(1, 164, 245, 0.125);
 
     --dns-logo-path: url("/assets/dns_logo_dark.svg");
-    --dns-logo-path-hover: url("/assets/dns_logo_dark_hover.svg");
     --ton-logo-path: url("/assets/ton_logo_dark.svg");
 
     --free-domain-status-color: #32D583;

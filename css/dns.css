@@ -659,8 +659,8 @@ nav .container-inner {
 }
 
 .badge .badge__dns {
-    width: 58px;
-    height: 16px;
+    width: 44px;
+    height: 18px;
     background: var(--dns-logo-path) center no-repeat;
     background-size: cover;
 }
