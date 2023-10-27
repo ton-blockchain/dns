@@ -12,5 +12,9 @@ TONSCAN_ENDPOINT = 'https://tonscan.org'
 
 TONAPI_WRAPPER_API = 'https://dp2xyxeojwjddkgygogm5jbjbe0crwaj.lambda-url.eu-central-1.on.aws'
 
+// GG INTEGRATION
+GG_ENDPOINT = 'https://api.getgems.io/ton-dns'
+// GG INTEGRATION
+
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000

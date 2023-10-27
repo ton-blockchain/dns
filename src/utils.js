@@ -139,7 +139,7 @@ const onlyNumbers = (value) => {
     return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
 }
 
-const setScreen = (name) => {
+const setScreen = (name, ggDomainState) => {
     ACTIVE_SCREEN = name
     toggle('#startScreen', name === 'startScreen')
     if (name === 'startScreen') {
@@ -170,11 +170,24 @@ const setScreen = (name) => {
     } else if (name === 'busyDomainScreen') {
         // bugfix: resetting clock on busy domain screen
         $('#flip-clock-container').dataset.endDate = '';
-        
-        $('#domainStatus').classList.add('busy')
-        $('#domainStatus').classList.remove('free')
 
-        $('#domainStatus span').innerText = store.localeDict.busy;
+        // GG INTEGRATION
+        if (ggDomainState === 'onSale') {
+            $('#domainStatus').classList.remove('busy');
+            $('#domainStatus').classList.add('free');
+            $('#domainStatus span').innerText = store.localeDict.gg_sale;
+        } else if (ggDomainState === 'onAuction') {
+            $('#domainStatus').classList.remove('busy');
+            $('#domainStatus').classList.add('free');
+            $('#domainStatus span').innerText = store.localeDict.gg_auction;
+        } else {
+        // GG INTEGRATION
+
+            $('#domainStatus').classList.add('busy')
+            $('#domainStatus').classList.remove('free')
+
+            $('#domainStatus span').innerText = store.localeDict.busy;
+        }
     }
 }
 
@@ -638,3 +651,14 @@ async function getSalePrice(domainName, isTestnet = false) {
 
     return TonWeb.utils.fromNano(data[0].value.toString());
 }
+
+// GG INTEGRATION
+async function getGGDomainData(domainAddressString) {
+    try {
+        const response = await fetch(`${GG_ENDPOINT}/status/${domainAddressString}`);
+        return await response.json();
+    } catch (e) {
+        return null;
+    }
+}
+// GG INTEGRATION

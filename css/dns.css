@@ -2988,3 +2988,70 @@ a.edit-btn:hover {
       transform: rotate(360deg);
     }
 }
+
+/* GG INTEGRATION */
+.gg__hidden {
+    display: none;
+}
+
+.gg__btn + .gg__btn {
+    margin-top: -6px;
+}
+
+.gg__btn + .btn:not(.gg__btn) {
+    margin-top: 4px;
+}
+
+.gg__btn__outline {
+    color: var(--text-primary);
+    border: 1px solid var(--card-border-default);
+    background: none;
+}
+
+.gg__btn__outline:hover,
+.gg__btn__outline:focus {
+    color: var(--text-primary);
+    border: 1px solid var(--card-border-default);
+    background: var(--background-content-hover);
+}
+
+.gg__btn__tertiary {
+    color: var(--accent-default);
+    background: none;
+}
+
+.gg__btn__tertiary:hover,
+.gg__btn__tertiary:focus {
+    color: var(--accent-default);
+    background: none;
+    text-decoration: underline;
+}
+
+.gg__btn__icon {
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.gg__btn__primary .gg__btn__icon {
+    background-image: url("../assets/gg_logo_white.svg");
+}
+
+html[data-theme='light'] .gg__btn__outline .gg__btn__icon {
+    background-image: url("../assets/gg_logo_dark_gray.svg");
+}
+
+html[data-theme='dark'] .gg__btn__outline .gg__btn__icon {
+    background-image: url("../assets/gg_logo_white.svg");
+}
+
+html[data-theme='light'] .gg__btn__tertiary .gg__btn__icon {
+    background-image: url("../assets/gg_logo_blue.svg");
+}
+
+html[data-theme='dark'] .gg__btn__tertiary .gg__btn__icon {
+    background-image: url("../assets/gg_logo_blue_dark.svg");
+}
+/* GG INTEGRATION */
