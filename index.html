@@ -288,6 +288,29 @@
 								<span id="salePriceConverted" class="converted__price">---</span>
 							</span>
 						</p>
+						<!-- GG INTEGRATION -->
+						<p id="ggSalePriceRow" class="row gg__hidden">
+							<span class="row__title" data-locale="gg_sale_price">Price</span>
+							<span class="priceContainer">
+								<span id="ggSalePrice" class="sale__price">---</span>
+								<span id="ggSalePriceConverted" class="converted__price">---</span>
+							</span>
+						</p>
+						<p id="ggAuctionMinBidRow" class="row gg__hidden">
+							<span class="row__title" data-locale="gg_auction_minimum_bid">Min. bid</span>
+							<span class="priceContainer">
+								<span id="ggAuctionMinBid" class="sale__price">---</span>
+								<span id="ggAuctionMinBidConverted" class="converted__price">---</span>
+							</span>
+						</p>
+						<p id="ggAuctionMaxBidRow" class="row gg__hidden">
+							<span class="row__title" data-locale="gg_auction_maximum_bid">Max. bid</span>
+							<span class="priceContainer">
+								<span id="ggAuctionMaxBid" class="sale__price">---</span>
+								<span id="ggAuctionMaxBidConverted" class="converted__price">---</span>
+							</span>
+						</p>
+						<!-- GG INTEGRATION -->
 						<p id="busyOwnerRow" class="row align__center">
 							<span data-locale="owner" class="row__title">Owner</span>
 							<span id="busyOwnerAddress" class="addr node__to__copy"></span>
@@ -377,6 +400,26 @@
 								Go back
 							</span>
 						</a>
+						<!-- GG INTEGRATION -->
+						<a id="ggBuyBtn" class="btn gg__btn gg__btn__primary gg__hidden" href="" target="_blank">
+							<span class="gg__btn__icon"></span>
+							<span data-locale="gg_buy">
+								Buy Now
+							</span>
+						</a>
+						<a id="ggPlaceBidBtn" class="btn gg__btn gg__btn__outline gg__hidden" href="" target="_blank">
+							<span class="gg__btn__icon"></span>
+							<span data-locale="gg_place_bid">
+								Place a bid
+							</span>
+						</a>
+						<a id="ggMakeOfferBtn" class="btn gg__btn gg__btn__tertiary gg__hidden" href="" target="_blank">
+							<span class="gg__btn__icon"></span>
+							<span data-locale="gg_make_offer">
+								Make offer
+							</span>
+						</a>
+						<!-- GG INTEGRATION -->
 						<a id="infoBtn" class="btn outline" href="/about.html#claim-your-ton-domain" target="_blank">
 							<span data-locale="claim_your_domain">
 								What is Ton Domains?

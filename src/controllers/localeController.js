@@ -165,6 +165,16 @@ const INDEX_LOCALES = {
 		loading_more_domains_button: 'Загрузка...',
 		already_expired: 'Истёк',
 		my_domains_domain_expired: 'Домен истёк',
+		// GG INTEGRATION
+		gg_sale: 'На продаже',
+		gg_auction: 'На аукционе',
+		gg_sale_price: 'Цена',
+		gg_auction_minimum_bid: 'Минимальная ставка',
+		gg_auction_maximum_bid: 'Максимальная ставка',
+		gg_buy: 'Купить',
+		gg_place_bid: 'Сделать ставку',
+		gg_make_offer: 'Сделать предложение',
+		// GG INTEGRATION
 	},
 	en: {
 		address: 'Address',
@@ -242,6 +252,16 @@ const INDEX_LOCALES = {
 		loading_more_domains_button: 'Loading...',
 		already_expired: 'Has expired on',
 		my_domains_domain_expired: 'Domain expired',
+		// GG INTEGRATION
+		gg_sale: 'On sale',
+		gg_auction: 'On auction',
+		gg_sale_price: 'Price',
+		gg_auction_minimum_bid: 'Min. bid',
+		gg_auction_maximum_bid: 'Max. bid',
+		gg_buy: 'Buy Now',
+		gg_place_bid: 'Place a bid',
+		gg_make_offer: 'Make offer',
+		// GG INTEGRATION
 	},
 }
 
