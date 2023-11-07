@@ -187,7 +187,7 @@ const setDomain = (domain, isTimerMounted) => {
                 renderFreeDomain(domain)
                 setScreen('freeDomainScreen')
             } else if (ownerAddress) {
-                currentOwner = ownerAddress.toString(true, true, true, IS_TESTNET);
+                currentOwner = ownerAddress.toString(false, true, true, IS_TESTNET);
                 $('#manageDomainGoBackBtn').style.display = 'none';
                 const isTakenByUser = walletController.getAccountAddress() === currentOwner;
 

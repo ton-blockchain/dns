@@ -105,7 +105,7 @@ class WalletController {
 		return this.currentWallet
 	}
 
-	getAccountAddress() {
+	getAccountAddressUserFriendly() {
 		const { address, chain } = this.currentWallet?.account || {}
 
 		if (!address || !chain) {
@@ -113,6 +113,16 @@ class WalletController {
 		}
 
 		return this.getUserFriendlyAddress(address, chain)
+	}
+
+	getAccountAddress() {
+		const { address, chain } = this.currentWallet?.account || {}
+
+		if (!address || !chain) {
+			return null
+		}
+
+		return address;
 	}
 
   getUserFriendlyAddress(address, chain) {
