@@ -194,6 +194,8 @@ const setDomain = (domain, isTimerMounted) => {
                 // GG INTEGRATION
                 let ggDomainData = null;
                 let ggDomainState = null;
+
+                hideGGElements();
                 // GG INTEGRATION
 
                 if (isTakenByUser) {
@@ -1302,19 +1304,43 @@ $(".reset__input--icon").addEventListener('click', (e) => {
 })
 
 // GG INTEGRATION
+function getGGUIData() {
+    return {
+        ggHiddenClassName: 'gg__hidden',
+        ggElements: {
+            ggSalePriceRow: $('#ggSalePriceRow'),
+            ggAuctionMinBidRow: $('#ggAuctionMinBidRow'),
+            ggAuctionMaxBidRow: $('#ggAuctionMaxBidRow'),
+            ggBuyBtn: $('#ggBuyBtn'),
+            ggPlaceBidBtn: $('#ggPlaceBidBtn'),
+            ggMakeOfferBtn: $('#ggMakeOfferBtn'),
+        }
+    };
+}
+
+function hideGGElements() {
+    const { ggHiddenClassName, ggElements } = getGGUIData();
+
+    Object.values(ggElements).forEach((node) => {
+        if (!!node && !node.classList.contains(ggHiddenClassName)) {
+            node.classList.add(ggHiddenClassName);
+        }
+    })
+}
+
 function renderGGElements(ggDomainData) {
-    const ggHiddenClassName = 'gg__hidden';
-    const ggSalePriceRow = $('#ggSalePriceRow');
-    const ggAuctionMinBidRow = $('#ggAuctionMinBidRow');
-    const ggAuctionMaxBidRow = $('#ggAuctionMaxBidRow');
-    const ggBuyBtn = $('#ggBuyBtn');
-    const ggPlaceBidBtn = $('#ggPlaceBidBtn');
-    const ggMakeOfferBtn = $('#ggMakeOfferBtn');
+    const { ggHiddenClassName, ggElements } = getGGUIData();
+    const {
+        ggSalePriceRow,
+        ggAuctionMinBidRow,
+        ggAuctionMaxBidRow,
+        ggBuyBtn,
+        ggPlaceBidBtn,
+        ggMakeOfferBtn,
+    } = ggElements;
     const ggPrimaryBtnClassName = getBtnClassName('primary');
     const ggOutlineBtnClassName = getBtnClassName('outline');
     const ggTertiaryBtnClassName = getBtnClassName('tertiary');
-
-    resetGGElements();
 
     ggMakeOfferBtn.setAttribute('href', ggDomainData.make_offer_url);
 
@@ -1345,14 +1371,6 @@ function renderGGElements(ggDomainData) {
         }
     } else {
         ggMakeOfferBtn.className = ggPrimaryBtnClassName;
-    }
-
-    function resetGGElements() {
-        [ggSalePriceRow, ggAuctionMinBidRow, ggAuctionMaxBidRow, ggBuyBtn, ggPlaceBidBtn, ggMakeOfferBtn].forEach((node) => {
-            if (!node.classList.contains(ggHiddenClassName)) {
-                node.classList.add(ggHiddenClassName);
-            }
-        })
     }
 
     function getBtnClassName(btnStyle) {
