@@ -195,7 +195,7 @@ const setDomain = (domain, isTimerMounted) => {
                 let ggDomainData = null;
                 let ggDomainState = null;
 
-                hideGGElements();
+                hideGGElements(domain);
                 // GG INTEGRATION
 
                 if (isTakenByUser) {
@@ -240,7 +240,7 @@ const setDomain = (domain, isTimerMounted) => {
 
                 // GG INTEGRATION
                 if (!!ggDomainData) {
-                    renderGGElements(ggDomainData);
+                    renderGGElements(ggDomainData, domain);
 
                     if (!!ggDomainData.sale) {
                         ggDomainState = 'onSale';
@@ -1318,17 +1318,17 @@ function getGGUIData() {
     };
 }
 
-function hideGGElements() {
+function hideGGElements(domain) {
     const { ggHiddenClassName, ggElements } = getGGUIData();
 
     Object.values(ggElements).forEach((node) => {
-        if (!!node && !node.classList.contains(ggHiddenClassName)) {
+        if (!!node && !node.classList.contains(ggHiddenClassName) && node.dataset.domain !== domain) {
             node.classList.add(ggHiddenClassName);
         }
     })
 }
 
-function renderGGElements(ggDomainData) {
+function renderGGElements(ggDomainData, domain) {
     const { ggHiddenClassName, ggElements } = getGGUIData();
     const {
         ggSalePriceRow,
@@ -1372,6 +1372,10 @@ function renderGGElements(ggDomainData) {
     } else {
         ggMakeOfferBtn.className = ggPrimaryBtnClassName;
     }
+
+    Object.values(ggElements).forEach((element) => {
+        element.setAttribute('data-domain', domain);
+    });
 
     function getBtnClassName(btnStyle) {
         return `btn gg__btn gg__btn__${btnStyle}`;
