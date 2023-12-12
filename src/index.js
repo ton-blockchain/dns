@@ -224,7 +224,13 @@ const setDomain = (domain, isTimerMounted) => {
                     $('#renewDomainButton').style.display = 'none';
 
                     // GG INTEGRATION
-                    ggDomainData = await getGGDomainData(domainAddressString);
+                    const lastFillUpTime = await dnsItem.methods.getLastFillUpTime();
+                    const expiryDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR);
+                    const isDomainExpired = expiryDate.getTime() <= new Date().getTime();
+
+                    if (!isDomainExpired) {
+                        ggDomainData = await getGGDomainData(domainAddressString);
+                    }
                     // GG INTEGRATION
                 }
 
