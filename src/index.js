@@ -1349,6 +1349,9 @@ function renderGGElements(ggDomainData, domain) {
     const ggTertiaryBtnClassName = getBtnClassName('tertiary');
 
     ggMakeOfferBtn.setAttribute('href', ggDomainData.make_offer_url);
+    ggMakeOfferBtn.onclick = function () {
+        analyticService.sendEvent({ type: 'make_offer_click' });
+    };
 
     if (!!ggDomainData.sale) {
         $('#ggSalePrice').innerText = ggDomainData.sale.price.ton;

@@ -175,7 +175,7 @@ function renderRow(rowData) {
     const domainNameWithoutDotTon = domainName.slice(0, -4);
     setDomainToBrowserHistory(domainNameWithoutDotTon);
     setDomain(domainNameWithoutDotTon).then(() => {
-        analyticService.sendEvent({ type: 'view_domain_info' })
+      analyticService.sendEvent({ type: 'view_domain_info' })
     });
   };
 
