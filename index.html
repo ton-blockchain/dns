@@ -319,14 +319,24 @@
 						<div id="domainEditContainer">
 							<div class="edit-form">
 								<div id="editWalletRow" class="edit__row">
-									<label class="edit__label" for="editWalletInput" data-locale="wallet_address">
-										Wallet address
+									<label class="edit__label" for="editWalletInput" data-locale="address">
+										Address
 									</label>
 									<input enterkeyhint="done" class="default__input" type="text" placeholder="Address"
 										id="editWalletInput">
 									<div class="edit__button">
 										<a data-locale="save">Save</a>
 									</div>
+								</div>
+								<div class="edit-row edit-row-checkbox edit-radio-btns">
+									<div style="font-size: 14px; padding-right: 24px;">
+                    <input type="radio" id="radio_btn_wallet" name="addr-radio-btns" value="wallet" checked>
+                    <label for="radio_btn_wallet" data-locale="radio_btn_wallet_title">Wallet</label>
+                  </div>
+									<div style="font-size: 14px">
+                    <input type="radio" id="radio_btn_service" name="addr-radio-btns" value="service">
+                    <label for="radio_btn_service" data-locale="radio_btn_service_title">Service</label>
+                  </div>
 								</div>
 								<div id="editAdnlRow" class="edit__row">
 									<label class="edit__label" for="editAdnlInput" data-locale="ton_site">

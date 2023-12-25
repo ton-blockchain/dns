@@ -1206,6 +1206,10 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
             createEditBtn('#editWalletRow .edit__button').addEventListener(
                 'click',
                 () => {
+                    const addresType = document.querySelector('input[name=addr-radio-btns]:checked').value;
+                    // 'wallet' or 'service'
+                    console.log("🚀 ~ file: index.js:1211 ~ toggleManageDomainForm ~ radios:", addresType);
+
                     const value = $('#editWalletRow input').value
                     if (!value || TonWeb.Address.isValid(value)) {
                         setTx(
