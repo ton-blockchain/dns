@@ -105,7 +105,7 @@ const getAuctionDuration = () => {
     return auction_start_duration - (auction_start_duration - auction_end_duration) * months / 12;
 }
 
-const API_URL = 'https://b45wjlr7aykwdxyljnnbnrzkdy0wcyth.lambda-url.eu-central-1.on.aws';
+const API_URL = 'https://ton.org/api/toncoinInfo';
 let ACTIVE_SCREEN;
 let LAST_PRICE_UPDATED_DATE = null
 let LAST_PRICE;
@@ -118,10 +118,10 @@ const getCoinPrice = () => {
     return fetch(API_URL)
         .then((res) => res.json())
         .then((res) => {
-            LAST_PRICE = res.market_data.current_price.usd
+            LAST_PRICE = res.price
             LAST_PRICE_UPDATED_DATE = Date.now()
 
-            return res.market_data.current_price.usd
+            return LAST_PRICE
         }).catch(() => {
             return 0
         })
