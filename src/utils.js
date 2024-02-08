@@ -105,7 +105,7 @@ const getAuctionDuration = () => {
     return auction_start_duration - (auction_start_duration - auction_end_duration) * months / 12;
 }
 
-const API_URL = 'https://ton.org/api/toncoinInfo';
+const API_URL = 'https://b45wjlr7aykwdxyljnnbnrzkdy0wcyth.lambda-url.eu-central-1.on.aws';
 let ACTIVE_SCREEN;
 let LAST_PRICE_UPDATED_DATE = null
 let LAST_PRICE;
@@ -509,7 +509,7 @@ async function assembleDomainItems(nft_items) {
 
         return arr;
     }, []);
-    
+
     return domain_items;
 }
 
@@ -549,7 +549,7 @@ function getDifferenceBetweenDates(futureDate, pastDate) {
 
     const minutes = Math.floor(delta / 60) % 60;
     delta -= minutes * 60;
-    
+
     return { days, hours, minutes };
 }
 
@@ -624,7 +624,7 @@ function getMsToSleep(retryHeaderString) {
 async function fetchAndRetry(fetchFn) {
     try {
         const response = await fetchFn();
-        
+
         if (response.status === 429) {
             const retryAfter = response.headers.get('retry-after');
             const msToSleep = getMsToSleep(retryAfter);
