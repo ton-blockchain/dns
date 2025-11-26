@@ -139,7 +139,7 @@ const onlyNumbers = (value) => {
     return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
 }
 
-const setScreen = (name, ggDomainState) => {
+const setScreen = (name, marketplaceState) => {
     ACTIVE_SCREEN = name
     toggle('#startScreen', name === 'startScreen')
     if (name === 'startScreen') {
@@ -172,11 +172,11 @@ const setScreen = (name, ggDomainState) => {
         $('#flip-clock-container').dataset.endDate = '';
 
         // GG INTEGRATION
-        if (ggDomainState === 'onSale') {
+        if (marketplaceState === 'onSale') {
             $('#domainStatus').classList.remove('busy');
             $('#domainStatus').classList.add('free');
             $('#domainStatus span').innerText = store.localeDict.gg_sale;
-        } else if (ggDomainState === 'onAuction') {
+        } else if (marketplaceState === 'onAuction') {
             $('#domainStatus').classList.remove('busy');
             $('#domainStatus').classList.add('free');
             $('#domainStatus span').innerText = store.localeDict.gg_auction;
@@ -509,7 +509,7 @@ async function assembleDomainItems(nft_items) {
 
         return arr;
     }, []);
-    
+
     return domain_items;
 }
 
@@ -549,7 +549,7 @@ function getDifferenceBetweenDates(futureDate, pastDate) {
 
     const minutes = Math.floor(delta / 60) % 60;
     delta -= minutes * 60;
-    
+
     return { days, hours, minutes };
 }
 
@@ -624,7 +624,7 @@ function getMsToSleep(retryHeaderString) {
 async function fetchAndRetry(fetchFn) {
     try {
         const response = await fetchFn();
-        
+
         if (response.status === 429) {
             const retryAfter = response.headers.get('retry-after');
             const msToSleep = getMsToSleep(retryAfter);
@@ -662,3 +662,14 @@ async function getGGDomainData(domainAddressString) {
     }
 }
 // GG INTEGRATION
+
+// webdom integration
+async function getWebdomDomainData(domainAddressString) {
+    try {
+        const response = await fetch(`${WEBDOM_ENDPOINT}${domainAddressString}`);
+        return await response.json();
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}

@@ -4,23 +4,34 @@ class LocaleController {
 		this.registerLocaleDict('about', ABOUT_LOCALES)
 
 		this.store = props.store
+		this.baseDict = this[props.localeDict]
+		this.localeDictName = props.localeDict
+
 		this.store.subscribe(this, 'setLocale', (locale) => {
-			this.store.dispatch('setLocaleDict', this[props.localeDict][locale])
+			const safeLocale = this[this.localeDictName][locale] ? locale : 'en'
+			this.store.dispatch('setLocaleDict', this[this.localeDictName][safeLocale])
 		})
 		this.store.subscribe(this, 'setLocaleDict', (localeDict) => {
-			if (this.store.locale !== 'en') {
-				document.querySelectorAll('[data-locale]').forEach((node) => {
-					const key = node.attributes['data-locale'].value
-					node.innerHTML = localeDict[key]
-				})
+			const fallbackDict = this.baseDict.en || {}
+			const fallbackRuDict = this.baseDict.ru || {}
 
-				document
-					.querySelectorAll('[data-placeholder-locale]')
-					.forEach((input) => {
-						const key = input.attributes['data-placeholder-locale'].value
-						input.placeholder = localeDict[key]
-					})
-			}
+			document.querySelectorAll('[data-locale]').forEach((node) => {
+				const key = node.attributes['data-locale'].value
+				const value = localeDict[key] ?? fallbackDict[key] ?? fallbackRuDict[key]
+				if (value !== undefined) {
+					node.innerHTML = value
+				}
+			})
+
+			document
+				.querySelectorAll('[data-placeholder-locale]')
+				.forEach((input) => {
+					const key = input.attributes['data-placeholder-locale'].value
+					const value = localeDict[key] ?? fallbackDict[key] ?? fallbackRuDict[key]
+					if (value !== undefined) {
+						input.placeholder = value
+					}
+				})
 		})
 	}
 
@@ -36,7 +47,10 @@ class LocaleController {
 				? 'ru'
 				: 'en'
 
+		const safeLang = this[this.localeDictName][lang] ? lang : 'en'
+
 		this.store.dispatch('setLocale', lang)
+		this.store.dispatch('setLocaleDict', this[this.localeDictName][safeLang])
 
 		return this
 	}
@@ -177,11 +191,47 @@ const INDEX_LOCALES = {
 		// GG INTEGRATION
 	},
 	en: {
+		about: 'About',
+		dark_mode: 'Dark mode',
 		address: 'Address',
 		adnl: 'ADNL address',
-		save: 'Save',
+		testnet_badge_message: 'Attention, this is the testnet! Do not send real TON. Test domains may be removed.',
+		open_auction: 'Register .ton domains',
 		start_input_placeholder: 'Enter a domain',
 		start_splash: 'Give crypto wallets, smart contracts or websites short readable names.',
+		more_info: 'More info<span class="icon arrow__right unbreak"></span>',
+		highest_bid: 'Highest bid',
+		from: 'From',
+		bid_step: 'Bid step',
+		minimum_bid: 'Minimum bid',
+		auction_ends: 'Auction ends in',
+		place_bid: 'Place a bid',
+		sale_price: 'Sale price',
+		owner: 'Owner',
+		wallet_address: 'Wallet address',
+		save: 'Save',
+		ton_site: 'TON Site',
+		subdomains: 'Subdomains',
+		expires: 'Expires on <span id="expiresDate"></span>',
+		edit: 'Edit',
+		bet_price: 'Bid price',
+		start_bid: 'The domain can be purchased at an open auction. Make the first bid to start the auction.',
+		auction_duration: 'Auction duration',
+		bid_to_start: 'Make a bid and start the auction',
+		enter_amount: 'Enter your bid amount',
+		small_bid_error: 'Bid is too small.',
+		place_label: 'Place a ',
+		place_label_2: 'bid',
+		scan_qr: 'Scan the QR code and send',
+		pay_mobile: 'To pay',
+		scan_qr_link: 'via Tonkeeper.',
+		pay_attention: 'Use only <a class="unbreak" href="https://ton.org/wallets?filterBy=wallets_non_custodial" target="_blank">non-custodial</a> wallets to pay.',
+		sent_to: 'Address',
+		message: 'Message',
+		place_with_extension: 'Open wallet',
+		copy_link: 'Copy payment link',
+		copy_link_copied: 'Link copied!',
+		place_with_app: 'Place a bid via Tonkeeper',
 		error_length: 'The domain name must be at least 4 characters and no more than 126 characters.',
 		subdomains_not_allowed: 'Subdomains are not allowed.',
 		invalid_chars: 'English letters (a-z), numbers (0-9), and hyphens (-) are allowed. A hyphen cannot be at the beginning or the end.',
@@ -194,10 +244,16 @@ const INDEX_LOCALES = {
 		free: 'Available',
 		busy: 'Taken',
 		update_extension: 'Please update your TON Wallet extension',
+		install_web_extension: 'Install TON Wallet',
+		install_tonkeeper: 'Install Tonkeeper',
 		claim_your_domain: 'What is Ton Domains?',
 		renew_this_domain: 'Renew this domain',
 		renew_domain: 'Renew domain',
 		renew_domain_explanation: 'Make a payment to renew your domain ownership',
+		use_other_payments: 'Other payment methods <svg class="arrow icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n' +
+			'                    <path d="M16 15L11.5 10L7 15" stroke="#0098EA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+			'                </svg>',
+		storage_checkbox: "Hosting in TON Storage",
 		footer_support: 'Support',
 		wallet_connect_button: 'Connect wallet',
 		wallet_connect_button_mobile: 'Connect',
@@ -211,6 +267,9 @@ const INDEX_LOCALES = {
 		wallet_modal_second_description_2: 'app.',
 		wallet_modal_second_back_button: 'Back',
 		wallet_logout: 'Log out',
+		payment_subheader_1: 'Open the app',
+		payment_subheader_2: 'and confirm',
+		payment_subheader_3: 'the transaction',
 		payment_loading_header: 'Checking Payment',
 		payment_loading_description: 'We are checking your payment. It may take some time.',
 		payment_success_header: 'Payment completed successfully',
@@ -224,6 +283,7 @@ const INDEX_LOCALES = {
 		my_domains: 'My domains',
 		my_expiring_domains_caption: 'This list includes only domains expiring in the next 360 days',
 		my_domains_empty_title: 'You have no domains yet',
+		my_domains_empty_caption: 'Join auctions and buy domains.',
 		my_domains_empty_button: 'Start now',
 		my_domains_list_domain_column: 'Domain',
 		my_domains_list_price_column: 'Sale price',

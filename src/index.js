@@ -191,16 +191,16 @@ const setDomain = (domain, isTimerMounted) => {
                 $('#manageDomainGoBackBtn').style.display = 'none';
                 const isTakenByUser = walletController.getAccountAddress() === currentOwner;
 
-                // GG INTEGRATION
+                // GG / Webdom marketplaces
                 let ggDomainData = null;
-                let ggDomainState = null;
-
-                hideGGElements(domain);
-                // GG INTEGRATION
+                let webdomDomainData = null;
+                let marketplaceState = null;
+                // GG / Webdom marketplaces
 
                 if (isTakenByUser) {
                     $('#infoBtn').style.display = 'none';
                     $('#manageDomainBtn').style.display = 'inline-flex';
+                    hideMarketplaceElements(domain);
 
                     // ---
                     // Always allow to renew a domain if it's expried OR
@@ -229,7 +229,10 @@ const setDomain = (domain, isTimerMounted) => {
                     const isDomainExpired = expiryDate.getTime() <= new Date().getTime();
 
                     if (!isDomainExpired) {
-                        ggDomainData = await getGGDomainData(domainAddressString);
+                        [ggDomainData, webdomDomainData] = await Promise.all([
+                            getGGDomainData(domainAddressString),
+                            getWebdomDomainData(domainAddressString),
+                        ]);
                     }
                     // GG INTEGRATION
                 }
@@ -244,19 +247,29 @@ const setDomain = (domain, isTimerMounted) => {
                     isTakenByUser
                 )
 
-                // GG INTEGRATION
-                if (!!ggDomainData) {
-                    renderGGElements(ggDomainData, domain);
+                // GG / Webdom marketplaces
+                if (!!ggDomainData || !!webdomDomainData) {
+                    const marketplaceResult = renderMarketplaceElements(
+                        {
+                            gg: ggDomainData,
+                            webdom: webdomDomainData,
+                        },
+                        domain
+                    );
 
-                    if (!!ggDomainData.sale) {
-                        ggDomainState = 'onSale';
-                    } else if (!!ggDomainData.auction) {
-                        ggDomainState = 'onAuction';
+                    if (!!marketplaceResult) {
+                        if (!!marketplaceResult.state) {
+                            marketplaceState = marketplaceResult.state;
+                        }
+                    } else {
+                        hideMarketplaceElements(domain);
                     }
+                } else {
+                    hideMarketplaceElements(domain);
                 }
-                // GG INTEGRATION
+                // GG / Webdom marketplaces
 
-                setScreen('busyDomainScreen', ggDomainState)
+                setScreen('busyDomainScreen', marketplaceState)
             } else {
                 storeDomainStatus('auction')
                 renderAuctionDomain(domain, domainAddressString, auctionInfo)
@@ -801,7 +814,7 @@ function togglePaymentModal({
 
     const openPaymentModal = () => {
         scrollToTop()
-        backdrop.addEventListener('click',  handleModalCloseViaBackdrop)
+        backdrop.addEventListener('click', handleModalCloseViaBackdrop)
         window.addEventListener('popstate', handleModalClose);
 
         paymentStatus = null
@@ -877,13 +890,11 @@ function togglePaymentModal({
         const validUntil = Date.now() + validUntilTimeMS;
         const transaction = {
             validUntil,
-            messages: [
-                {
-                    address: addressString,
-                    amount: TonWeb.utils.toNano(String(localPrice)).toString(),
-                    payload,
-                },
-            ],
+            messages: [{
+                address: addressString,
+                amount: TonWeb.utils.toNano(String(localPrice)).toString(),
+                payload,
+            }, ],
         };
 
         await walletController.sendTransaction(
@@ -942,7 +953,7 @@ function togglePaymentModal({
         }
 
         if (paymentStatus === 'rejection') {
-            renderPaymentFailure({rejection: true})
+            renderPaymentFailure({ rejection: true })
             return
         }
 
@@ -1048,7 +1059,7 @@ function togglePaymentModal({
         $('#tonkeeperButton').href = 'https://app.tonkeeper.com/transfer/' + destinationAddress + '?text=' + encodeURIComponent(domain) + '&amount=' + encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000));
         $('#copyLinkbutton').setAttribute('address', buyUrl);
     }
-    
+
     openPaymentModal();
 }
 
@@ -1309,7 +1320,7 @@ $(".reset__input--icon").addEventListener('click', (e) => {
     resetError($('.start-error'))
 })
 
-// GG INTEGRATION
+// Marketplace integrations (Getgems + Webdom)
 function getGGUIData() {
     return {
         ggHiddenClassName: 'gg__hidden',
@@ -1324,22 +1335,183 @@ function getGGUIData() {
     };
 }
 
-function hideGGElements(domain) {
+function hideMarketplaceElements(domain) {
     const { ggHiddenClassName, ggElements } = getGGUIData();
+    const priceNodes = [$('#ggSalePrice'), $('#ggAuctionMinBid'), $('#ggAuctionMaxBid')];
 
     Object.values(ggElements).forEach((node) => {
-        if (!!node && !node.classList.contains(ggHiddenClassName) && node.dataset.domain !== domain) {
+        if (!!node && !node.classList.contains(ggHiddenClassName)) {
             node.classList.add(ggHiddenClassName);
         }
-    })
+
+        if (node) {
+            node.removeAttribute('data-domain');
+        }
+    });
+
+    priceNodes.forEach((node) => {
+        if (node) {
+            node.style.removeProperty('--ton-logo-path');
+        }
+    });
 }
 
-function renderGGElements(ggDomainData, domain) {
+function setPriceCurrencyIcon(node, currency) {
+    if (!node) {
+        return;
+    }
+
+    const currencyToIconPath = {
+        web3: '/assets/web3_logo.svg',
+        usdt: '/assets/usdt_logo.svg',
+    };
+
+    const iconPath = currencyToIconPath[currency];
+
+    if (iconPath) {
+        node.style.setProperty('--ton-logo-path', `url("${iconPath}")`);
+    } else {
+        node.style.removeProperty('--ton-logo-path');
+    }
+}
+
+function getMarketplaceEntries({ gg, webdom }) {
+    return [
+        { id: 'getgems', label: 'Getgems', icon: null, data: gg },
+        { id: 'webdom', label: 'Webdom', icon: '/assets/webdom_logo.svg', data: webdom },
+    ].filter((entry) => {
+        if (!entry.data) {
+            return false;
+        }
+
+        return !!(entry.data.sale || entry.data.auction || entry.data.make_offer_url);
+    });
+}
+
+function setMarketplaceButtonIcon(button, iconPath, hideIcon = false) {
+    if (!button) {
+        return;
+    }
+
+    const icon = button.querySelector('.gg__btn__icon');
+
+    if (!icon) {
+        return;
+    }
+
+    if (hideIcon) {
+        icon.style.display = 'none';
+        icon.style.backgroundImage = '';
+        return;
+    }
+
+    icon.style.removeProperty('display');
+    icon.style.backgroundImage = iconPath ? `url("${iconPath}")` : '';
+}
+
+function getMarketplaceCopy(action) {
+    const localeIsRu = store.locale === 'ru';
+    const verbs = {
+        buy: localeIsRu ? 'Купить' : 'Buy',
+        bid: localeIsRu ? 'Сделать ставку' : 'Place a bid',
+        offer: localeIsRu ? 'Сделать предложение' : 'Make an offer',
+    };
+
+    const verb = verbs[action] || verbs.buy;
+
+    return {
+        title: localeIsRu ? 'Выберите маркетплейс' : 'Choose a marketplace',
+        subtitle: localeIsRu ? verb : verb,
+        buttonPrefix: localeIsRu ? `${verb} на` : `${verb} on`,
+    };
+}
+
+function closeMarketplaceModal() {
+    toggle('#marketplaceModalBackdrop', false, 'flex', true, 200);
+    const backdrop = $('#marketplaceModalBackdrop');
+    if (backdrop) {
+        backdrop.classList.add('gg__hidden');
+    }
+}
+
+function openMarketplaceChoice(action, marketplaces) {
+    const actionToUrl = (data) => {
+        if (action === 'buy') {
+            return data?.sale?.buy_url || data?.auction?.buy_now_url;
+        }
+        if (action === 'bid') {
+            return data?.auction?.make_bid_url;
+        }
+        if (action === 'offer') {
+            return data?.make_offer_url;
+        }
+
+        return null;
+    };
+
+    const options = marketplaces
+        .map((entry) => ({
+            ...entry,
+            url: actionToUrl(entry.data),
+        }))
+        .filter((entry) => !!entry.url);
+
+    if (!options.length) {
+        return;
+    }
+
+    if (options.length === 1) {
+        window.open(options[0].url, '_blank');
+        return;
+    }
+
+    const { title, buttonPrefix } = getMarketplaceCopy(action);
+    const backdrop = $('#marketplaceModalBackdrop');
+    const titleNode = $('#marketplaceModalTitle');
+    const buttons = {
+        getgems: $('#marketplaceBtnGetgems'),
+        webdom: $('#marketplaceBtnWebdom'),
+    };
+
+    [buttons.getgems, buttons.webdom].forEach((btn) => {
+        if (!btn) return;
+        btn.classList.add('gg__hidden');
+        btn.onclick = null;
+        btn.setAttribute('href', '#');
+    });
+
+    options.forEach((option, index) => {
+        const btn = buttons[option.id];
+        if (!btn) return;
+
+        const labelNode = btn.querySelector('.marketplace-modal__label');
+        if (labelNode) {
+            labelNode.innerText = `${buttonPrefix} ${option.label}`;
+        }
+
+        btn.classList.remove('gg__hidden');
+        btn.className = `btn gg__btn gg__btn__${index === 0 ? 'primary' : 'outline'} marketplace-modal__btn`.trim();
+        btn.setAttribute('href', option.url);
+        btn.onclick = (event) => {
+            event.preventDefault();
+            window.open(option.url, '_blank');
+            closeMarketplaceModal();
+        };
+    });
+
+    if (titleNode) {
+        titleNode.innerText = title;
+    }
+
+    if (backdrop) {
+        backdrop.classList.remove('gg__hidden');
+        toggle('#marketplaceModalBackdrop', true, 'flex', true, 200);
+    }
+}
+
+function renderMarketplaceButtons({ displayEntry, marketplaces }) {
     const { ggHiddenClassName, ggElements } = getGGUIData();
     const {
-        ggSalePriceRow,
-        ggAuctionMinBidRow,
-        ggAuctionMaxBidRow,
         ggBuyBtn,
         ggPlaceBidBtn,
         ggMakeOfferBtn,
@@ -1347,50 +1519,244 @@ function renderGGElements(ggDomainData, domain) {
     const ggPrimaryBtnClassName = getBtnClassName('primary');
     const ggOutlineBtnClassName = getBtnClassName('outline');
     const ggTertiaryBtnClassName = getBtnClassName('tertiary');
+    const isChooserMode = marketplaces.length > 1;
 
-    ggMakeOfferBtn.setAttribute('href', ggDomainData.make_offer_url);
-    ggMakeOfferBtn.onclick = function () {
-        analyticService.sendEvent({ type: 'make_offer_click' });
+    const defaultMarketplaceData = displayEntry?.data || {};
+    const defaultIcon = displayEntry?.icon || null;
+
+    const hasSale = marketplaces.some((entry) => !!entry.data?.sale);
+    const hasAuction = marketplaces.some((entry) => !!entry.data?.auction);
+    const hasAuctionBuyNow = marketplaces.some((entry) => !!entry.data?.auction?.buy_now_url);
+    const hasMakeOffer = marketplaces.some((entry) => !!entry.data?.make_offer_url);
+
+    const setButtonHandler = (button, url, handler, iconPath, className) => {
+        if (!button) {
+            return;
+        }
+
+        button.classList.remove(ggHiddenClassName);
+        button.className = className;
+        button.onclick = handler;
+        button.setAttribute('href', url || '#');
+        setMarketplaceButtonIcon(button, iconPath, isChooserMode);
     };
 
-    if (!!ggDomainData.sale) {
-        $('#ggSalePrice').innerText = ggDomainData.sale.price.ton;
-        $('#ggSalePriceConverted').innerText = ggDomainData.sale.price.usd;
-        ggSalePriceRow.classList.remove(ggHiddenClassName);
-        ggBuyBtn.setAttribute('href', ggDomainData.sale.buy_url);
-        ggBuyBtn.className = ggPrimaryBtnClassName;
-        ggMakeOfferBtn.className = ggOutlineBtnClassName;
-    } else if (!!ggDomainData.auction) {
-        $('#ggAuctionMinBid').innerText = ggDomainData.auction.min_bid.ton;
-        $('#ggAuctionMinBidConverted').innerText = ggDomainData.auction.min_bid.usd;
-        ggAuctionMinBidRow.classList.remove(ggHiddenClassName);
-        ggPlaceBidBtn.setAttribute('href', ggDomainData.auction.make_bid_url);
+    if (hasSale || hasAuctionBuyNow) {
+        const buyUrl = defaultMarketplaceData?.sale?.buy_url || defaultMarketplaceData?.auction?.buy_now_url || '#';
+        const buyHandler = isChooserMode
+            ? (event) => {
+                event.preventDefault();
+                openMarketplaceChoice('buy', marketplaces);
+            }
+            : null;
 
-        if (!!ggDomainData.auction.max_bid) {
-            $('#ggAuctionMaxBid').innerText = ggDomainData.auction.max_bid.ton;
-            $('#ggAuctionMaxBidConverted').innerText = ggDomainData.auction.max_bid.usd;
-            ggAuctionMaxBidRow.classList.remove(ggHiddenClassName);
-            ggBuyBtn.setAttribute('href', ggDomainData.auction.buy_now_url);
-            ggBuyBtn.className = ggPrimaryBtnClassName;
-            ggPlaceBidBtn.className = ggOutlineBtnClassName;
-            ggMakeOfferBtn.className = ggTertiaryBtnClassName;
-        } else {
-            ggPlaceBidBtn.className = ggPrimaryBtnClassName;
-            ggMakeOfferBtn.className = ggOutlineBtnClassName;
-        }
+        setButtonHandler(ggBuyBtn, buyUrl, buyHandler, defaultIcon, ggPrimaryBtnClassName);
     } else {
-        ggMakeOfferBtn.className = ggPrimaryBtnClassName;
+        ggBuyBtn.classList.add(ggHiddenClassName);
     }
 
-    Object.values(ggElements).forEach((element) => {
-        element.setAttribute('data-domain', domain);
-    });
+    if (hasAuction) {
+        const bidUrl = defaultMarketplaceData?.auction?.make_bid_url || '#';
+        const bidHandler = isChooserMode
+            ? (event) => {
+                event.preventDefault();
+                openMarketplaceChoice('bid', marketplaces);
+            }
+            : null;
+
+        const bidBtnClassName = hasAuctionBuyNow ? ggOutlineBtnClassName : ggPrimaryBtnClassName;
+        setButtonHandler(ggPlaceBidBtn, bidUrl, bidHandler, defaultIcon, bidBtnClassName);
+    } else {
+        ggPlaceBidBtn.classList.add(ggHiddenClassName);
+    }
+
+    if (hasMakeOffer) {
+        const offerUrl = defaultMarketplaceData?.make_offer_url || '#';
+        const offerHandler = isChooserMode
+            ? (event) => {
+                event.preventDefault();
+                analyticService.sendEvent({type: 'make_offer_click'});
+                openMarketplaceChoice('offer', marketplaces);
+            }
+            : () => {
+                analyticService.sendEvent({type: 'make_offer_click'});
+            };
+
+        const offerBtnClassName = hasAuctionBuyNow ? ggTertiaryBtnClassName : ggOutlineBtnClassName;
+        setButtonHandler(ggMakeOfferBtn, offerUrl, offerHandler, defaultIcon, offerBtnClassName);
+    } else {
+        ggMakeOfferBtn.classList.add(ggHiddenClassName);
+    }
 
     function getBtnClassName(btnStyle) {
         return `btn gg__btn gg__btn__${btnStyle}`;
     }
 }
-// GG INTEGRATION
+
+function renderMarketplaceElements(marketplaceData, domain) {
+    const { ggHiddenClassName, ggElements } = getGGUIData();
+    const {
+        ggSalePriceRow,
+        ggAuctionMinBidRow,
+        ggAuctionMaxBidRow,
+    } = ggElements;
+
+    [ggSalePriceRow, ggAuctionMinBidRow, ggAuctionMaxBidRow].forEach((row) => {
+        if (row) {
+            row.classList.add(ggHiddenClassName);
+        }
+    });
+
+    const marketplaces = getMarketplaceEntries(marketplaceData);
+
+    if (!marketplaces.length) {
+        return null;
+    }
+
+    const getMarketplaceCurrency = (data) => {
+        const fallbackTon = 'ton';
+        const explicitCurrency =
+            data?.currency ||
+            data?.sale?.currency ||
+            data?.auction?.currency;
+
+        if (explicitCurrency) {
+            return explicitCurrency.toLowerCase();
+        }
+
+        const priceCandidates = [
+            data?.sale?.price,
+            data?.auction?.min_bid,
+            data?.auction?.max_bid,
+        ];
+
+        for (const priceObj of priceCandidates) {
+            if (!priceObj) continue;
+            if (priceObj.usdt !== undefined) {
+                return 'usdt';
+            }
+            if (priceObj.web3 !== undefined) {
+                return 'web3';
+            }
+            if (priceObj.ton !== undefined) {
+                return 'ton';
+            }
+        }
+
+        return fallbackTon;
+    };
+
+    const marketplacesWithCurrency = marketplaces.map((entry) => {
+        const normalizedCurrency = getMarketplaceCurrency(entry.data);
+
+        return {
+            ...entry,
+            currency: normalizedCurrency,
+        };
+    });
+
+    const displayEntry =
+        marketplacesWithCurrency.find((entry) => entry.id === 'webdom' && entry.currency !== 'ton') ||
+        marketplacesWithCurrency.find((entry) => entry.currency !== 'ton') ||
+        marketplacesWithCurrency.find((entry) => !!entry.data?.sale) ||
+        marketplacesWithCurrency[0];
+
+    const displayData = displayEntry.data;
+    const displayCurrency = displayEntry.currency;
+
+    const getPriceParts = (priceObject, currency) => {
+        if (!priceObject) {
+            return { main: '---', usd: '---' };
+        }
+
+        const normalizedCurrency = currency || 'ton';
+        const main =
+            priceObject[normalizedCurrency] ??
+            priceObject.ton ??
+            priceObject.usd ??
+            '---';
+        const usd = priceObject.usd ?? '---';
+
+        return { main, usd };
+    };
+
+    if (!!displayData.sale) {
+        const { main, usd } = getPriceParts(displayData.sale.price, displayCurrency);
+        $('#ggSalePrice').innerText = main;
+        $('#ggSalePriceConverted').innerText = usd;
+        ggSalePriceRow.classList.remove(ggHiddenClassName);
+        setPriceCurrencyIcon($('#ggSalePrice'), displayCurrency);
+    } else if (!!displayData.auction) {
+        const minParts = getPriceParts(displayData.auction.min_bid, displayCurrency);
+        $('#ggAuctionMinBid').innerText = minParts.main;
+        $('#ggAuctionMinBidConverted').innerText = minParts.usd;
+        ggAuctionMinBidRow.classList.remove(ggHiddenClassName);
+        setPriceCurrencyIcon($('#ggAuctionMinBid'), displayCurrency);
+
+        if (!!displayData.auction.max_bid) {
+            const maxParts = getPriceParts(displayData.auction.max_bid, displayCurrency);
+            $('#ggAuctionMaxBid').innerText = maxParts.main;
+            $('#ggAuctionMaxBidConverted').innerText = maxParts.usd;
+            ggAuctionMaxBidRow.classList.remove(ggHiddenClassName);
+            setPriceCurrencyIcon($('#ggAuctionMaxBid'), displayCurrency);
+        }
+    }
+
+    renderMarketplaceButtons({
+        displayEntry,
+        marketplaces,
+    });
+
+    Object.values(ggElements).forEach((element) => {
+        element.setAttribute('data-domain', domain);
+    });
+
+    return {
+        state: !!displayData.sale
+            ? 'onSale'
+            : !!displayData.auction
+                ? 'onAuction'
+            : null,
+    };
+}
+// Marketplace integrations (Getgems + Webdom)
+
+const marketplaceModalBackdrop = $('#marketplaceModalBackdrop');
+const marketplaceModalCloseButton = $('#marketplaceModalClose');
+const footerLocaleToggle = $('#footerLocaleToggle');
+const footerLocaleLabel = $('#footerLocaleLabel');
+
+if (marketplaceModalBackdrop) {
+    marketplaceModalBackdrop.addEventListener('click', (e) => {
+        if (e.target === marketplaceModalBackdrop) {
+            closeMarketplaceModal();
+        }
+    });
+}
+
+if (marketplaceModalCloseButton) {
+    marketplaceModalCloseButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeMarketplaceModal();
+    });
+}
+
+if (footerLocaleToggle && footerLocaleLabel) {
+    const syncFooterLocale = () => {
+        footerLocaleLabel.innerText = (store.locale || 'en').toUpperCase();
+    };
+
+    footerLocaleToggle.addEventListener('click', () => {
+        const nextLocale = store.locale === 'ru' ? 'en' : 'ru';
+        store.dispatch('setLocale', nextLocale);
+        syncFooterLocale();
+        if (window.refreshFlipLocale) {
+            window.refreshFlipLocale();
+        }
+    });
+
+    syncFooterLocale();
+}
 
 // COMMON
 var oldStartInputValue = '';

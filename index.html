@@ -105,7 +105,7 @@
 								stroke-linejoin="round" />
 						</svg>
 						<input id="navInputElement" enterkeyhint="search" type="text"
-							data-locale="start_input_placeholder" placeholder="[data-locale]" class="suggestions__input" />
+							data-placeholder-locale="start_input_placeholder" placeholder="[data-locale]" class="suggestions__input" />
 					</div>
 
 					<div class="nav__controls">
@@ -160,7 +160,7 @@
 							stroke-linejoin="round" />
 					</svg>
 					<input id="startInputElement" enterkeyhint="search" class="start-input suggestions__input"
-						type="text" placeholder="Enter a domain..." />
+						type="text" data-placeholder-locale="start_input_placeholder" placeholder="Enter a domain..." />
 					<svg class="icon reset__input--icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
 						xmlns="http://www.w3.org/2000/svg">
 						<path d="M6.00012 18L18.0001 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -835,26 +835,53 @@
 							Back
 						</button>
 					</div>
-				</div>
-			</div>
-
-			<div class="careete__helper"></div>
-
-			<footer class="footer">
-				<div class="separator"></div>
-				<div class="copyrights">
-					<div class="info-links">
-						<a class="support-link" href="https://t.me/ton_help_bot" target="_blank"
-							rel="noreferrer noopener">
-							<span class="support-link__icon"></span>
-							<span data-locale="footer_support">Support</span>
-						</a>
-						<a class="about-link" href="/about.html" target="_blank" rel="noreferrer noopener">
-							<span class="about-link__icon"></span>
-							<span data-locale="about">About</span>
-						</a>
 					</div>
-					<div class="social-links">
+				</div>
+
+				<!-- Marketplace chooser modal -->
+				<div id="marketplaceModalBackdrop" class="marketplace-modal__backdrop gg__hidden animate">
+					<div class="marketplace-modal">
+						<button id="marketplaceModalClose" class="marketplace-modal__close" aria-label="Close">
+							<span></span>
+						</button>
+						<div class="marketplace-modal__head">
+							<div id="marketplaceModalTitle" class="marketplace-modal__title">Choose a marketplace</div>
+						</div>
+						<div class="marketplace-modal__buttons">
+							<a id="marketplaceBtnGetgems" class="btn gg__btn gg__btn__primary marketplace-modal__btn" target="_blank" rel="noreferrer">
+								<span class="marketplace-modal__icon marketplace-modal__icon--gg"></span>
+								<span class="marketplace-modal__label">Getgems</span>
+							</a>
+							<a id="marketplaceBtnWebdom" class="btn gg__btn gg__btn__outline marketplace-modal__btn" target="_blank" rel="noreferrer">
+								<span class="marketplace-modal__icon marketplace-modal__icon--webdom"></span>
+								<span class="marketplace-modal__label">Webdom</span>
+							</a>
+						</div>
+					</div>
+				</div>
+				<!-- Marketplace chooser modal -->
+
+				<div class="careete__helper"></div>
+
+				<footer class="footer">
+					<div class="separator"></div>
+					<div class="copyrights">
+						<div class="info-links">
+							<a class="support-link" href="https://t.me/ton_help_bot" target="_blank"
+								rel="noreferrer noopener">
+								<span class="support-link__icon"></span>
+								<span data-locale="footer_support">Support</span>
+							</a>
+							<a class="about-link" href="/about.html" target="_blank" rel="noreferrer noopener">
+								<span class="about-link__icon"></span>
+								<span data-locale="about">About</span>
+							</a>
+							<button id="footerLocaleToggle" class="footer-lang">
+								<span class="footer-lang__icon"></span>
+								<span id="footerLocaleLabel">EN</span>
+							</button>
+						</div>
+						<div class="social-links">
 						<a class="social-link" href="https://www.linkedin.com/company/ton-blockchain/" target="_blank"
 							rel="noreferrer noopener">
 							<svg width="18" height="18" viewBox="0 0 18 18" fill="none"
