@@ -314,7 +314,7 @@ const ABOUT_LOCALES = {
 		ton_domain_names_are_nft_p2:
 			'Домены в зоне TON — это NFT. Это значит, что вы сможете хранить, дарить или продавать свои домены так же, как вы это делаете с обычными NFT.',
 		ton_domain_names_are_nft_p3:
-			'Домен отображается в кошельках и его можно выставить на продажу на NFT-маркетплейсах, таких как <a href="https://getgems.io/">Getgems</a> или <a href="https://beta.disintar.io/">Disintar</a> — они уже это поддерживают.',
+			'Домен отображается в кошельках и его можно выставить на продажу на NFT-маркетплейсах, таких как <a href="https://getgems.io/">Getgems</a> или <a href="https://webdom.market/">Webdom</a> — они уже это поддерживают.',
 		ton_domain_names_are_nft_image1: 'Домены в NFT-маркетплейсе Getgems',
 		rules_for_ton_domain_names: 'Правила доменов .ton',
 		rules_for_ton_domain_names_p1:
@@ -434,7 +434,7 @@ const ABOUT_LOCALES = {
 		ton_domain_names_are_nft_p2:
 			'That means that once you obtain a domain name, you’ll be able to store, gift, or sell it — the same way you’d handle regular NFTs.',
 		ton_domain_names_are_nft_p3:
-			'Your domain will be stored in your wallet, and you’ll be able to put it up for sale on NFT marketplaces, such as <a target="_blank" href="https://getgems.io/">Getgems</a> or <a target="_blank" href="https://beta.disintar.io/">Disintar</a>, which already support TON DNS.',
+			'Your domain will be stored in your wallet, and you’ll be able to put it up for sale on NFT marketplaces, such as <a target="_blank" href="https://getgems.io/">Getgems</a> or <a target="_blank" href="https://webdom.market/">Webdom</a>, which already support TON DNS.',
 		ton_domain_names_are_nft_image1:
 			'Domain names for sale on NFT marketplace Getgems.',
 		rules_for_ton_domain_names: 'Rules for .ton domain names',
