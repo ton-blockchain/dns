@@ -909,13 +909,21 @@ nav .container-inner {
     font-size: 40px;
     line-height: 48px;
     color: var(--text-primary);
-    margin-bottom: 24px;
     word-break: break-all;
     text-align: center;
 }
 
 #domainName.domain__name--small {
     font-size: 32px;
+}
+
+#domainPunyName {
+    font-weight: 600;
+    line-height: 48px;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    word-break: break-all;
+    text-align: center;
 }
 
 .status {

@@ -62,6 +62,19 @@ const shortAddress = (address) => {
     return address.substring(0, 8) + '...' + address.substring(address.length - 8);
 }
 
+const isPunycode = (str) => {
+    return /xn--[a-z0-9]+/i.test(str)
+}
+
+const normalizeDomain = (domain) => {
+    if (isPunycode(domain)) {
+        try {
+            return idnaUts46.toUnicode(domain)
+        } catch (e) {}
+    }
+    return domain
+}
+
 const getMinPriceConfig = (domainCharCount) => {
     switch (domainCharCount) {
         case 4: return ['1000', '100'];
