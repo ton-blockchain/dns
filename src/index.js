@@ -1173,9 +1173,8 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
             $('#editWalletRow input').value = dnsRecordWallet
                 ? dnsRecordWallet.toString(true, true, true, IS_TESTNET)
                 : ''
-            $('#editAdnlRow input').value = dnsRecordSite ? dnsRecordSite.toHex() : ''
+            $('#editAdnlRow input').value = isSiteInStorage ? (dnsRecordStorage ? dnsRecordStorage.toHex() : '') : (dnsRecordSite ? dnsRecordSite.toHex() : '')
             $('#siteStorage').checked = isSiteInStorage
-            $('#editStorageRow input').value = dnsRecordStorage ? dnsRecordStorage.toHex() : ''
             $('#editResolverRow input').value = dnsRecordResolver
                 ? dnsRecordResolver.toString(true, true, true, IS_TESTNET)
                 : ''
@@ -1245,24 +1244,6 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                 }
                 setTx('#editAdnlRow', TonWeb.dns.DNS_CATEGORY_SITE, value ? record : null)
             })
-
-            createEditBtn('#editStorageRow .edit-btn').addEventListener('click', () => {
-                const value = $('#editStorageRow input').value; // hex
-
-                let record = null;
-                if (value) {
-                    try {
-                        const bagId = new TonWeb.utils.StorageBagId(value);
-                        record = TonWeb.dns.createStorageBagIdRecord(bagId);
-                    } catch (e) {
-                        console.error(e);
-                        alert(store.localeDict.invalid_hex_address);
-                        return;
-                    }
-                }
-
-                setTx('#editStorageRow', TonWeb.dns.DNS_CATEGORY_STORAGE, value ? record : null);
-            });
 
             $('#editResolverRow input').placeholder = store.localeDict.address
 
