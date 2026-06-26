@@ -529,12 +529,34 @@ const renderBusyDomain = (
 
     const isDomainExpired = expiresDate.getTime() <= new Date().getTime();
     if (isDomainExpired) {
+        domainType = FREE_DOMAIN_TYPE
+        const salePrice = TonWeb.utils.fromNano(getMinPrice(domain))
+        $('#betRestartPriceRow').style.display = 'flex';
+        $('#restartMinBet').innerText = formatNumber(salePrice, false)
+        attachPaymentModalListeners('restart', domain, salePrice, '#restartButton',domainItemAddress.toString(
+            true,
+            true,
+            true,
+            IS_TESTNET
+        ))
         $('#busyDomainYetToExpire').style.display = 'none';
         $('#busyDomainAlreadyExpired').style.display = 'inline';
+        $('#restartInfoRow').style.display = 'inline';
+        $('#restartButton').style.display = 'inline-flex';
         $('#busyDomainAlreadyExpired #expiredDate').innerText = formattedExpiryDate;
+        getCoinPrice().then((price) => {
+            if (price) {
+                $('#restartMinBetConverted').innerText = formatNumber(salePrice * price, 2)
+            }
+        }).catch((e) => {
+            console.error(e)
+        })
     } else {
         $('#busyDomainYetToExpire').style.display = 'inline';
         $('#busyDomainAlreadyExpired').style.display = 'none';
+        $('#betRestartPriceRow').style.display = 'none';
+        $('#restartInfoRow').style.display = 'none';
+        $('#restartButton').style.display = 'none';
         $('#expiresDate').innerText = formattedExpiryDate;
     }
 }
@@ -872,6 +894,7 @@ function togglePaymentModal({
         if (!payload) {
             payload = modalType === 'renew' ?
                 await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
+            if(modalType === 'restart') payload = 'te6cckEBAQEADgAAGE7RS2UAAAAAAAAADacdAXI=='
         }
 
         const validUntil = Date.now() + validUntilTimeMS;

@@ -311,9 +311,20 @@
 							</span>
 						</p>
 						<!-- GG INTEGRATION -->
+						<p id="betRestartPriceRow" class="row">
+							<span class="row__title" data-locale="bet_price">Bet price</span>
+							<span class="priceContainer">
+								<span id="restartMinBet" class="sale__price">---</span>
+								<span id="restartMinBetConverted" class="converted__price">---</span>
+							</span>
+						</p>
 						<p id="busyOwnerRow" class="row align__center">
 							<span data-locale="owner" class="row__title">Owner</span>
 							<span id="busyOwnerAddress" class="addr node__to__copy"></span>
+						</p>
+						<p id="restartInfoRow" class="row info__row">
+							<span data-locale="start_bid">The domain can be purchased at an open auction. To&nbsp;start
+								the auction, make the first bid.</span>
 						</p>
 						<div id="domainEditContainer">
 							<div class="edit-form">
@@ -420,6 +431,14 @@
 							</span>
 						</a>
 						<!-- GG INTEGRATION -->
+						<!-- RESTART BUTTON -->
+						<button id="restartButton" class="btn">
+							<img src="/assets/hammer.svg" alt="Place bid">
+							<span data-locale="bid_to_start">
+								Place a bid to start the auction
+							</span>
+						</button>
+						<!-- RESTART BUTTON -->
 						<a id="infoBtn" class="btn outline" href="/about.html#claim-your-ton-domain" target="_blank">
 							<span data-locale="claim_your_domain">
 								What is Ton Domains?
