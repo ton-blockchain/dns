@@ -175,6 +175,8 @@ const INDEX_LOCALES = {
 		gg_place_bid: 'Сделать ставку',
 		gg_make_offer: 'Сделать предложение',
 		// GG INTEGRATION
+		radio_btn_wallet_title: 'Кошелёк',
+		radio_btn_service_title: 'Сервис',
 	},
 	en: {
 		address: 'Address',
@@ -262,6 +264,8 @@ const INDEX_LOCALES = {
 		gg_place_bid: 'Place a bid',
 		gg_make_offer: 'Make offer',
 		// GG INTEGRATION
+		radio_btn_wallet_title: 'Wallet',
+		radio_btn_service_title: 'Service',
 	},
 }
 
@@ -507,5 +511,7 @@ const ABOUT_LOCALES = {
 		developers_p4:
 			'We welcome the writing of auxiliary services that could simplify user participation in auctions; for example, so that users do not have to wake up early in the morning if the auction is held at an inconvenient time. Also, services could collect a small commission fee in Toncoin for their work.',
 		developers_a1: 'Documentation',
+		radio_btn_wallet: 'Wallet',
+		radio_btn_service: 'Service',
 	},
 }
