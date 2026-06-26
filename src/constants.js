@@ -16,5 +16,8 @@ TONAPI_WRAPPER_API = 'https://dp2xyxeojwjddkgygogm5jbjbe0crwaj.lambda-url.eu-cen
 GG_ENDPOINT = 'https://api.getgems.io/ton-dns'
 // GG INTEGRATION
 
+// webdom integration
+WEBDOM_ENDPOINT = 'https://webdom.market/api/dns-info/'
+
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000

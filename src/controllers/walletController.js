@@ -12,7 +12,7 @@ class WalletController {
     });
 
     const currentTheme = themeController.getTheme()
-    const locale = store.locale
+    const locale = store.locale || 'en'
 
     this.tonConnectUI.uiOptions = {
       language: locale,
@@ -25,6 +25,18 @@ class WalletController {
         notifications: []
       }
     };
+
+    this.store.subscribe(this, 'setLocale', (newLocale) => {
+      const language = newLocale || 'en';
+      if (typeof this.tonConnectUI.setLanguage === 'function') {
+        this.tonConnectUI.setLanguage(language);
+      } else {
+        this.tonConnectUI.uiOptions = {
+          ...this.tonConnectUI.uiOptions,
+          language,
+        };
+      }
+    });
 
     const unsubscribe = this.tonConnectUI.onStatusChange(
       (walletInfo) => {
