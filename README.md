@@ -1,6 +1,6 @@
 # [dns.ton.org](http://dns.ton.org/)
 
-Simple app to buy and manage DNS items associated with [Toncoin](https://ton.org/toncoin).
+Simple app to buy and manage DNS items associated with [Gram](https://ton.org/#gram).
 
 ## Local Development
 
