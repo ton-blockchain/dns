@@ -2005,6 +2005,8 @@ p {
 .edit-row-checkbox {
     padding-left: 24px;
     margin-top: -16px;
+    display: flex;
+    flex-direction: row;
 }
 
 .edit-row-checkbox input {
@@ -3055,3 +3057,14 @@ html[data-theme='dark'] .gg__btn__tertiary .gg__btn__icon {
     background-image: url("../assets/gg_logo_blue_dark.svg");
 }
 /* GG INTEGRATION */
+
+.edit-radio-btns input {
+    margin: 0;
+    margin-right: 6px;
+    border-radius: 12px;
+    background: url("/assets/radio-button.svg") center no-repeat, var(--accent-default);
+}
+
+.edit-radio-btns input:checked {
+    background: url("/assets/checked-radio-button.svg") center no-repeat, var(--accent-default);
+}
