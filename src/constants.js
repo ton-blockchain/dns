@@ -16,5 +16,9 @@ TONSCAN_ENDPOINT = 'https://tonscan.org'
 GG_ENDPOINT = 'https://api.getgems.io/ton-dns'
 // GG INTEGRATION
 
+// WEBDOM INTEGRATION
+WEBDOM_ENDPOINT = 'https://api.webdom.market/api/dns-info/'
+// WEBDOM INTEGRATION
+
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000

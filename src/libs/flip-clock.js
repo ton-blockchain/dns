@@ -254,4 +254,17 @@ renderTimer = function ($, start) {
             return ' days'
         }
     }
+
+    function refreshFlipLocale() {
+        document.querySelectorAll('.flip-item-days .flip-digit-current, .flip-item-days .flip-digit-next')
+            .forEach((node) => {
+                const currentValue = parseInt(node.getAttribute('data-digit'), 10)
+                if (isNaN(currentValue)) {
+                    return;
+                }
+                node.setAttribute('data-digit', currentValue + getDaysPostfix(currentValue));
+            });
+    }
+
+    window.refreshFlipLocale = refreshFlipLocale;
 }
