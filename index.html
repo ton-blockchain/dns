@@ -41,15 +41,15 @@
 		<link
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
 			rel="stylesheet">
-		<link rel="stylesheet" href="./css/constants.css?21">
+		<link rel="stylesheet" href="./css/constants.css?22">
 		<link rel="stylesheet" href="./css/loader.css?21">
-		<link rel="stylesheet" href="./css/dns.css?21">
+		<link rel="stylesheet" href="./css/dns.css?24">
 		<link rel="stylesheet" href="./css/flip-clock.css?21">
-		<link rel="stylesheet" href="./css/my-domains.css?21">
+		<link rel="stylesheet" href="./css/my-domains.css?22">
 		<script type="text/javascript" src="src/state.js?21"></script>
 		<script type="text/javascript" src="src/controllers/themeController.js?21"></script>
 		<script type="text/javascript" src="src/controllers/flipTimerController.js?21"></script>
-		<script type="text/javascript" src="./src/utils.js?21"></script>
+		<script type="text/javascript" src="./src/utils.js?24"></script>
 		<script type="text/javascript" src="./src/libs/preloadImages.js?21">
 		        preloadImages([
 		            '/assets/logo.svg',
@@ -62,9 +62,6 @@
 	<script>
     const themeController = new ThemeController({store})
     themeController.init();
-</script>
-	<script>
-    getCoinPrice();
 </script>
 	<body class="hidden">
 		<div class="app__container">
@@ -83,7 +80,7 @@
 						</defs>
 					</svg>
 					<span data-locale="testnet_badge_message">
-						Warning! This is a test network, do not send real Toncoin! Test domains may be dropped.
+						Warning! This is a test network, do not send real Gram! Test domains may be dropped.
 					</span>
 				</div>
 				<div class="container-inner">
@@ -145,7 +142,7 @@
 				<p>
 					<span data-locale="start_splash">Give crypto wallets, smart contracts or websites short readable
 						names.</span>
-					<a class="arrow__link" href="/about.html" target="_blank" data-locale="more_info">
+					<a class="arrow__link" href="https://docs.ton.org/foundations/web3/ton-dns" target="_blank" data-locale="more_info">
 						More info&nbsp;<span class="icon arrow__right unbreak"></span>
 					</a>
 				</p>
@@ -228,7 +225,10 @@
 						<p class="row">
 							<span class="row__title" data-locale="highest_bid">Highest bid</span>
 							<span class="priceContainer">
-								<span id="auctionAmount" class="sale__price">---</span>
+								<span class="coin-amount">
+									<span id="auctionAmount" class="sale__price">---</span>
+									<svg class="gram-icon" width="20" height="20" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
+								</span>
 								<span id="auctionAmountConverted" class="converted__price">---</span>
 							</span>
 						</p>
@@ -241,7 +241,10 @@
 						<p class="row">
 							<span class="row__title" data-locale="bid_step">Bid step</span>
 							<span class="priceContainer">
-								<span id="auctionBidStep" class="sale__price">---</span>
+								<span class="coin-amount">
+									<span id="auctionBidStep" class="sale__price">---</span>
+									<svg class="gram-icon" width="20" height="20" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
+								</span>
 								<span id="auctionBidStepConverted" class="converted__percent"></span>
 							</span>
 						</p>
@@ -249,7 +252,10 @@
 						<p class="row">
 							<span class="row__title" data-locale="minimum_bid">Minimum bid</span>
 							<span class="priceContainer">
-								<span id="auctionMinBet" class="sale__price">---</span>
+								<span class="coin-amount">
+									<span id="auctionMinBet" class="sale__price">---</span>
+									<svg class="gram-icon" width="20" height="20" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
+								</span>
 								<span id="auctionMinBetConverted" class="converted__price">---</span>
 							</span>
 						</p>
@@ -270,7 +276,7 @@
 							<img src="/assets/hammer.svg" alt="Place bid">
 							<span data-locale="place_bid">Place bid</span>
 						</a>
-						<a id="auctionInfoBtn" class="btn outline" href="/about.html#claim-your-ton-domain"
+						<a id="auctionInfoBtn" class="btn outline" href="https://docs.ton.org/foundations/web3/ton-dns"
 							target="_blank">
 							<span data-locale="claim_your_domain">
 								What is Ton Domains?
@@ -284,33 +290,13 @@
 						<p id="salePriceRow" class="row">
 							<span class="row__title" data-locale="sale__price">Sale price</span>
 							<span class="priceContainer">
-								<span id="salePrice" class="sale__price">---</span>
+								<span class="coin-amount">
+									<span id="salePrice" class="sale__price">---</span>
+									<svg class="gram-icon" width="20" height="20" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
+								</span>
 								<span id="salePriceConverted" class="converted__price">---</span>
 							</span>
 						</p>
-						<!-- GG INTEGRATION -->
-						<p id="ggSalePriceRow" class="row gg__hidden">
-							<span class="row__title" data-locale="gg_sale_price">Price</span>
-							<span class="priceContainer">
-								<span id="ggSalePrice" class="sale__price">---</span>
-								<span id="ggSalePriceConverted" class="converted__price">---</span>
-							</span>
-						</p>
-						<p id="ggAuctionMinBidRow" class="row gg__hidden">
-							<span class="row__title" data-locale="gg_auction_minimum_bid">Min. bid</span>
-							<span class="priceContainer">
-								<span id="ggAuctionMinBid" class="sale__price">---</span>
-								<span id="ggAuctionMinBidConverted" class="converted__price">---</span>
-							</span>
-						</p>
-						<p id="ggAuctionMaxBidRow" class="row gg__hidden">
-							<span class="row__title" data-locale="gg_auction_maximum_bid">Max. bid</span>
-							<span class="priceContainer">
-								<span id="ggAuctionMaxBid" class="sale__price">---</span>
-								<span id="ggAuctionMaxBidConverted" class="converted__price">---</span>
-							</span>
-						</p>
-						<!-- GG INTEGRATION -->
 						<p id="busyOwnerRow" class="row align__center">
 							<span data-locale="owner" class="row__title">Owner</span>
 							<span id="busyOwnerAddress" class="addr node__to__copy"></span>
@@ -400,33 +386,13 @@
 								Go back
 							</span>
 						</a>
-						<!-- GG INTEGRATION -->
-						<a id="ggBuyBtn" class="btn gg__btn gg__btn__primary gg__hidden" href="" target="_blank">
-							<span class="gg__btn__icon"></span>
-							<span data-locale="gg_buy">
-								Buy Now
-							</span>
-						</a>
-						<a id="ggPlaceBidBtn" class="btn gg__btn gg__btn__outline gg__hidden" href="" target="_blank">
-							<span class="gg__btn__icon"></span>
-							<span data-locale="gg_place_bid">
-								Place a bid
-							</span>
-						</a>
-						<a id="ggMakeOfferBtn" class="btn gg__btn gg__btn__tertiary gg__hidden" href="" target="_blank">
-							<span class="gg__btn__icon"></span>
-							<span data-locale="gg_make_offer">
-								Make offer
-							</span>
-						</a>
-						<!-- GG INTEGRATION -->
 						<button id="startExpiredAuctionButton" class="btn" style="display: none;">
 							<img src="/assets/hammer.svg" alt="Start auction">
 							<span data-locale="bid_to_start">
 								Place a bid to start the auction
 							</span>
 						</button>
-						<a id="infoBtn" class="btn outline" href="/about.html#claim-your-ton-domain" target="_blank">
+						<a id="infoBtn" class="btn outline" href="https://docs.ton.org/foundations/web3/ton-dns" target="_blank">
 							<span data-locale="claim_your_domain">
 								What is Ton Domains?
 							</span>
@@ -444,7 +410,10 @@
 						<p id="betPriceRow" class="row">
 							<span class="row__title" data-locale="bet_price">Bet price</span>
 							<span class="priceContainer">
-								<span id="freeMinBet" class="sale__price">---</span>
+								<span class="coin-amount">
+									<span id="freeMinBet" class="sale__price">---</span>
+									<svg class="gram-icon" width="20" height="20" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
+								</span>
 								<span id="freeMinBetConverted" class="converted__price">---</span>
 							</span>
 						</p>
@@ -471,7 +440,7 @@
 								Place a bid to start the auction
 							</span>
 						</button>
-						<a id="freeDomainInfoBtn" class="btn outline" href="/about.html" target="_blank">
+						<a id="freeDomainInfoBtn" class="btn outline" href="https://docs.ton.org/foundations/web3/ton-dns" target="_blank">
 							<span data-locale="claim_your_domain">
 								What is Ton Domains?
 							</span>
@@ -566,16 +535,9 @@
 						<span id="bidModalSubheader" class="bid__modal--subheader" data-locale="enter_amount">Enter your
 							bid amount</span>
 						<div class="bid__input--container">
-							<svg class="icon bid__input--icon" width="20" height="20" viewBox="0 0 20 20" fill="none"
-								xmlns="http://www.w3.org/2000/svg">
-								<svg id="inputTonIcon" width="20" height="20" viewBox="0 0 20 20" fill="#0098EA"
-									xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" clip-rule="evenodd"
-										d="M5.92179 3H14.0784C14.6114 2.99998 15.0724 2.99996 15.439 3.0336C15.8104 3.06767 16.2346 3.14549 16.5994 3.41049C17.0923 3.76854 17.4102 4.31891 17.474 4.92479C17.5212 5.37322 17.3767 5.77949 17.2206 6.11821C17.0665 6.45262 16.8362 6.85187 16.5698 7.31356L10.7797 17.3498C10.6189 17.6284 10.3217 17.8 10.0001 17.8C9.67845 17.8 9.38126 17.6284 9.22053 17.3498L3.43043 7.31358C3.16404 6.85188 2.93367 6.45262 2.77958 6.11821C2.6235 5.77949 2.47895 5.37322 2.52618 4.92479C2.59 4.31891 2.90787 3.76854 3.40079 3.41049C3.76561 3.14549 4.18974 3.06767 4.56114 3.0336C4.9278 2.99996 5.38875 2.99998 5.92179 3ZM4.4494 4.87379C4.37749 4.92975 4.33022 5.01158 4.31769 5.10184C4.32054 5.11916 4.33566 5.19411 4.41437 5.36492C4.52964 5.61508 4.71729 5.94215 5.01011 6.4497L9.10009 13.539V4.8H5.96291C5.37696 4.8 4.99988 4.80091 4.72559 4.82607C4.5383 4.84325 4.46583 4.86761 4.4494 4.87379ZM10.9001 4.8V13.539L14.9901 6.4497C15.2829 5.94215 15.4705 5.61508 15.5858 5.36492C15.6645 5.19411 15.6796 5.11916 15.6825 5.10184C15.67 5.01158 15.6227 4.92975 15.5508 4.87379C15.5344 4.86761 15.4619 4.84325 15.2746 4.82607C15.0003 4.80091 14.6232 4.8 14.0373 4.8H10.9001Z" />
-								</svg>
-							</svg>
 							<input enterkeyhint="done" id="bid__modal--bid__input"
 								class="bid_modal--input default__input" />
+							<svg id="inputGramIcon" class="gram-icon bid__input--icon" width="20" height="20" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
 						</div>
 						<div class="bid__modal--message__container">
 							<span id="bid__input--converted__price" class="converted__price">---</span>
@@ -589,14 +551,10 @@
 								<span id="bid__modal--submit__step--label_1" data-locale="place_label">
 									Place a&nbsp;
 								</span>
-								<svg class="bid__modal--ton__icon" width="20" height="20" viewBox="0 0 20 20"
-									fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" clip-rule="evenodd"
-										d="M5.92179 3H14.0784C14.6114 2.99998 15.0724 2.99996 15.439 3.0336C15.8104 3.06767 16.2346 3.14549 16.5994 3.41049C17.0923 3.76854 17.4102 4.31891 17.474 4.92479C17.5212 5.37322 17.3767 5.77949 17.2206 6.11821C17.0665 6.45262 16.8362 6.85187 16.5698 7.31356L10.7797 17.3498C10.6189 17.6284 10.3217 17.8 10.0001 17.8C9.67845 17.8 9.38126 17.6284 9.22053 17.3498L3.43043 7.31358C3.16404 6.85188 2.93367 6.45262 2.77958 6.11821C2.6235 5.77949 2.47895 5.37322 2.52618 4.92479C2.59 4.31891 2.90787 3.76854 3.40079 3.41049C3.76561 3.14549 4.18974 3.06767 4.56114 3.0336C4.9278 2.99996 5.38875 2.99998 5.92179 3ZM4.4494 4.87379C4.37749 4.92975 4.33022 5.01158 4.31769 5.10184C4.32054 5.11916 4.33566 5.19411 4.41437 5.36492C4.52964 5.61508 4.71729 5.94215 5.01011 6.4497L9.10009 13.539V4.8H5.96291C5.37696 4.8 4.99988 4.80091 4.72559 4.82607C4.5383 4.84325 4.46583 4.86761 4.4494 4.87379ZM10.9001 4.8V13.539L14.9901 6.4497C15.2829 5.94215 15.4705 5.61508 15.5858 5.36492C15.6645 5.19411 15.6796 5.11916 15.6825 5.10184C15.67 5.01158 15.6227 4.92975 15.5508 4.87379C15.5344 4.86761 15.4619 4.84325 15.2746 4.82607C15.0003 4.80091 14.6232 4.8 14.0373 4.8H10.9001Z"
-										fill="white" />
-								</svg>
-								<span id="bid__modal--submit__price"></span>
-								&nbsp;
+								<span class="coin-amount">
+									<span id="bid__modal--submit__price"></span>
+									<svg class="gram-icon bid__modal--gram__icon" width="20" height="20" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
+								</span>
 								<span id="bid__modal--submit__step--label_2" data-locale="place_label_2">bid</span>
 							</button>
 						</div>
@@ -612,41 +570,20 @@
 						<span class="bid__modal--subheader">
 							<span data-locale="pay_mobile" class="hide__desktop">Pay</span>
 							<span data-locale="scan_qr" class="hide__mobile">Scan the QR code and pay</span>
-							<span id="priceContainer">
-								<svg class="bidPrice-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"
-									xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" clip-rule="evenodd"
-										d="M5.32961 2.7002H12.6706C13.1503 2.70018 13.5651 2.70016 13.8951 2.73043C14.2294 2.7611 14.6111 2.83113 14.9395 3.06964C15.3831 3.39189 15.6692 3.88721 15.7266 4.4325C15.7691 4.8361 15.639 5.20173 15.4985 5.50659C15.3599 5.80755 15.1525 6.16688 14.9128 6.5824L9.70169 15.615C9.55704 15.8657 9.28956 16.0202 9.00008 16.0202C8.71061 16.0202 8.44313 15.8657 8.29847 15.615L3.08738 6.58242C2.84763 6.16689 2.6403 5.80755 2.50162 5.50659C2.36115 5.20173 2.23106 4.8361 2.27357 4.4325C2.331 3.88721 2.61708 3.39189 3.06071 3.06964C3.38905 2.83113 3.77077 2.7611 4.10503 2.73043C4.43502 2.70016 4.84988 2.70018 5.32961 2.7002ZM4.00446 4.38661C3.93974 4.43697 3.8972 4.51062 3.88592 4.59185C3.88849 4.60744 3.9021 4.67489 3.97293 4.82862C4.07668 5.05377 4.24557 5.34813 4.5091 5.80492L8.19008 12.1853V4.3202H5.36662C4.83926 4.3202 4.49989 4.32101 4.25303 4.34366C4.08447 4.35912 4.01925 4.38105 4.00446 4.38661ZM9.81008 4.3202V12.1853L13.4911 5.80492C13.7546 5.34813 13.9235 5.05377 14.0272 4.82862C14.0981 4.6749 14.1117 4.60744 14.1143 4.59185C14.103 4.51062 14.0604 4.43697 13.9957 4.38661C13.9809 4.38104 13.9157 4.35912 13.7471 4.34366C13.5003 4.32101 13.1609 4.3202 12.6335 4.3202H9.81008Z"
-										fill="currentColor" />
-								</svg>
+							<span id="priceContainer" class="coin-amount">
 								<span id="bidPrice"></span>
+								<svg class="gram-icon bidPrice-icon" width="18" height="18" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
 							</span>
 
-							<span class="bidPrice--tonkepeer" data-locale="scan_qr_link">via Tonkeeper.</span>
 						</span>
 
 						<div id="freeQr" class="bid__modal--qr"></div>
 
 						<div class="button__container">
-							<a id="tonkeeperButton" target="_blank" class="btn">
-								<span class="mobile__bid--label">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 19 18"
-										class="icon bid__modal--icon">
-										<g clip-path="url(#a)">
-											<path fill="#fff"
-												d="M9.49977 7.3.433105 3.9 9.49977.5l9.06663 3.4-9.06663 3.4Z" />
-											<path fill="#D1E1F4" d="m9.5 7.2999 9.0667-3.4-9.0667 13.6v-10.2Z" />
-											<path fill="#A2C4E9" d="m9.49977 7.2999-9.066665-3.4 9.066665 13.6v-10.2Z"
-												opacity=".8" />
-										</g>
-										<defs>
-											<clippath id="a">
-												<path fill="#fff" d="M.433105.5h18.1333v17H.433105z" />
-											</clippath>
-										</defs>
-									</svg>
-									<span data-locale="place_with_app">
-										Place a bid via Tonkeeper
+							<a id="freeBtn" target="_blank" class="btn">
+								<span class="mobile__bid--default__label">
+									<span data-locale="place_with_extension">
+										Open wallet
 									</span>
 								</span>
 							</a>
@@ -679,14 +616,9 @@
 							&nbsp;
 							<span data-locale="payment_subheader_3">the transaction</span>
 							<span class="payment__textline">
-								<span id="priceContainer">
-									<svg class="bidPrice-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"
-										xmlns="http://www.w3.org/2000/svg">
-										<path fill-rule="evenodd" clip-rule="evenodd"
-											d="M5.32961 2.7002H12.6706C13.1503 2.70018 13.5651 2.70016 13.8951 2.73043C14.2294 2.7611 14.6111 2.83113 14.9395 3.06964C15.3831 3.39189 15.6692 3.88721 15.7266 4.4325C15.7691 4.8361 15.639 5.20173 15.4985 5.50659C15.3599 5.80755 15.1525 6.16688 14.9128 6.5824L9.70169 15.615C9.55704 15.8657 9.28956 16.0202 9.00008 16.0202C8.71061 16.0202 8.44313 15.8657 8.29847 15.615L3.08738 6.58242C2.84763 6.16689 2.6403 5.80755 2.50162 5.50659C2.36115 5.20173 2.23106 4.8361 2.27357 4.4325C2.331 3.88721 2.61708 3.39189 3.06071 3.06964C3.38905 2.83113 3.77077 2.7611 4.10503 2.73043C4.43502 2.70016 4.84988 2.70018 5.32961 2.7002ZM4.00446 4.38661C3.93974 4.43697 3.8972 4.51062 3.88592 4.59185C3.88849 4.60744 3.9021 4.67489 3.97293 4.82862C4.07668 5.05377 4.24557 5.34813 4.5091 5.80492L8.19008 12.1853V4.3202H5.36662C4.83926 4.3202 4.49989 4.32101 4.25303 4.34366C4.08447 4.35912 4.01925 4.38105 4.00446 4.38661ZM9.81008 4.3202V12.1853L13.4911 5.80492C13.7546 5.34813 13.9235 5.05377 14.0272 4.82862C14.0981 4.6749 14.1117 4.60744 14.1143 4.59185C14.103 4.51062 14.0604 4.43697 13.9957 4.38661C13.9809 4.38104 13.9157 4.35912 13.7471 4.34366C13.5003 4.32101 13.1609 4.3202 12.6335 4.3202H9.81008Z"
-											fill="currentColor" />
-									</svg>
+								<span id="priceContainer" class="coin-amount">
 									<span id="bidPrice-payment-loading"></span>
+								<svg class="gram-icon bidPrice-icon" width="18" height="18" viewBox="0 0 40 40" role="img" aria-label="GRAM"><use href="./assets/gram.svg#gram"></use></svg>
 								</span>
 							</span>
 						</span>
@@ -751,8 +683,7 @@
 					<div id="otherPaymentsMethodsContainer" class="bid__modal--payments">
 						<div class="bid__modal--alert">
 							<span data-locale="pay_attention">
-								Use only <a class="unbreak"
-									href="https://ton.org/wallets?filterBy=wallets_non_custodial" target="_blank">non-custodial</a>
+								Use only <span class="unbreak">non-custodial</span>
 								wallets to place bets and make payments.
 							</span>
 						</div>
@@ -772,13 +703,6 @@
 						</div>
 
 						<div class="button__container">
-							<a id="freeBtn" target="_blank" class="btn inversed__mobile">
-								<span class="mobile__bid--default__label">
-									<span data-locale="place_with_extension">
-										Open wallet
-									</span>
-								</span>
-							</a>
 							<a id="copyLinkbutton" class="btn outline secondary">
 								<span class="mobile__bid--default__label">
 									<span class="icon copy__link__icon unbreak"></span>
@@ -854,7 +778,7 @@
 							<span class="support-link__icon"></span>
 							<span data-locale="footer_support">Support</span>
 						</a>
-						<a class="about-link" href="/about.html" target="_blank" rel="noreferrer noopener">
+						<a class="about-link" href="https://docs.ton.org/foundations/web3/ton-dns" target="_blank" rel="noreferrer noopener">
 							<span class="about-link__icon"></span>
 							<span data-locale="about">About</span>
 						</a>
@@ -870,7 +794,7 @@
 		<script type="text/javascript" src="./src/libs/qr-code-styling-1.5.0.js?21"></script>
 		<script type="text/javascript" src="./src/libs/bignumbers.js?21"></script>
 		<script type="text/javascript" src="./src/analytics.js?21"></script>
-		<script type="text/javascript" src="./src/controllers/localeController.js?21"></script>
+		<script type="text/javascript" src="./src/controllers/localeController.js?23"></script>
 		<script type="text/javascript" src="./src/libs/flip-clock.js?21"></script>
 		<script type="text/javascript" src="./src/lottie.js?21"></script>
 		<script type="text/javascript" src="./src/mobile-menu.js?21"></script>
@@ -878,9 +802,9 @@
 		<script type="text/javascript" src="./src/config/wallets.js?21"></script>
 		<script type="text/javascript" src="./src/controllers/walletController.js?21"></script>
 		<script type="text/javascript" src="./src/controllers/testnetController.js?21"></script>
-		<script type="text/javascript" src="./src/views/myDomainsView.js?21"></script>
+		<script type="text/javascript" src="./src/views/myDomainsView.js?22"></script>
 		<script type="text/javascript" src="./src/controllers/myDomainsController.js?21"></script>
-		<script type="text/javascript" src="./src/constants.js?21"></script>
-		<script type="text/javascript" src="./src/index.js?21"></script>
+		<script type="text/javascript" src="./src/constants.js?22"></script>
+		<script type="text/javascript" src="./src/index.js?24"></script>
 	</body>
 </html>

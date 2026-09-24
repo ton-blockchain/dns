@@ -59,24 +59,30 @@ const buildDomainCell = (cell, domain) => {
 }
 
 const loadingPricePlaceholder = isMobile() ? 123 : 12345;
+const createGramIcon = () => {
+  const icon = document.createElement('img');
+  icon.src = './assets/gram.svg';
+  icon.alt = 'GRAM';
+  icon.width = icon.height = 20;
+  icon.classList.add('gram-icon', 'my-domains-cell-price-gram-logo');
+  return icon;
+}
+
 const renderSalePrice = (priceCellDiv, salePrice) => {
   priceCellDiv.replaceChildren();
 
   if (salePrice === undefined) {
-    const tonLogoSpan = document.createElement('span');
-    tonLogoSpan.classList.add('my-domains-cell-price-ton-logo');
-    priceCellDiv.appendChild(tonLogoSpan);
-
     const loadingPriceSpan = document.createElement('span');
     loadingPriceSpan.classList.add('my-domains-cell-price-loading');
-    loadingPriceSpan.innerHTML = '&nbsp;' + formatNumber(loadingPricePlaceholder, 2);
+    loadingPriceSpan.innerText = formatNumber(loadingPricePlaceholder, 2);
     priceCellDiv.appendChild(loadingPriceSpan);
+    priceCellDiv.appendChild(createGramIcon());
     return;
   }
 
-  const spanPriceInTON = document.createElement('span');
-  spanPriceInTON.classList.add('my-domains-cell-price');
-  priceCellDiv.appendChild(spanPriceInTON);
+  const priceSpan = document.createElement('span');
+  priceSpan.classList.add('my-domains-cell-price');
+  priceCellDiv.appendChild(priceSpan);
 
   const hasSalePrice = salePrice !== undefined
     && salePrice !== null
@@ -84,12 +90,10 @@ const renderSalePrice = (priceCellDiv, salePrice) => {
     && Number.isFinite(Number(salePrice));
 
   if (hasSalePrice) {
-    const tonLogoSpan = document.createElement('span');
-    tonLogoSpan.classList.add('my-domains-cell-price-ton-logo');
-    priceCellDiv.insertBefore(tonLogoSpan, spanPriceInTON);
-    spanPriceInTON.innerHTML = '&nbsp;' + formatNumber(salePrice, 2);
+    priceSpan.innerText = formatNumber(salePrice, 2);
+    priceCellDiv.appendChild(createGramIcon());
   } else {
-    spanPriceInTON.innerHTML = '&mdash;';
+    priceSpan.innerHTML = '&mdash;';
   }
 }
 

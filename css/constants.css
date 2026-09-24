@@ -66,7 +66,6 @@ html[data-theme='light'] {
     --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(5, 139, 207, 0.125);
     --accent-light-hover: #00A6FF;
     --dns-logo-path: url("/assets/dns_logo.svg");
-    --ton-logo-path: url("/assets/ton_logo_light.svg");
 
     --free-domain-status-color: #47C58A;
     --free-domain-loader-bg: rgba(50, 213, 131, 0.2);
@@ -83,8 +82,6 @@ html[data-theme='light'] {
 
     --socials--color: #98B2BF;
 
-    --tonkeeper__icon: url("/assets/tonkeeper_white.svg");
-    --tonkeeper__icon--mono: url("/assets/tonkeeper_icon.svg");
     --web__wallet__icon: url("/assets/web_wallet.svg");
 
     --copy__link__icon: url("/assets/copy_link_icon.svg");
@@ -145,7 +142,6 @@ html[data-theme='dark'] {
     --default--input--box--shadow--clicked: 0px 0px 1px 5px rgba(1, 164, 245, 0.125);
 
     --dns-logo-path: url("/assets/dns_logo_dark.svg");
-    --ton-logo-path: url("/assets/ton_logo_dark.svg");
 
     --free-domain-status-color: #32D583;
     --free-domain-loader-bg: rgba(50, 213, 131, 0.2);
@@ -162,8 +158,6 @@ html[data-theme='dark'] {
     --arrow--right--inversed: url("/assets/arrow_right_dark-grey.svg");
 
     --socials--color: #606069;
-    --tonkeeper__icon: url("/assets/tonkeeper_icon.svg");
-    --tonkeeper__icon--mono: url("/assets/tonkeeper_icon.svg");
     --web__wallet__icon: url("/assets/web_wallet.svg");
     --copy__link__icon: url("/assets/copy_link_icon_dark.svg");
     --copy__link__icon--success: url("/assets/copy_link_success.svg");

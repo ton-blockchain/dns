@@ -5,6 +5,8 @@ const DOMAIN_RENEW_LIMIT_IN_DAYS = 180;
 const RENEW_DOMAIN_PRICE = 0.015;
 const MANAGE_DOMAIN_PRICE = 0.05;
 
+getCoinPrice();
+
 let LOCALE_CONTROLLER = new LocaleController({store, localeDict: 'index'}).init()
 
 $('#navInputElement').placeholder = store.localeDict.start_input_placeholder
@@ -57,6 +59,7 @@ let currentDomain = null
 let currentOwner = null
 let currentDnsItem = null
 let previousBid = null
+let domainViewVersion = 0
 
 const removeListeners = {}
 const DEFAULT_CARETE_HELPER_TEXT = '.ton'
@@ -72,6 +75,7 @@ function isDomainFree(domainType){
 }
 
 const clear = () => {
+    domainViewVersion++
     clearInterval(updateIntervalId)
     clearInterval(auctionTimerIntervalId)
     freeQrUrl = null
@@ -125,8 +129,12 @@ const validateDomain = (domain) => {
 const setDomain = (domain, isTimerMounted) => {
     scrollToTop()
     currentDomain = domain
+    const viewVersion = ++domainViewVersion
+    let pendingLoad = null
 
     const loadDomain = async (setShimmers) => {
+        const isCurrentLoad = () => currentDomain === domain
+            && domainViewVersion === viewVersion
         if (setShimmers) {
             if (!isTimerMounted) {
                 FlipTimer.unmountTimers()
@@ -187,22 +195,15 @@ const setDomain = (domain, isTimerMounted) => {
             Math.floor(Date.now() / 1000) - lastFillUpTime > MS_IN_ONE_LEAP_YEAR / 1000
         )
 
-        if (currentDomain === domain) {
+        if (isCurrentLoad()) {
             if (!domainExists) {
                 storeDomainStatus('free')
                 renderFreeDomain(domain)
                 setScreen('freeDomainScreen')
             } else if (ownerAddress) {
-                currentOwner = ownerAddress.toString(false, true, true, IS_TESTNET);
+                currentOwner = normalizeAccountAddress(ownerAddress);
                 $('#manageDomainGoBackBtn').style.display = 'none';
-                const isTakenByUser = walletController.getAccountAddress() === currentOwner;
-
-                // GG INTEGRATION
-                let ggDomainData = null;
-                let ggDomainState = null;
-
-                hideGGElements(domain);
-                // GG INTEGRATION
+                const isTakenByUser = isSameAccount(walletController.getAccountAddress(), currentOwner);
 
                 if (isTakenByUser) {
                     $('#infoBtn').style.display = 'none';
@@ -226,38 +227,21 @@ const setDomain = (domain, isTimerMounted) => {
                     $('#infoBtn').style.display = 'inline-flex';
                     $('#manageDomainBtn').style.display = 'none';
                     $('#renewDomainButton').style.display = 'none';
-
-                    // GG INTEGRATION
-                    if (!isDomainExpired) {
-                        ggDomainData = await getGGDomainData(domainAddressString);
-                    }
-                    // GG INTEGRATION
                 }
 
+                if (!isCurrentLoad()) return;
                 currentDnsItem = dnsItem
                 storeDomainStatus('busy')
                 renderBusyDomain(
                     domain,
                     domainAddressString,
-                    ownerAddress.toString(true, true, true, IS_TESTNET),
+                    ownerAddress,
                     lastFillUpTime,
                     isTakenByUser,
                     isDomainExpired
                 )
 
-                // GG INTEGRATION
-                if (!!ggDomainData) {
-                    renderGGElements(ggDomainData, domain);
-
-                    if (!!ggDomainData.sale) {
-                        ggDomainState = 'onSale';
-                    } else if (!!ggDomainData.auction) {
-                        ggDomainState = 'onAuction';
-                    }
-                }
-                // GG INTEGRATION
-
-                setScreen('busyDomainScreen', ggDomainState)
+                setScreen('busyDomainScreen')
             } else {
                 storeDomainStatus('auction')
                 renderAuctionDomain(domain, domainAddressString, auctionInfo)
@@ -265,6 +249,13 @@ const setDomain = (domain, isTimerMounted) => {
             }
         }
     }
+
+    const refreshDomain = (setShimmers) => {
+        if (!pendingLoad) {
+            pendingLoad = loadDomain(setShimmers).finally(() => { pendingLoad = null; });
+        }
+        return pendingLoad;
+    };
 
     clearInterval(auctionTimerIntervalId)
     freeQrUrl = null
@@ -281,8 +272,8 @@ const setDomain = (domain, isTimerMounted) => {
     setScreen('main')
 
     clearInterval(updateIntervalId)
-    updateIntervalId = setInterval(() => loadDomain(), 10 * 1000)
-    return loadDomain(true)
+    updateIntervalId = setInterval(() => refreshDomain(), 10 * 1000)
+    return refreshDomain(true)
 }
 
 let currentDomainStatus = null
@@ -419,12 +410,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
     const auctionEndTime = auctionInfo.auctionEndTime // unixtime
     const bestBidAmount = auctionInfo.maxBidAmount
-    const bestBidAddress = auctionInfo.maxBidAddress.toString(
-        true,
-        true,
-        true,
-        IS_TESTNET
-    )
+    const bestBidAddress = auctionInfo.maxBidAddress
 
     const prevDate = $('#auction-bid-flip-clock-container').dataset.endDate
     const endDate = new Date(auctionEndTime * 1000)
@@ -446,7 +432,7 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
     $('#auctionAmount').innerText = formatNumber(auctionAmount, false)
 
-    setAddress($('#auctionOwnerAddress'), bestBidAddress)
+    renderDomainAddress($('#auctionOwnerAddress'), bestBidAddress, domain)
 
     const minBet = TonWeb.utils.fromNano(
         bestBidAmount.mul(new TonWeb.utils.BN(105)).div(new TonWeb.utils.BN(100))
@@ -467,15 +453,8 @@ const renderAuctionDomain = (domain, domainItemAddress, auctionInfo) => {
 
     attachPaymentModalListeners('place a bid', domain, minBet, '#auctionBtn', domainItemAddress)
 
-    getCoinPrice().then((price) => {
-        if (price) {
-            $('#auctionAmountConverted').innerText = formatNumber(auctionAmount * price, 2)
-        }
-        if (price) {
-            $('#auctionMinBetConverted').innerText = formatNumber(minBet * price, 2)
-        }
-
-    })
+    renderConvertedTonPrice($('#auctionAmountConverted'), auctionAmount)
+    renderConvertedTonPrice($('#auctionMinBetConverted'), minBet)
 }
 
 const renderFreeDomain = async (domain) => {
@@ -492,13 +471,14 @@ const renderFreeDomain = async (domain) => {
 
     attachPaymentModalListeners('place a bid', domain, salePrice, '#bidButton')
 
-    getCoinPrice().then((price) => {
-        if (price) {
-            $('#freeMinBetConverted').innerText = formatNumber(salePrice * price, 2)
-        }
-    }).catch((e) => {
-        console.error(e)
-    })
+    renderConvertedTonPrice($('#freeMinBetConverted'), salePrice)
+}
+
+const renderDomainAddress = (node, address, domain) => {
+    const viewVersion = domainViewVersion
+    const type = domainType
+    return setDisplayAddress(node, address, IS_TESTNET, () => currentDomain === domain
+        && domainViewVersion === viewVersion && domainType === type)
 }
 
 const renderBusyDomain = (
@@ -511,7 +491,7 @@ const renderBusyDomain = (
 ) => {
     domainType = BUSY_DOMAIN_TYPE
 
-    setAddress($('#busyOwnerAddress'), ownerAddress)
+    renderDomainAddress($('#busyOwnerAddress'), ownerAddress, domain)
     const expiresDate = new Date(lastFillUpTime * 1000 + MS_IN_ONE_LEAP_YEAR)
     const prevDate = $('#flip-clock-container').dataset.endDate
     const isDateEqual = String(prevDate) === String(expiresDate)
@@ -1027,7 +1007,7 @@ function togglePaymentModal({
 
     const renderSecondStep = () => {
         updateBidModalPaymentData()
-        prepareLinks();
+        const paymentUrl = prepareLinks();
 
         isDomainFree(domainType)
             ? analyticService.sendEvent({type: 'place_an_initial_bid'})
@@ -1037,7 +1017,7 @@ function togglePaymentModal({
         toggle('.bid__modal--first__step', false)
         toggle('.bid__modal--second__step', true)
 
-        renderQr('#freeQr', buildTransferUrl('https://app.tonkeeper.com/transfer/'))
+        renderQr('#freeQr', paymentUrl)
 
         setAddress($('#transactionAddress'), destinationAddress)
 
@@ -1065,31 +1045,19 @@ function togglePaymentModal({
     }
 
     const prepareLinks = () => {
-        const isExtensionInstalled = !isMobile() && window.ton;
-        const buyUrl = buildTransferUrl('ton://transfer/');
-        const tonkeeperUrl = buildTransferUrl('https://app.tonkeeper.com/transfer/');
-
-        if (isExtensionInstalled) {
-            $('#freeBtn').href = buyUrl;
-        } else {
-            $('#freeBtn').href = tonkeeperUrl;
-        }
-
-        if (isMobile()) {
-            $('#freeBtn').href = buyUrl;
-        }
-
-        $('#tonkeeperButton').href = tonkeeperUrl;
-        $('#copyLinkbutton').setAttribute('address', buyUrl);
+        const paymentUrl = buildTransferUrl();
+        $('#freeBtn').href = paymentUrl;
+        $('#copyLinkbutton').setAttribute('address', paymentUrl);
+        return paymentUrl;
     }
 
-    const buildTransferUrl = (baseUrl) => {
+    const buildTransferUrl = () => {
         const amount = encodeURIComponent(new BigNumber(localPrice).multipliedBy(1000000000));
         const payloadParam = payloadIn
             ? `bin=${encodeURIComponent(payloadIn)}`
             : `text=${encodeURIComponent(domain)}`;
 
-        return `${baseUrl}${destinationAddress}?amount=${amount}&${payloadParam}`;
+        return `ton://transfer/${destinationAddress}?amount=${amount}&${payloadParam}`;
     }
     
     openPaymentModal();
@@ -1126,10 +1094,9 @@ function renderOtherPaymentsMethods() {
 }
 
 const renderConvertedTonPrice = (node, priceToCovert) => {
+    node.innerText = '---';
     getCoinPrice().then((price) => {
-        if (price) {
-            node.innerText = formatNumber(priceToCovert * price, 2)
-        }
+        node.innerText = price ? formatNumber(priceToCovert * price, 2) : '---';
     })
 }
 
@@ -1167,16 +1134,13 @@ const createEditBtn = (containerName) => {
 }
 
 const toggleManageDomainForm = async (domain, dnsItem) => {
-    if (currentOwner !== walletController.getAccountAddress()) {
+    if (!isSameAccount(currentOwner, walletController.getAccountAddress())) {
         alert(store.localeDict.not_owner)
         return
     }
 
-    const tonConnectAccauntAddress = walletController.getAccountAddress()
-    if (tonConnectAccauntAddress !== currentOwner) {
-        alert(store.localeDict.not_owner)
-        return
-    }
+    const viewVersion = ++domainViewVersion
+    const isCurrentForm = () => domain === currentDomain && domainViewVersion === viewVersion
 
     FlipTimer.unmountTimers();
     setScreen('domainLoadingScreen');
@@ -1188,10 +1152,10 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
     $('#manageDomainGoBackBtn').setAttribute('disabled', true);
     clearInterval(updateIntervalId);
 
-    $('#manageDomainGoBackBtn').addEventListener('click', () => {
+    $('#manageDomainGoBackBtn').onclick = () => {
         $('#manageDomainGoBackBtn').style.display = 'none';
         setDomain(domain);
-    });
+    };
 
     try {
         const dnsRecordWallet = await dnsItem.resolve(
@@ -1212,16 +1176,22 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
             TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER
         )
 
-        if (domain === currentDomain) {
-            $('#editWalletRow input').value = dnsRecordWallet
-                ? dnsRecordWallet.toString(true, true, true, IS_TESTNET)
-                : ''
+        if (!isCurrentForm()) return;
+        const [walletAddress, resolverAddress] = await Promise.all([
+            getDisplayAddress(dnsRecordWallet, IS_TESTNET),
+            getDisplayAddress(dnsRecordResolver, IS_TESTNET),
+        ]);
+        if (!isCurrentForm()) return;
+        if (!isSameAccount(currentOwner, walletController.getAccountAddress())) {
+            throw new Error('The connected account no longer owns this domain');
+        }
+
+        {
+            $('#editWalletRow input').value = walletAddress
             $('#editAdnlRow input').value = dnsRecordSite ? dnsRecordSite.toHex() : ''
             $('#siteStorage').checked = isSiteInStorage
             $('#editStorageRow input').value = dnsRecordStorage ? dnsRecordStorage.toHex() : ''
-            $('#editResolverRow input').value = dnsRecordResolver
-                ? dnsRecordResolver.toString(true, true, true, IS_TESTNET)
-                : ''
+            $('#editResolverRow input').value = resolverAddress
 
             const setTx = async (btnToOpenModalId, key, value) => {
                 const dnsItemAddress = await dnsItem.getAddress();
@@ -1250,7 +1220,7 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                 'click',
                 () => {
                     const value = $('#editWalletRow input').value
-                    if (!value || TonWeb.Address.isValid(value)) {
+                    if (!value || isValidAddressForNetwork(value, IS_TESTNET)) {
                         setTx(
                             '#editWalletRow',
                             TonWeb.dns.DNS_CATEGORY_WALLET,
@@ -1313,7 +1283,7 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
                 'click',
                 () => {
                     const value = $('#editResolverRow input').value
-                    if (!value || TonWeb.Address.isValid(value)) {
+                    if (!value || isValidAddressForNetwork(value, IS_TESTNET)) {
                         setTx(
                             '#editResolverRow',
                             TonWeb.dns.DNS_CATEGORY_NEXT_RESOLVER,
@@ -1330,6 +1300,7 @@ const toggleManageDomainForm = async (domain, dnsItem) => {
         $('#manageDomainGoBackBtn').setAttribute('disabled', false);
         setScreen('busyDomainScreen');
     } catch (e) {
+        if (!isCurrentForm()) return;
         console.error(e)
         alert(store.localeDict.manage_domain_unavailable);
         $('#manageDomainGoBackBtn').style.display = 'none';
@@ -1351,89 +1322,6 @@ $(".reset__input--icon").addEventListener('click', (e) => {
     $('.start-input').value = ''
     resetError($('.start-error'))
 })
-
-// GG INTEGRATION
-function getGGUIData() {
-    return {
-        ggHiddenClassName: 'gg__hidden',
-        ggElements: {
-            ggSalePriceRow: $('#ggSalePriceRow'),
-            ggAuctionMinBidRow: $('#ggAuctionMinBidRow'),
-            ggAuctionMaxBidRow: $('#ggAuctionMaxBidRow'),
-            ggBuyBtn: $('#ggBuyBtn'),
-            ggPlaceBidBtn: $('#ggPlaceBidBtn'),
-            ggMakeOfferBtn: $('#ggMakeOfferBtn'),
-        }
-    };
-}
-
-function hideGGElements(domain) {
-    const { ggHiddenClassName, ggElements } = getGGUIData();
-
-    Object.values(ggElements).forEach((node) => {
-        if (!!node && !node.classList.contains(ggHiddenClassName) && node.dataset.domain !== domain) {
-            node.classList.add(ggHiddenClassName);
-        }
-    })
-}
-
-function renderGGElements(ggDomainData, domain) {
-    const { ggHiddenClassName, ggElements } = getGGUIData();
-    const {
-        ggSalePriceRow,
-        ggAuctionMinBidRow,
-        ggAuctionMaxBidRow,
-        ggBuyBtn,
-        ggPlaceBidBtn,
-        ggMakeOfferBtn,
-    } = ggElements;
-    const ggPrimaryBtnClassName = getBtnClassName('primary');
-    const ggOutlineBtnClassName = getBtnClassName('outline');
-    const ggTertiaryBtnClassName = getBtnClassName('tertiary');
-
-    ggMakeOfferBtn.setAttribute('href', ggDomainData.make_offer_url);
-    ggMakeOfferBtn.onclick = function () {
-        analyticService.sendEvent({ type: 'make_offer_click' });
-    };
-
-    if (!!ggDomainData.sale) {
-        $('#ggSalePrice').innerText = ggDomainData.sale.price.ton;
-        $('#ggSalePriceConverted').innerText = ggDomainData.sale.price.usd;
-        ggSalePriceRow.classList.remove(ggHiddenClassName);
-        ggBuyBtn.setAttribute('href', ggDomainData.sale.buy_url);
-        ggBuyBtn.className = ggPrimaryBtnClassName;
-        ggMakeOfferBtn.className = ggOutlineBtnClassName;
-    } else if (!!ggDomainData.auction) {
-        $('#ggAuctionMinBid').innerText = ggDomainData.auction.min_bid.ton;
-        $('#ggAuctionMinBidConverted').innerText = ggDomainData.auction.min_bid.usd;
-        ggAuctionMinBidRow.classList.remove(ggHiddenClassName);
-        ggPlaceBidBtn.setAttribute('href', ggDomainData.auction.make_bid_url);
-
-        if (!!ggDomainData.auction.max_bid) {
-            $('#ggAuctionMaxBid').innerText = ggDomainData.auction.max_bid.ton;
-            $('#ggAuctionMaxBidConverted').innerText = ggDomainData.auction.max_bid.usd;
-            ggAuctionMaxBidRow.classList.remove(ggHiddenClassName);
-            ggBuyBtn.setAttribute('href', ggDomainData.auction.buy_now_url);
-            ggBuyBtn.className = ggPrimaryBtnClassName;
-            ggPlaceBidBtn.className = ggOutlineBtnClassName;
-            ggMakeOfferBtn.className = ggTertiaryBtnClassName;
-        } else {
-            ggPlaceBidBtn.className = ggPrimaryBtnClassName;
-            ggMakeOfferBtn.className = ggOutlineBtnClassName;
-        }
-    } else {
-        ggMakeOfferBtn.className = ggPrimaryBtnClassName;
-    }
-
-    Object.values(ggElements).forEach((element) => {
-        element.setAttribute('data-domain', domain);
-    });
-
-    function getBtnClassName(btnStyle) {
-        return `btn gg__btn gg__btn__${btnStyle}`;
-    }
-}
-// GG INTEGRATION
 
 // COMMON
 var oldStartInputValue = '';
@@ -1487,8 +1375,10 @@ $('.start-input-container__domain--container').addEventListener('click', () => {
 
 document.querySelectorAll('.copy__addr').forEach((btn) => {
     btn.addEventListener('click', (e) => {
+        const address = e.target.parentNode.querySelector('.addr').dataset.dataAddress;
+        if (!address) return;
         copyToClipboard(
-            e.target.parentNode.querySelector('.addr').dataset.dataAddress,
+            address,
             e.target.parentNode.querySelector('button'),
         );
     })
@@ -1527,6 +1417,7 @@ document.querySelectorAll('.addr').forEach((node) => {
     node.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
+        if (!node.dataset.dataAddress) return;
         window.open(tonscanUrl + '/address/' + node.dataset.dataAddress, '_blank')
     })
 })

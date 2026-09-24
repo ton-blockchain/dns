@@ -179,10 +179,12 @@ html[data-theme='dark'] #noDomainsBannerLight {
 .my-domains-cell-price-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
 }
 
 .my-domains-cell-price-loading {
-  margin-left: 4px;
   border-radius: 6px;
   color: transparent;
   background: var(--loader--background--gradient);
@@ -197,13 +199,6 @@ html[data-theme='dark'] #noDomainsBannerLight {
   font-weight: 600;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-.my-domains-cell-price-ton-logo {
-  width: 20px;
-  height: 20px;
-  transform: translateY(20%);
-  background: var(--ton-logo-path) center no-repeat;
 }
 
 .my-domains-cell-expiried-date {
@@ -310,10 +305,9 @@ html[data-theme='dark'] #noDomainsBannerLight {
     line-height: 18px;
   }
 
-  .my-domains-cell-price-ton-logo {
+  .my-domains-cell-price-gram-logo {
     width: 16px;
     height: 16px;
-    transform: translateY(12%);
   }
 
   .my-domains-cell-expiried-date {

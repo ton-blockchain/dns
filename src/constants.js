@@ -12,9 +12,5 @@ TON_ROOT_ADDRESS = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz'
 TONSCAN_ENDPOINT_TESTNET = 'https://testnet.tonscan.org'
 TONSCAN_ENDPOINT = 'https://tonscan.org'
 
-// GG INTEGRATION
-GG_ENDPOINT = 'https://api.getgems.io/ton-dns'
-// GG INTEGRATION
-
 MS_IN_ONE_LEAP_YEAR = 31622400000
 SEC_IN_ONE_MONTH = 2592000

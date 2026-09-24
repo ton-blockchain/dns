@@ -105,26 +105,68 @@ const getAuctionDuration = () => {
     return auction_start_duration - (auction_start_duration - auction_end_duration) * months / 12;
 }
 
-const API_URL = 'https://ton.org/api/toncoinInfo';
+const GRAM_USDT_POOL_ADDRESS = 'EQA-X_yo3fzzbDbJ_0bzFWKqtRuZFIRa1sJsveZJ1YpViO3r';
 let ACTIVE_SCREEN;
-let LAST_PRICE_UPDATED_DATE = null
+let LAST_PRICE_UPDATED_DATE = null;
 let LAST_PRICE;
+let coinPriceRequest;
+
+const fetchCoinPrice = async () => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+
+    try {
+        const response = await fetch('https://toncenter.com/api/v2/runGetMethodStd', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': TONCENTER_API_KEY,
+            },
+            body: JSON.stringify({
+                address: GRAM_USDT_POOL_ADDRESS,
+                method: 'get_reserves',
+                stack: [],
+            }),
+            signal: controller.signal,
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok || data.result?.exit_code !== 0) {
+            throw new Error('Failed to fetch GRAM/USDT reserves');
+        }
+
+        const gramReserve = Number(data.result.stack[0]?.number?.number) / 1e9;
+        const usdtReserve = Number(data.result.stack[1]?.number?.number) / 1e6;
+        const price = usdtReserve / gramReserve;
+        if (!Number.isFinite(gramReserve) || gramReserve <= 0 || !Number.isFinite(price) || price <= 0) {
+            throw new Error('Invalid GRAM/USDT reserves');
+        }
+
+        return price;
+    } finally {
+        clearTimeout(timeout);
+    }
+};
 
 const getCoinPrice = () => {
-    if (LAST_PRICE && LAST_PRICE_UPDATED_DATE && (Date.now() - LAST_PRICE_UPDATED_DATE < 100 * 60 * 5)) { // 30 sec
-        return Promise.resolve(LAST_PRICE)
+    if (LAST_PRICE && LAST_PRICE_UPDATED_DATE && Date.now() - LAST_PRICE_UPDATED_DATE < 30000) {
+        return Promise.resolve(LAST_PRICE);
     }
 
-    return fetch(API_URL)
-        .then((res) => res.json())
-        .then((res) => {
-            LAST_PRICE = res.price
-            LAST_PRICE_UPDATED_DATE = Date.now()
+    if (!coinPriceRequest) {
+        coinPriceRequest = fetchCoinPrice()
+            .then((price) => {
+                LAST_PRICE = price;
+                LAST_PRICE_UPDATED_DATE = Date.now();
 
-            return LAST_PRICE
-        }).catch(() => {
-            return 0
-        })
+                return price;
+            })
+            .catch(() => 0)
+            .finally(() => {
+                coinPriceRequest = null;
+            });
+    }
+
+    return coinPriceRequest;
 }
 
 function debounce(func, timeout = 300){
@@ -139,7 +181,7 @@ const onlyNumbers = (value) => {
     return value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
 }
 
-const setScreen = (name, ggDomainState) => {
+const setScreen = (name) => {
     ACTIVE_SCREEN = name
     toggle('#startScreen', name === 'startScreen')
     if (name === 'startScreen') {
@@ -171,23 +213,9 @@ const setScreen = (name, ggDomainState) => {
         // bugfix: resetting clock on busy domain screen
         $('#flip-clock-container').dataset.endDate = '';
 
-        // GG INTEGRATION
-        if (ggDomainState === 'onSale') {
-            $('#domainStatus').classList.remove('busy');
-            $('#domainStatus').classList.add('free');
-            $('#domainStatus span').innerText = store.localeDict.gg_sale;
-        } else if (ggDomainState === 'onAuction') {
-            $('#domainStatus').classList.remove('busy');
-            $('#domainStatus').classList.add('free');
-            $('#domainStatus span').innerText = store.localeDict.gg_auction;
-        } else {
-        // GG INTEGRATION
-
-            $('#domainStatus').classList.add('busy')
-            $('#domainStatus').classList.remove('free')
-
-            $('#domainStatus span').innerText = store.localeDict.busy;
-        }
+        $('#domainStatus').classList.add('busy')
+        $('#domainStatus').classList.remove('free')
+        $('#domainStatus span').innerText = store.localeDict.busy;
     }
 }
 
@@ -397,6 +425,84 @@ function addressToString(address, isTestNet = false) {
     return new TonWeb.Address(address).toString(true, true, true, isTestNet);
 }
 
+function normalizeAccountAddress(value) {
+    if (!value) return null;
+    try {
+        const address = new TonWeb.Address(value);
+        const rawAddress = address.toString(false).toUpperCase();
+        if (typeof value === 'string' && !address.isUserFriendly && value.toUpperCase() !== rawAddress) {
+            return null;
+        }
+        return rawAddress;
+    } catch (error) {
+        return null;
+    }
+}
+
+function isSameAccount(first, second) {
+    const address = normalizeAccountAddress(first);
+    return address !== null && address === normalizeAccountAddress(second);
+}
+
+function isValidAddressForNetwork(value, isTestnet = false) {
+    if (!normalizeAccountAddress(value)) return false;
+    return isTestnet || !new TonWeb.Address(value).isTestOnly;
+}
+
+const displayAddressRequests = new WeakMap();
+
+async function getDisplayAddress(address, isTestnet = false, previousAddress) {
+    const rawAddress = normalizeAccountAddress(address);
+    if (!rawAddress) return '';
+    const fallbackAddress = previousAddress || addressToString(rawAddress, isTestnet);
+
+    const controller = new AbortController();
+    let timeoutId;
+    const request = async () => {
+        const book = await fetchToncenterIndex(
+            'addressBook', { address: rawAddress }, isTestnet, controller.signal,
+        );
+        const entry = Object.entries(book).find(([key]) => normalizeAccountAddress(key) === rawAddress);
+        const friendly = entry && entry[1] && entry[1].user_friendly;
+        if (typeof friendly !== 'string') return fallbackAddress;
+
+        const parsed = new TonWeb.Address(friendly);
+        if (!parsed.isUserFriendly || parsed.isTestOnly !== isTestnet
+            || parsed.toString(false).toUpperCase() !== rawAddress) return fallbackAddress;
+        return parsed.toString(true, true, parsed.isBounceable, isTestnet);
+    };
+
+    try {
+        return await Promise.race([
+            request(),
+            new Promise((resolve) => {
+                timeoutId = setTimeout(() => {
+                    controller.abort();
+                    resolve(fallbackAddress);
+                }, 10000);
+            }),
+        ]);
+    } catch (error) {
+        return fallbackAddress;
+    } finally {
+        clearTimeout(timeoutId);
+    }
+}
+
+async function setDisplayAddress(node, address, isTestnet, isCurrent) {
+    if (!isCurrent()) return;
+    const request = {};
+    displayAddressRequests.set(node, request);
+    if (!isSameAccount(node.dataset.dataAddress, address)) {
+        node.innerText = '…';
+        delete node.dataset.dataAddress;
+    }
+    const displayAddress = await getDisplayAddress(address, isTestnet, node.dataset.dataAddress);
+    if (displayAddressRequests.get(node) === request && isCurrent()) {
+        if (displayAddress) setAddress(node, displayAddress);
+    }
+}
+
 async function getAuctionBidPayload(string) {
     let a = new TonWeb.boc.Cell();
     a.bits.writeUint(0, 32);
@@ -544,8 +650,6 @@ function adjustPaymentModalCaption(modalType) {
         $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
         $('#payment-message-success .payment__message--description').innerText = store.localeDict.payment_success_description;
 
-        $('#inputTonIcon').classList.remove('disabled__input--icon');
-
         return;
     }
 
@@ -561,8 +665,6 @@ function adjustPaymentModalCaption(modalType) {
         $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
         $('#payment-message-success .payment__message--description').innerText = '';
 
-        $('#inputTonIcon').classList.add('disabled__input--icon');
-
         return;
     }
 
@@ -577,8 +679,6 @@ function adjustPaymentModalCaption(modalType) {
 
         $('#payment-message-success .payment__message--title').innerText = store.localeDict.payment_success_header;
         $('#payment-message-success .payment__message--description').innerText = '';
-
-        $('#inputTonIcon').classList.add('disabled__input--icon');
 
         return;
     }
@@ -676,7 +776,7 @@ async function readToncenterIndexResponse(response) {
     return json;
 }
 
-async function fetchToncenterIndex(method, params = {}, isTestnet = false) {
+async function fetchToncenterIndex(method, params = {}, isTestnet = false, signal) {
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => appendSearchParam(searchParams, key, value));
 
@@ -685,8 +785,10 @@ async function fetchToncenterIndex(method, params = {}, isTestnet = false) {
     const url = `${endpoint}/${method}${query ? `?${query}` : ''}`;
     const response = await fetchAndRetry(async () => {
         await waitForToncenterIndexRequestSlot();
+        if (signal?.aborted) throw new Error('Toncenter v3 request aborted');
         return fetch(url, {
             headers: getToncenterIndexHeaders(isTestnet),
+            signal,
         });
     });
 
@@ -1241,14 +1343,3 @@ async function fetchExpiringDomains(accountAddress, period, isTestnet = false) {
 
     return domainItems.sort((a, b) => b.expiring_at - a.expiring_at);
 }
-
-// GG INTEGRATION
-async function getGGDomainData(domainAddressString) {
-    try {
-        const response = await fetch(`${GG_ENDPOINT}/status/${domainAddressString}`);
-        return await response.json();
-    } catch (e) {
-        return null;
-    }
-}
-// GG INTEGRATION

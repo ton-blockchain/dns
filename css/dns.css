@@ -1052,19 +1052,20 @@ p {
     font-weight: 600;
     font-size: 18px;
     line-height: 28px;
-    position: relative;
 }
 
-.sale__price:before {
-    content: '';
+.coin-amount {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.gram-icon {
     width: 20px;
     height: 20px;
     display: block;
-    position: absolute;
-    left: -24px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--ton-logo-path) center no-repeat;
+    flex-shrink: 0;
 }
 
 #freeComment {
@@ -1124,8 +1125,10 @@ p {
     position: absolute;
     width: 20px;
     height: 20px;
-    left: 24px;
-    top: 50%;
+    right: 24px;
+    top: calc(50% + 12px);
+    transform: translateY(-50%);
+    pointer-events: none;
 }
 
 .bid__modal--domain__name {
@@ -1160,6 +1163,7 @@ p {
 
 .bid__modal--payment .payment__textline {
     display: flex;
+    margin-inline-start: 4px;
 }
 
 .bid__modal--payment .payment__message {
@@ -1228,7 +1232,7 @@ p {
 }
 
 .bid__modal--first__step .btn {
-    gap: 0;
+    gap: 4px;
     width: 100%;
 }
 
@@ -1239,11 +1243,16 @@ p {
 }
 
 .bid__input--container .default__input {
-    padding: 12px 24px 12px 52px;
+    padding: 12px 52px 12px 24px;
+    text-align: right;
 }
 
 .bid__modal--second__step {
     display: none;
+}
+
+.bid__modal--second__step .bid__modal--subheader {
+    column-gap: 4px;
 }
 
 .bid__modal--second__step .button__container {
@@ -1452,20 +1461,8 @@ p {
     transform: rotate(0);
 }
 
-#installWebwalletBtn, #installTonkeeperBtn {
+#installWebwalletBtn {
     display: none;
-}
-
-.tonkeeper__icon {
-    width: 24px;
-    height: 24px;
-    background: var(--tonkeeper__icon) center no-repeat;
-    background-size: contain;
-}
-
-.tonkeeper__icon.tonkeeper__icon--mono {
-    background: var(--tonkeeper__icon--mono) center no-repeat;
-
 }
 
 .tooltip--backdrop {
@@ -1714,10 +1711,6 @@ p {
     animation: var(--gradient--animation--transition);
 }
 
-#tonkeeperButton {
-    display: none;
-}
-
 #bid__input--converted__price, .bid__input--error {
     padding-top: 8px;
 }
@@ -1731,11 +1724,6 @@ p {
         display: none;
     }
 
-    #tonkeeperButton {
-        display: block;
-    }
-
-
     .bid__modal--first__step, 
     .bid__modal--second__step, 
     .bid__modal--payment, 
@@ -1744,10 +1732,6 @@ p {
     }
 
     .bid__modal--qr {
-        display: none;
-    }
-
-    .bidPrice--tonkepeer {
         display: none;
     }
 
@@ -1944,6 +1928,11 @@ p {
     padding: 16px 150px 16px 24px;
 }
 
+#bidPrice,
+#bidPrice-payment-loading {
+    font-weight: 600;
+}
+
 #bidPrice {
     display: inline-flex;
     flex-direction: row;
@@ -1952,10 +1941,8 @@ p {
 }
 
 .bidPrice-icon {
-    display: inline-block;
     width: 18px;
     height: 18px;
-    padding-left: 2px;
 }
 
 #busyDomainScreen.edit-expand #domainEditContainer,
@@ -2140,13 +2127,6 @@ p {
         font-weight: 600;
         font-size: 16px !important;
         line-height: 24px !important;
-    }
-
-    .sale__price:before {
-        width: 20px;
-        height: 20px;
-        left: -24px;
-        top: 50%;
     }
 
     .row__title {
@@ -2849,10 +2829,6 @@ input.input__clicked {
     color: var(--text-tetriary);
 }
 
-.disabled__input--icon {
-    fill: var(--text-tetriary);
-}
-
 input::placeholder, .start-input-container__domain {
     color: var(--text-tetriary);
     font-weight: 400;
@@ -2926,8 +2902,18 @@ a.edit-btn:hover {
     display: inline-block;
 }
 
-.bid__modal--ton__icon {
-    margin-top: -1px;
+.bid__modal--gram__icon {
+    --gram-color: white;
+    --gram-sparkle-color: var(--button--background);
+}
+
+.btn:hover .bid__modal--gram__icon {
+    --gram-sparkle-color: var(--accent-hover);
+}
+
+.btn:disabled .bid__modal--gram__icon {
+    --gram-color: var(--text-tetriary);
+    --gram-sparkle-color: var(--disabled--button--background-content);
 }
 
 @keyframes bounceIn {
@@ -2988,70 +2974,3 @@ a.edit-btn:hover {
       transform: rotate(360deg);
     }
 }
-
-/* GG INTEGRATION */
-.gg__hidden {
-    display: none;
-}
-
-.gg__btn + .gg__btn {
-    margin-top: -6px;
-}
-
-.gg__btn + .btn:not(.gg__btn) {
-    margin-top: 4px;
-}
-
-.gg__btn__outline {
-    color: var(--text-primary);
-    border: 1px solid var(--card-border-default);
-    background: none;
-}
-
-.gg__btn__outline:hover,
-.gg__btn__outline:focus {
-    color: var(--text-primary);
-    border: 1px solid var(--card-border-default);
-    background: var(--background-content-hover);
-}
-
-.gg__btn__tertiary {
-    color: var(--accent-default);
-    background: none;
-}
-
-.gg__btn__tertiary:hover,
-.gg__btn__tertiary:focus {
-    color: var(--accent-default);
-    background: none;
-    text-decoration: underline;
-}
-
-.gg__btn__icon {
-    width: 20px;
-    height: 20px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
-
-.gg__btn__primary .gg__btn__icon {
-    background-image: url("../assets/gg_logo_white.svg");
-}
-
-html[data-theme='light'] .gg__btn__outline .gg__btn__icon {
-    background-image: url("../assets/gg_logo_dark_gray.svg");
-}
-
-html[data-theme='dark'] .gg__btn__outline .gg__btn__icon {
-    background-image: url("../assets/gg_logo_white.svg");
-}
-
-html[data-theme='light'] .gg__btn__tertiary .gg__btn__icon {
-    background-image: url("../assets/gg_logo_blue.svg");
-}
-
-html[data-theme='dark'] .gg__btn__tertiary .gg__btn__icon {
-    background-image: url("../assets/gg_logo_blue_dark.svg");
-}
-/* GG INTEGRATION */
