@@ -710,7 +710,7 @@ function togglePaymentModal({
     const otherPaymentMethodsContainer = $('#otherPaymentsMethodsContainer')
     const otherPaymentMethodsButtonContainer = $('#otherPaymentsMethodsContainer .button__container')
     const copyPaymentLinkButton = $('#copyLinkbutton')
-    const isReauction = modalType === 'start expired auction'
+    const hasBinaryPayload = Boolean(payloadIn)
 
     adjustPaymentModalCaption(modalType)
 
@@ -1025,13 +1025,21 @@ function togglePaymentModal({
         otherPaymentMethodsContainer.classList.remove('show')
         otherPaymentMethodsContainer.style.display = 'none'
 
-        if (isReauction) {
+        const isMobile = window.matchMedia('(max-width: 568px)').matches;
+        showOtherPaymentMethods.parentNode.style.display = isMobile && !hasBinaryPayload ? 'none' : '';
+
+        if (hasBinaryPayload) {
             showOtherPaymentMethods.style.display = 'none'
             showOtherPaymentMethods.parentNode.appendChild(copyPaymentLinkButton)
         } else {
-            showOtherPaymentMethods.style.display = ''
+            showOtherPaymentMethods.style.display = isMobile ? 'none' : '';
             otherPaymentMethodsButtonContainer.appendChild(copyPaymentLinkButton)
-            showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
+            if (isMobile) {
+                otherPaymentMethodsContainer.style.display = '';
+                otherPaymentMethodsContainer.classList.add('show');
+            } else {
+                showOtherPaymentMethods.addEventListener('click', renderOtherPaymentsMethods)
+            }
         }
     }
 
@@ -1046,7 +1054,6 @@ function togglePaymentModal({
 
     const prepareLinks = () => {
         const paymentUrl = buildTransferUrl();
-        $('#freeBtn').href = paymentUrl;
         $('#copyLinkbutton').setAttribute('address', paymentUrl);
         return paymentUrl;
     }
