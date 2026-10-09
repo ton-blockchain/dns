@@ -507,7 +507,7 @@ async function getAuctionBidPayload(string) {
     let a = new TonWeb.boc.Cell();
     a.bits.writeUint(0, 32);
     a.bits.writeString(string);
-    let payload = TonWeb.utils.bytesToBase64(await a.toBoc());
+    let payload = TonWeb.utils.bytesToBase64(await a.toBoc(false));
 
     return payload
 }

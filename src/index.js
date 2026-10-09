@@ -877,7 +877,7 @@ function togglePaymentModal({
                 await getChangeDnsRecordPayload(message) : await getAuctionBidPayload(message);
         }
 
-        const validUntil = Date.now() + validUntilTimeMS;
+        const validUntil = Math.floor((Date.now() + validUntilTimeMS) / 1000);
         const transaction = {
             validUntil,
             messages: [
