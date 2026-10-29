@@ -191,7 +191,6 @@ const setDomain = (domain, isTimerMounted) => {
         const isDomainExpired = Boolean(
             domainExists &&
             ownerAddress &&
-            !auctionInfo &&
             Math.floor(Date.now() / 1000) - lastFillUpTime > MS_IN_ONE_LEAP_YEAR / 1000
         )
 
